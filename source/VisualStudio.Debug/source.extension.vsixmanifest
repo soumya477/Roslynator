@@ -21,7 +21,7 @@
   <Assets>
     <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="Refactorings" Path="|Refactorings|" />
     <Asset Type="Microsoft.VisualStudio.Analyzer" d:Source="Project" d:ProjectName="Analyzers" Path="|Analyzers|" />
-    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="AnalyzersFixes" Path="|AnalyzersFixes|" />
+    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="Analyzers.CodeFixes" Path="|Analyzers.CodeFixes|" />
     <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="CodeFixes" Path="|CodeFixes|" />
 </Assets>
   <Prerequisites>
