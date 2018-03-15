@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 
-namespace Roslynator.CSharp.Analyzers
+namespace Roslynator.CSharp.Analysis
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class AddCommaAfterLastEnumMemberAnalyzer : BaseDiagnosticAnalyzer
