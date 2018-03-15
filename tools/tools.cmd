@@ -1,8 +1,8 @@
 @echo off
-"..\source\Tools\AddCodeFileHeader\bin\Release\AddCodeFileHeader" "..\source"
+"..\src\Tools\AddCodeFileHeader\bin\Release\AddCodeFileHeader" "..\src"
 echo AddCodeFileHeader DONE
-"..\source\Tools\MetadataGenerator\bin\Release\MetadataGenerator" "..\source"
+"..\src\Tools\MetadataGenerator\bin\Release\MetadataGenerator" "..\src"
 echo MetadataGenerator DONE
-"..\source\Tools\CodeGenerator\bin\Release\CodeGenerator" "..\source"
+"..\src\Tools\CodeGenerator\bin\Release\CodeGenerator" "..\src"
 echo CodeGenerator DONE
 pause

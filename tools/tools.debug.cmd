@@ -1,6 +1,6 @@
 @echo off
-"..\source\Tools\MetadataGenerator\bin\Debug\MetadataGenerator" "..\source"
+"..\src\Tools\MetadataGenerator\bin\Debug\MetadataGenerator" "..\src"
 echo MetadataGenerator DONE
-"..\source\Tools\CodeGenerator\bin\Debug\CodeGenerator" "..\source"
+"..\src\Tools\CodeGenerator\bin\Debug\CodeGenerator" "..\src"
 echo CodeGenerator DONE
 pause
