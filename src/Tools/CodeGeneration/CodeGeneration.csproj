@@ -162,9 +162,9 @@
       <Project>{9C9EF15B-2CB0-485E-BB48-90F670F6A3D8}</Project>
       <Name>CodeFixes</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\Core.csproj">
+    <ProjectReference Include="..\..\CSharp\CSharp.csproj">
       <Project>{34a3e42e-2254-4ee7-a152-eedb18e3d7e3}</Project>
-      <Name>Core</Name>
+      <Name>CSharp</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Refactorings\Refactorings.csproj">
       <Project>{3AD7B124-7B99-440D-84A1-858BE5AE268B}</Project>

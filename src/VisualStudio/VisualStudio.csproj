@@ -173,9 +173,9 @@
       <Project>{9c9ef15b-2cb0-485e-bb48-90f670f6a3d8}</Project>
       <Name>CodeFixes</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Core\Core.csproj">
+    <ProjectReference Include="..\CSharp\CSharp.csproj">
       <Project>{34a3e42e-2254-4ee7-a152-eedb18e3d7e3}</Project>
-      <Name>Core</Name>
+      <Name>CSharp</Name>
     </ProjectReference>
     <ProjectReference Include="..\Refactorings\Refactorings.csproj">
       <Project>{3ad7b124-7b99-440d-84a1-858be5ae268b}</Project>
@@ -193,9 +193,9 @@
       <Project>{4ad2a192-847e-4942-8a72-d99c5602d5a7}</Project>
       <Name>VisualStudio.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Workspaces\Workspaces.csproj">
+    <ProjectReference Include="..\CSharp.Workspaces\CSharp.Workspaces.csproj">
       <Project>{56da29a3-c179-471c-9941-42426eeb84d0}</Project>
-      <Name>Workspaces</Name>
+      <Name>CSharp.Workspaces</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

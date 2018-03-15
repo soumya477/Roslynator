@@ -31,9 +31,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Common.Workspaces\Common.Workspaces.csproj" />
-    <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\Common\Common.csproj" />
-    <ProjectReference Include="..\Workspaces\Workspaces.csproj" />
+    <ProjectReference Include="..\CSharp\CSharp.csproj" />
+    <ProjectReference Include="..\CSharp.Workspaces\CSharp.Workspaces.csproj" />
   </ItemGroup>
 
 </Project>

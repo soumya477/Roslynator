@@ -91,7 +91,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Common.Workspaces\Common.Workspaces.csproj">
       <Project>{d6b3faf2-c92d-4b2d-82df-d6b3dd7f4107}</Project>
-      <Name>CommonWorkspaces</Name>
+      <Name>Common.Workspaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{814c7bd5-f7fa-441d-897f-f7876b038b30}</Project>
@@ -101,9 +101,9 @@
       <Project>{9C9EF15B-2CB0-485E-BB48-90F670F6A3D8}</Project>
       <Name>CodeFixes</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Core\Core.csproj">
+    <ProjectReference Include="..\CSharp\CSharp.csproj">
       <Project>{34a3e42e-2254-4ee7-a152-eedb18e3d7e3}</Project>
-      <Name>Core</Name>
+      <Name>CSharp</Name>
     </ProjectReference>
     <ProjectReference Include="..\Refactorings\Refactorings.csproj">
       <Project>{3ad7b124-7b99-440d-84a1-858be5ae268b}</Project>
@@ -115,9 +115,9 @@
       <Project>{4ad2a192-847e-4942-8a72-d99c5602d5a7}</Project>
       <Name>VisualStudio.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Workspaces\Workspaces.csproj">
+    <ProjectReference Include="..\CSharp.Workspaces\CSharp.Workspaces.csproj">
       <Project>{56da29a3-c179-471c-9941-42426eeb84d0}</Project>
-      <Name>Workspaces</Name>
+      <Name>CSharp.Workspaces</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
