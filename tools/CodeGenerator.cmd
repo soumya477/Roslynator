@@ -1,4 +1,4 @@
 @echo off
-"..\source\Tools\CodeGenerator\bin\Debug\CodeGenerator" "..\source"
+"..\src\Tools\CodeGenerator\bin\Debug\CodeGenerator" "..\src"
 echo CodeGenerator DONE
 pause
