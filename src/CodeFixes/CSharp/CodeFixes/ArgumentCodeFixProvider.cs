@@ -134,10 +134,10 @@ namespace Roslynator.CSharp.CodeFixes
                             {
                                 ExpressionSyntax expression = argument.Expression;
 
-                                if (expression?.IsKind(
+                                if (expression.IsKind(
                                     SyntaxKind.IdentifierName,
                                     SyntaxKind.GenericName,
-                                    SyntaxKind.SimpleMemberAccessExpression) == true)
+                                    SyntaxKind.SimpleMemberAccessExpression))
                                 {
                                     InvocationExpressionSyntax invocationExpression = InvocationExpression(
                                         expression.WithoutTrailingTrivia(),

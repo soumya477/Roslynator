@@ -116,7 +116,7 @@ namespace Roslynator.CSharp.Syntax
             InvocationExpressionSyntax invocationExpression,
             bool allowMissing = false)
         {
-            if (invocationExpression?.Parent?.IsKind(SyntaxKind.ExpressionStatement) != true)
+            if (!invocationExpression.IsParentKind(SyntaxKind.ExpressionStatement))
                 return Default;
 
             return CreateImpl(invocationExpression, allowMissing);

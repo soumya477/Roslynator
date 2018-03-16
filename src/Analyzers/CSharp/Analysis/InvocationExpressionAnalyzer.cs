@@ -96,7 +96,6 @@ namespace Roslynator.CSharp.Analysis
 
                     string methodName = invocationInfo.NameText;
 
-                    //TODO: ?
                     AvoidNullReferenceExceptionAnalyzer.Analyze(context, invocationInfo);
 
                     CallStringConcatInsteadOfStringJoinAnalysis.Analyze(context, invocationInfo);
