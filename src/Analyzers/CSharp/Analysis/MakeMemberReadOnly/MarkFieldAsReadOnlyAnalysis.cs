@@ -33,7 +33,7 @@ namespace Roslynator.CSharp.Analysis.MakeMemberReadOnly
                         && !fieldSymbol.IsImplicitlyDeclared
                         && (fieldSymbol.Type.IsReferenceType
                             || CSharpFacts.IsSimpleType(fieldSymbol.Type.SpecialType)
-                            || fieldSymbol.Type.IsEnum()))
+                            || fieldSymbol.Type.TypeKind == TypeKind.Enum))
                     {
                         (analyzableFields ?? (analyzableFields = new HashSet<ISymbol>())).Add(fieldSymbol);
                     }
