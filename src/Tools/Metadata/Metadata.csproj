@@ -10,7 +10,7 @@
     <RootNamespace>Roslynator.Metadata</RootNamespace>
     <CodeAnalysisRuleSet>..\..\global.ruleset</CodeAnalysisRuleSet>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Roslynator.Metadata.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Metadata.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <PropertyGroup>

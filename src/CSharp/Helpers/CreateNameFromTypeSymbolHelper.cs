@@ -27,7 +27,7 @@ namespace Roslynator.Helpers
             if (string.IsNullOrEmpty(name))
                 return null;
 
-            if (typeSymbol3.IsInterface()
+            if (typeSymbol3.TypeKind == TypeKind.Interface
                 && name.Length > 1
                 && name[0] == 'I')
             {

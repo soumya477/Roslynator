@@ -1337,56 +1337,6 @@ namespace Roslynator
             return false;
         }
 
-        /// <summary>
-        /// Returns true if the type is a class.
-        /// </summary>
-        /// <param name="typeSymbol"></param>
-        /// <returns></returns>
-        public static bool IsClass(this ITypeSymbol typeSymbol)
-        {
-            return typeSymbol?.TypeKind == TypeKind.Class;
-        }
-
-        /// <summary>
-        /// Returns true if the type is an interface.
-        /// </summary>
-        /// <param name="typeSymbol"></param>
-        /// <returns></returns>
-        public static bool IsInterface(this ITypeSymbol typeSymbol)
-        {
-            return typeSymbol?.TypeKind == TypeKind.Interface;
-        }
-
-        /// <summary>
-        /// Returns true if the type is a struct.
-        /// </summary>
-        /// <param name="typeSymbol"></param>
-        /// <returns></returns>
-        public static bool IsStruct(this ITypeSymbol typeSymbol)
-        {
-            return typeSymbol?.TypeKind == TypeKind.Struct;
-        }
-
-        /// <summary>
-        /// Returns true if the type is an enumeration.
-        /// </summary>
-        /// <param name="typeSymbol"></param>
-        /// <returns></returns>
-        public static bool IsEnum(this ITypeSymbol typeSymbol)
-        {
-            return typeSymbol?.TypeKind == TypeKind.Enum;
-        }
-
-        /// <summary>
-        /// Returns true if the type is a delegate.
-        /// </summary>
-        /// <param name="typeSymbol"></param>
-        /// <returns></returns>
-        public static bool IsDelegate(this ITypeSymbol typeSymbol)
-        {
-            return typeSymbol?.TypeKind == TypeKind.Delegate;
-        }
-
         internal static bool IsEnumWithFlags(this ITypeSymbol typeSymbol, SemanticModel semanticModel)
         {
             return typeSymbol?.TypeKind == TypeKind.Enum
