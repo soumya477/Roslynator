@@ -11,7 +11,13 @@ namespace Roslynator.CSharp.Analyzers.Tests
         }
 
         [AttributeUsageAttribute(AttributeTargets.All, AllowMultiple = false)]
-        private class BarAttributer : Attribute
+        private class BarAttribute : Attribute
+        {
+        }
+
+        //n
+
+        private class Bar2Attribute : BarAttribute
         {
         }
     }
