@@ -2,6 +2,8 @@
 
 using System;
 
+#pragma warning disable CA1813
+
 namespace Roslynator.CSharp.Analyzers.Tests
 {
     public static class UseAttributeUsageAttribute
@@ -10,14 +12,22 @@ namespace Roslynator.CSharp.Analyzers.Tests
         {
         }
 
+        //n
+
         [AttributeUsageAttribute(AttributeTargets.All, AllowMultiple = false)]
-        private class BarAttribute : Attribute
+        private class Foo2Attribute : Attribute
         {
         }
 
-        //n
+        private class Foo3Attribute : Foo2Attribute
+        {
+        }
 
-        private class Bar2Attribute : BarAttribute
+        private class Foo4Attribute
+        {
+        }
+
+        private class Foo : Attribute
         {
         }
     }
