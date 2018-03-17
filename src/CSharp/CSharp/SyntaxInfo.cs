@@ -362,6 +362,16 @@ namespace Roslynator.CSharp
         }
 
         /// <summary>
+        /// Creates a new <see cref="Syntax.GenericInfo"/> from the specified type parameter.
+        /// </summary>
+        /// <param name="typeParameter"></param>
+        /// <returns></returns>
+        public static GenericInfo GenericInfo(TypeParameterSyntax typeParameter)
+        {
+            return Syntax.GenericInfo.Create(typeParameter);
+        }
+
+        /// <summary>
         /// Creates a new <see cref="Syntax.GenericInfo"/> from the specified type parameter list.
         /// </summary>
         /// <param name="typeParameterList"></param>
@@ -1252,7 +1262,7 @@ namespace Roslynator.CSharp
         /// <param name="constraint"></param>
         /// <param name="allowMissing"></param>
         /// <returns></returns>
-        public static TypeParameterConstraintInfo TypeParameterConstraintInfo(TypeParameterConstraintSyntax constraint, bool allowMissing = false)
+        internal static TypeParameterConstraintInfo TypeParameterConstraintInfo(TypeParameterConstraintSyntax constraint, bool allowMissing = false)
         {
             return Syntax.TypeParameterConstraintInfo.Create(constraint, allowMissing);
         }
@@ -1262,7 +1272,7 @@ namespace Roslynator.CSharp
         /// </summary>
         /// <param name="typeParameter"></param>
         /// <returns></returns>
-        public static TypeParameterInfo TypeParameterInfo(TypeParameterSyntax typeParameter)
+        internal static TypeParameterInfo TypeParameterInfo(TypeParameterSyntax typeParameter)
         {
             return Syntax.TypeParameterInfo.Create(typeParameter);
         }

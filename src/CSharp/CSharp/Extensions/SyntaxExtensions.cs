@@ -1772,7 +1772,6 @@ namespace Roslynator.CSharp
             bool ifInsideElse = true,
             bool usingInsideUsing = true)
         {
-            //TODO: null check?
             if (statement == null)
                 throw new ArgumentNullException(nameof(statement));
 

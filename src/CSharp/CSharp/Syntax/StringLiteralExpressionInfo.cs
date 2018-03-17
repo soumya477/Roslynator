@@ -18,7 +18,6 @@ namespace Roslynator.CSharp.Syntax
 
         private static StringLiteralExpressionInfo Default { get; } = new StringLiteralExpressionInfo();
 
-        //TODO: LiteralExpression
         public LiteralExpressionSyntax Expression { get; }
 
         public SyntaxToken Token
@@ -54,7 +53,6 @@ namespace Roslynator.CSharp.Syntax
             get { return Token.ValueText; }
         }
 
-        //TODO: IsNonVerbatim
         public bool IsRegular
         {
             get { return Text.StartsWith("\"", StringComparison.Ordinal); }

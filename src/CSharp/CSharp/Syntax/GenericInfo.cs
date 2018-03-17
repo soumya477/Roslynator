@@ -15,43 +15,41 @@ namespace Roslynator.CSharp.Syntax
     public readonly struct GenericInfo : IEquatable<GenericInfo>
     {
         private GenericInfo(ClassDeclarationSyntax classDeclaration)
-            : this(classDeclaration, SyntaxKind.ClassDeclaration, classDeclaration.TypeParameterList, classDeclaration.ConstraintClauses)
+            : this(classDeclaration, classDeclaration.TypeParameterList, classDeclaration.ConstraintClauses)
         {
         }
 
         private GenericInfo(DelegateDeclarationSyntax delegateDeclaration)
-            : this(delegateDeclaration, SyntaxKind.DelegateDeclaration, delegateDeclaration.TypeParameterList, delegateDeclaration.ConstraintClauses)
+            : this(delegateDeclaration, delegateDeclaration.TypeParameterList, delegateDeclaration.ConstraintClauses)
         {
         }
 
         private GenericInfo(InterfaceDeclarationSyntax interfaceDeclaration)
-            : this(interfaceDeclaration, SyntaxKind.InterfaceDeclaration, interfaceDeclaration.TypeParameterList, interfaceDeclaration.ConstraintClauses)
+            : this(interfaceDeclaration, interfaceDeclaration.TypeParameterList, interfaceDeclaration.ConstraintClauses)
         {
         }
 
         private GenericInfo(LocalFunctionStatementSyntax localFunctionStatement)
-            : this(localFunctionStatement, SyntaxKind.LocalFunctionStatement, localFunctionStatement.TypeParameterList, localFunctionStatement.ConstraintClauses)
+            : this(localFunctionStatement, localFunctionStatement.TypeParameterList, localFunctionStatement.ConstraintClauses)
         {
         }
 
         private GenericInfo(MethodDeclarationSyntax methodDeclaration)
-            : this(methodDeclaration, SyntaxKind.MethodDeclaration, methodDeclaration.TypeParameterList, methodDeclaration.ConstraintClauses)
+            : this(methodDeclaration, methodDeclaration.TypeParameterList, methodDeclaration.ConstraintClauses)
         {
         }
 
         private GenericInfo(StructDeclarationSyntax structDeclaration)
-            : this(structDeclaration, SyntaxKind.StructDeclaration, structDeclaration.TypeParameterList, structDeclaration.ConstraintClauses)
+            : this(structDeclaration, structDeclaration.TypeParameterList, structDeclaration.ConstraintClauses)
         {
         }
 
         private GenericInfo(
             SyntaxNode declaration,
-            SyntaxKind kind,
             TypeParameterListSyntax typeParameterList,
             SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses)
         {
             Declaration = declaration;
-            Kind = kind;
             TypeParameterList = typeParameterList;
             ConstraintClauses = constraintClauses;
         }
@@ -67,7 +65,10 @@ namespace Roslynator.CSharp.Syntax
         /// <summary>
         /// The kind of this generic syntax.
         /// </summary>
-        public SyntaxKind Kind { get; }
+        public SyntaxKind Kind
+        {
+            get { return Declaration?.Kind() ?? SyntaxKind.None; }
+        }
 
         /// <summary>
         /// The type parameter list.
@@ -144,34 +145,42 @@ namespace Roslynator.CSharp.Syntax
                 case SyntaxKind.ClassDeclaration:
                     {
                         var classDeclaration = (ClassDeclarationSyntax)declaration;
-                        return new GenericInfo(classDeclaration, SyntaxKind.ClassDeclaration, classDeclaration.TypeParameterList, classDeclaration.ConstraintClauses);
+                        return new GenericInfo(classDeclaration, classDeclaration.TypeParameterList, classDeclaration.ConstraintClauses);
                     }
                 case SyntaxKind.DelegateDeclaration:
                     {
                         var delegateDeclaration = (DelegateDeclarationSyntax)declaration;
-                        return new GenericInfo(delegateDeclaration, SyntaxKind.DelegateDeclaration, delegateDeclaration.TypeParameterList, delegateDeclaration.ConstraintClauses);
+                        return new GenericInfo(delegateDeclaration, delegateDeclaration.TypeParameterList, delegateDeclaration.ConstraintClauses);
                     }
                 case SyntaxKind.InterfaceDeclaration:
                     {
                         var interfaceDeclaration = (InterfaceDeclarationSyntax)declaration;
-                        return new GenericInfo(interfaceDeclaration, SyntaxKind.InterfaceDeclaration, interfaceDeclaration.TypeParameterList, interfaceDeclaration.ConstraintClauses);
+                        return new GenericInfo(interfaceDeclaration, interfaceDeclaration.TypeParameterList, interfaceDeclaration.ConstraintClauses);
                     }
                 case SyntaxKind.LocalFunctionStatement:
                     {
                         var localFunctionStatement = (LocalFunctionStatementSyntax)declaration;
-                        return new GenericInfo(localFunctionStatement, SyntaxKind.LocalFunctionStatement, localFunctionStatement.TypeParameterList, localFunctionStatement.ConstraintClauses);
+                        return new GenericInfo(localFunctionStatement, localFunctionStatement.TypeParameterList, localFunctionStatement.ConstraintClauses);
                     }
                 case SyntaxKind.MethodDeclaration:
                     {
                         var methodDeclaration = (MethodDeclarationSyntax)declaration;
-                        return new GenericInfo(methodDeclaration, SyntaxKind.MethodDeclaration, methodDeclaration.TypeParameterList, methodDeclaration.ConstraintClauses);
+                        return new GenericInfo(methodDeclaration, methodDeclaration.TypeParameterList, methodDeclaration.ConstraintClauses);
                     }
                 case SyntaxKind.StructDeclaration:
                     {
                         var structDeclaration = (StructDeclarationSyntax)declaration;
-                        return new GenericInfo(structDeclaration, SyntaxKind.StructDeclaration, structDeclaration.TypeParameterList, structDeclaration.ConstraintClauses);
+                        return new GenericInfo(structDeclaration, structDeclaration.TypeParameterList, structDeclaration.ConstraintClauses);
                     }
             }
+
+            return Default;
+        }
+
+        internal static GenericInfo Create(TypeParameterSyntax typeParameter)
+        {
+            if (typeParameter.Parent is TypeParameterListSyntax typeParameterList)
+                return Create(typeParameterList);
 
             return Default;
         }
@@ -188,32 +197,32 @@ namespace Roslynator.CSharp.Syntax
                 case SyntaxKind.ClassDeclaration:
                     {
                         var classDeclaration = (ClassDeclarationSyntax)parent;
-                        return new GenericInfo(classDeclaration, SyntaxKind.ClassDeclaration, typeParameterList, classDeclaration.ConstraintClauses);
+                        return new GenericInfo(classDeclaration, typeParameterList, classDeclaration.ConstraintClauses);
                     }
                 case SyntaxKind.DelegateDeclaration:
                     {
                         var delegateDeclaration = (DelegateDeclarationSyntax)parent;
-                        return new GenericInfo(delegateDeclaration, SyntaxKind.DelegateDeclaration, typeParameterList, delegateDeclaration.ConstraintClauses);
+                        return new GenericInfo(delegateDeclaration, typeParameterList, delegateDeclaration.ConstraintClauses);
                     }
                 case SyntaxKind.InterfaceDeclaration:
                     {
                         var interfaceDeclaration = (InterfaceDeclarationSyntax)parent;
-                        return new GenericInfo(interfaceDeclaration, SyntaxKind.InterfaceDeclaration, typeParameterList, interfaceDeclaration.ConstraintClauses);
+                        return new GenericInfo(interfaceDeclaration, typeParameterList, interfaceDeclaration.ConstraintClauses);
                     }
                 case SyntaxKind.LocalFunctionStatement:
                     {
                         var localFunctionStatement = (LocalFunctionStatementSyntax)parent;
-                        return new GenericInfo(localFunctionStatement, SyntaxKind.LocalFunctionStatement, typeParameterList, localFunctionStatement.ConstraintClauses);
+                        return new GenericInfo(localFunctionStatement, typeParameterList, localFunctionStatement.ConstraintClauses);
                     }
                 case SyntaxKind.MethodDeclaration:
                     {
                         var methodDeclaration = (MethodDeclarationSyntax)parent;
-                        return new GenericInfo(methodDeclaration, SyntaxKind.MethodDeclaration, typeParameterList, methodDeclaration.ConstraintClauses);
+                        return new GenericInfo(methodDeclaration, typeParameterList, methodDeclaration.ConstraintClauses);
                     }
                 case SyntaxKind.StructDeclaration:
                     {
                         var structDeclaration = (StructDeclarationSyntax)parent;
-                        return new GenericInfo(structDeclaration, SyntaxKind.StructDeclaration, typeParameterList, structDeclaration.ConstraintClauses);
+                        return new GenericInfo(structDeclaration, typeParameterList, structDeclaration.ConstraintClauses);
                     }
             }
 

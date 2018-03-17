@@ -12,21 +12,14 @@ namespace Roslynator.CSharp.Syntax
     /// <summary>
     /// Provides information about a type parameter constraint.
     /// </summary>
-    public readonly struct TypeParameterConstraintInfo : IEquatable<TypeParameterConstraintInfo>
+    internal readonly struct TypeParameterConstraintInfo : IEquatable<TypeParameterConstraintInfo>
     {
-        //TODO: zredukovat
         private TypeParameterConstraintInfo(
             TypeParameterConstraintSyntax constraint,
-            TypeParameterConstraintClauseSyntax constraintClause,
-            SyntaxNode declaration,
-            TypeParameterListSyntax typeParameterList,
-            SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses)
+            TypeParameterConstraintClauseSyntax constraintClause)
         {
             Constraint = constraint;
             ConstraintClause = constraintClause;
-            Declaration = declaration;
-            TypeParameterList = typeParameterList;
-            ConstraintClauses = constraintClauses;
         }
 
         private static TypeParameterConstraintInfo Default { get; } = new TypeParameterConstraintInfo();
@@ -63,47 +56,6 @@ namespace Roslynator.CSharp.Syntax
         public string NameText
         {
             get { return Name?.Identifier.ValueText; }
-        }
-
-        //TODO: Node
-        /// <summary>
-        /// Declaration node that contains this type parameter in its type parameter list.
-        /// </summary>
-        public SyntaxNode Declaration { get; }
-
-        /// <summary>
-        /// Type parameter list that contains this type parameter.
-        /// </summary>
-        public TypeParameterListSyntax TypeParameterList { get; }
-
-        /// <summary>
-        /// A list of type parameters that contains this type parameter.
-        /// </summary>
-        public SeparatedSyntaxList<TypeParameterSyntax> TypeParameters
-        {
-            get { return TypeParameterList?.Parameters ?? default(SeparatedSyntaxList<TypeParameterSyntax>); }
-        }
-
-        /// <summary>
-        /// A list of constraint clauses.
-        /// </summary>
-        public SyntaxList<TypeParameterConstraintClauseSyntax> ConstraintClauses { get; }
-
-        /// <summary>
-        /// The type parameter that this constraint is declared for. Returns null if a type parameter is not declared.
-        /// </summary>
-        public TypeParameterSyntax TypeParameter
-        {
-            get
-            {
-                foreach (TypeParameterSyntax typeParameter in TypeParameters)
-                {
-                    if (string.Equals(NameText, typeParameter.Identifier.ValueText, StringComparison.Ordinal))
-                        return typeParameter;
-                }
-
-                return null;
-            }
         }
 
         /// <summary>
@@ -171,7 +123,7 @@ namespace Roslynator.CSharp.Syntax
                         if (!Check(typeParameterList, allowMissing))
                             return Default;
 
-                        return new TypeParameterConstraintInfo(constraint, constraintClause, classDeclaration, typeParameterList, classDeclaration.ConstraintClauses);
+                        return new TypeParameterConstraintInfo(constraint, constraintClause);
                     }
                 case SyntaxKind.DelegateDeclaration:
                     {
@@ -182,7 +134,7 @@ namespace Roslynator.CSharp.Syntax
                         if (!Check(typeParameterList, allowMissing))
                             return Default;
 
-                        return new TypeParameterConstraintInfo(constraint, constraintClause, delegateDeclaration, typeParameterList, delegateDeclaration.ConstraintClauses);
+                        return new TypeParameterConstraintInfo(constraint, constraintClause);
                     }
                 case SyntaxKind.InterfaceDeclaration:
                     {
@@ -193,7 +145,7 @@ namespace Roslynator.CSharp.Syntax
                         if (!Check(typeParameterList, allowMissing))
                             return Default;
 
-                        return new TypeParameterConstraintInfo(constraint, constraintClause, interfaceDeclaration, interfaceDeclaration.TypeParameterList, interfaceDeclaration.ConstraintClauses);
+                        return new TypeParameterConstraintInfo(constraint, constraintClause);
                     }
                 case SyntaxKind.LocalFunctionStatement:
                     {
@@ -204,7 +156,7 @@ namespace Roslynator.CSharp.Syntax
                         if (!Check(typeParameterList, allowMissing))
                             return Default;
 
-                        return new TypeParameterConstraintInfo(constraint, constraintClause, localFunctionStatement, typeParameterList, localFunctionStatement.ConstraintClauses);
+                        return new TypeParameterConstraintInfo(constraint, constraintClause);
                     }
                 case SyntaxKind.MethodDeclaration:
                     {
@@ -215,7 +167,7 @@ namespace Roslynator.CSharp.Syntax
                         if (!Check(typeParameterList, allowMissing))
                             return Default;
 
-                        return new TypeParameterConstraintInfo(constraint, constraintClause, methodDeclaration, typeParameterList, methodDeclaration.ConstraintClauses);
+                        return new TypeParameterConstraintInfo(constraint, constraintClause);
                     }
                 case SyntaxKind.StructDeclaration:
                     {
@@ -226,7 +178,7 @@ namespace Roslynator.CSharp.Syntax
                         if (!Check(typeParameterList, allowMissing))
                             return Default;
 
-                        return new TypeParameterConstraintInfo(constraint, constraintClause, structDeclaration, typeParameterList, structDeclaration.ConstraintClauses);
+                        return new TypeParameterConstraintInfo(constraint, constraintClause);
                     }
             }
 
@@ -259,7 +211,7 @@ namespace Roslynator.CSharp.Syntax
         /// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
         public bool Equals(TypeParameterConstraintInfo other)
         {
-            return EqualityComparer<SyntaxNode>.Default.Equals(Declaration, other.Declaration);
+            return EqualityComparer<TypeParameterConstraintClauseSyntax>.Default.Equals(ConstraintClause, other.ConstraintClause);
         }
 
         /// <summary>
@@ -268,7 +220,7 @@ namespace Roslynator.CSharp.Syntax
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            return EqualityComparer<SyntaxNode>.Default.GetHashCode(Declaration);
+            return EqualityComparer<TypeParameterConstraintClauseSyntax>.Default.GetHashCode(ConstraintClause);
         }
 
         public static bool operator ==(TypeParameterConstraintInfo info1, TypeParameterConstraintInfo info2)

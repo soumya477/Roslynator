@@ -32,7 +32,6 @@ namespace Roslynator.CSharp
         /// </summary>
         ComparisonToNull = EqualsToNull | NotEqualsToNull,
 
-        //TODO: IsNullPattern, NotIsNullPattern
         /// <summary>
         /// <code>x is null</code>
         /// </summary>

@@ -11,18 +11,14 @@ namespace Roslynator.CSharp.Syntax
     /// <summary>
     /// Provides information about a type parameter.
     /// </summary>
-    public readonly struct TypeParameterInfo : IEquatable<TypeParameterInfo>
+    internal readonly struct TypeParameterInfo : IEquatable<TypeParameterInfo>
     {
         private TypeParameterInfo(
             TypeParameterSyntax typeParameter,
-            SyntaxNode declaration,
-            TypeParameterListSyntax typeParameterList,
-            SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses)
+            TypeParameterListSyntax typeParameterList)
         {
             TypeParameter = typeParameter;
-            Declaration = declaration;
             TypeParameterList = typeParameterList;
-            ConstraintClauses = constraintClauses;
         }
 
         private static TypeParameterInfo Default { get; } = new TypeParameterInfo();
@@ -33,6 +29,11 @@ namespace Roslynator.CSharp.Syntax
         public TypeParameterSyntax TypeParameter { get; }
 
         /// <summary>
+        /// Type parameter list that contains this type parameter.
+        /// </summary>
+        public TypeParameterListSyntax TypeParameterList { get; }
+
+        /// <summary>
         /// The type parameter name.
         /// </summary>
         public string Name
@@ -40,47 +41,12 @@ namespace Roslynator.CSharp.Syntax
             get { return TypeParameter?.Identifier.ValueText; }
         }
 
-        //TODO: Node
-        /// <summary>
-        /// Declaration node that contains this type parameter in its type parameter list.
-        /// </summary>
-        public SyntaxNode Declaration { get; }
-
-        /// <summary>
-        /// Type parameter list that contains this type parameter.
-        /// </summary>
-        public TypeParameterListSyntax TypeParameterList { get; }
-
         /// <summary>
         /// A list of type parameters that contains this type parameter.
         /// </summary>
         public SeparatedSyntaxList<TypeParameterSyntax> TypeParameters
         {
             get { return TypeParameterList?.Parameters ?? default(SeparatedSyntaxList<TypeParameterSyntax>); }
-        }
-
-        /// <summary>
-        /// A list of constraint clauses.
-        /// </summary>
-        public SyntaxList<TypeParameterConstraintClauseSyntax> ConstraintClauses { get; }
-
-        /// <summary>
-        /// The type parameter constraint clause. Returns null if a constraint clause if not declared.
-        /// </summary>
-        public TypeParameterConstraintClauseSyntax ConstraintClause
-        {
-            get
-            {
-                string name = Name;
-
-                foreach (TypeParameterConstraintClauseSyntax constraintClause in ConstraintClauses)
-                {
-                    if (string.Equals(name, constraintClause.Name.Identifier.ValueText, StringComparison.Ordinal))
-                        return constraintClause;
-                }
-
-                return null;
-            }
         }
 
         /// <summary>
@@ -103,137 +69,32 @@ namespace Roslynator.CSharp.Syntax
                 case SyntaxKind.ClassDeclaration:
                     {
                         var classDeclaration = (ClassDeclarationSyntax)parent;
-                        return new TypeParameterInfo(typeParameter, classDeclaration, typeParameterList, classDeclaration.ConstraintClauses);
+                        return new TypeParameterInfo(typeParameter, typeParameterList);
                     }
                 case SyntaxKind.DelegateDeclaration:
                     {
                         var delegateDeclaration = (DelegateDeclarationSyntax)parent;
-                        return new TypeParameterInfo(typeParameter, delegateDeclaration, typeParameterList, delegateDeclaration.ConstraintClauses);
+                        return new TypeParameterInfo(typeParameter, typeParameterList);
                     }
                 case SyntaxKind.InterfaceDeclaration:
                     {
                         var interfaceDeclaration = (InterfaceDeclarationSyntax)parent;
-                        return new TypeParameterInfo(typeParameter, interfaceDeclaration, typeParameterList, interfaceDeclaration.ConstraintClauses);
+                        return new TypeParameterInfo(typeParameter, typeParameterList);
                     }
                 case SyntaxKind.LocalFunctionStatement:
                     {
                         var localFunctionStatement = (LocalFunctionStatementSyntax)parent;
-                        return new TypeParameterInfo(typeParameter, localFunctionStatement, typeParameterList, localFunctionStatement.ConstraintClauses);
+                        return new TypeParameterInfo(typeParameter, typeParameterList);
                     }
                 case SyntaxKind.MethodDeclaration:
                     {
                         var methodDeclaration = (MethodDeclarationSyntax)parent;
-                        return new TypeParameterInfo(typeParameter, methodDeclaration, typeParameterList, methodDeclaration.ConstraintClauses);
+                        return new TypeParameterInfo(typeParameter, typeParameterList);
                     }
                 case SyntaxKind.StructDeclaration:
                     {
                         var structDeclaration = (StructDeclarationSyntax)parent;
-                        return new TypeParameterInfo(typeParameter, structDeclaration, typeParameterList, structDeclaration.ConstraintClauses);
-                    }
-            }
-
-            return Default;
-        }
-
-        internal static TypeParameterInfo Create(SyntaxNode declaration, string name)
-        {
-            switch (declaration?.Kind())
-            {
-                case SyntaxKind.ClassDeclaration:
-                    {
-                        var classDeclaration = (ClassDeclarationSyntax)declaration;
-
-                        TypeParameterListSyntax typeParameterList = classDeclaration.TypeParameterList;
-
-                        if (typeParameterList == null)
-                            return Default;
-
-                        TypeParameterSyntax typeParameter = typeParameterList.GetTypeParameterByName(name);
-
-                        if (typeParameter == null)
-                            return Default;
-
-                        return new TypeParameterInfo(typeParameter, classDeclaration, typeParameterList, classDeclaration.ConstraintClauses);
-                    }
-                case SyntaxKind.DelegateDeclaration:
-                    {
-                        var delegateDeclaration = (DelegateDeclarationSyntax)declaration;
-
-                        TypeParameterListSyntax typeParameterList = delegateDeclaration.TypeParameterList;
-
-                        if (typeParameterList == null)
-                            return Default;
-
-                        TypeParameterSyntax typeParameter = typeParameterList.GetTypeParameterByName(name);
-
-                        if (typeParameter == null)
-                            return Default;
-
-                        return new TypeParameterInfo(typeParameter, delegateDeclaration, typeParameterList, delegateDeclaration.ConstraintClauses);
-                    }
-                case SyntaxKind.InterfaceDeclaration:
-                    {
-                        var interfaceDeclaration = (InterfaceDeclarationSyntax)declaration;
-
-                        TypeParameterListSyntax typeParameterList = interfaceDeclaration.TypeParameterList;
-
-                        if (typeParameterList == null)
-                            return Default;
-
-                        TypeParameterSyntax typeParameter = typeParameterList.GetTypeParameterByName(name);
-
-                        if (typeParameter == null)
-                            return Default;
-
-                        return new TypeParameterInfo(typeParameter, interfaceDeclaration, typeParameterList, interfaceDeclaration.ConstraintClauses);
-                    }
-                case SyntaxKind.LocalFunctionStatement:
-                    {
-                        var localFunctionStatement = (LocalFunctionStatementSyntax)declaration;
-
-                        TypeParameterListSyntax typeParameterList = localFunctionStatement.TypeParameterList;
-
-                        if (typeParameterList == null)
-                            return Default;
-
-                        TypeParameterSyntax typeParameter = typeParameterList.GetTypeParameterByName(name);
-
-                        if (typeParameter == null)
-                            return Default;
-
-                        return new TypeParameterInfo(typeParameter, localFunctionStatement, typeParameterList, localFunctionStatement.ConstraintClauses);
-                    }
-                case SyntaxKind.MethodDeclaration:
-                    {
-                        var methodDeclaration = (MethodDeclarationSyntax)declaration;
-
-                        TypeParameterListSyntax typeParameterList = methodDeclaration.TypeParameterList;
-
-                        if (typeParameterList == null)
-                            return Default;
-
-                        TypeParameterSyntax typeParameter = typeParameterList.GetTypeParameterByName(name);
-
-                        if (typeParameter == null)
-                            return Default;
-
-                        return new TypeParameterInfo(typeParameter, methodDeclaration, typeParameterList, methodDeclaration.ConstraintClauses);
-                    }
-                case SyntaxKind.StructDeclaration:
-                    {
-                        var structDeclaration = (StructDeclarationSyntax)declaration;
-
-                        TypeParameterListSyntax typeParameterList = structDeclaration.TypeParameterList;
-
-                        if (typeParameterList == null)
-                            return Default;
-
-                        TypeParameterSyntax typeParameter = typeParameterList.GetTypeParameterByName(name);
-
-                        if (typeParameter == null)
-                            return Default;
-
-                        return new TypeParameterInfo(typeParameter, structDeclaration, typeParameterList, structDeclaration.ConstraintClauses);
+                        return new TypeParameterInfo(typeParameter, typeParameterList);
                     }
             }
 
@@ -266,7 +127,7 @@ namespace Roslynator.CSharp.Syntax
         /// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
         public bool Equals(TypeParameterInfo other)
         {
-            return EqualityComparer<SyntaxNode>.Default.Equals(Declaration, other.Declaration);
+            return EqualityComparer<TypeParameterListSyntax>.Default.Equals(TypeParameterList, other.TypeParameterList);
         }
 
         /// <summary>
@@ -275,7 +136,7 @@ namespace Roslynator.CSharp.Syntax
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            return EqualityComparer<SyntaxNode>.Default.GetHashCode(Declaration);
+            return EqualityComparer<TypeParameterListSyntax>.Default.GetHashCode(TypeParameterList);
         }
 
         public static bool operator ==(TypeParameterInfo info1, TypeParameterInfo info2)
