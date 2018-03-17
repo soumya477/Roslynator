@@ -32,6 +32,7 @@ namespace Roslynator.CSharp.Syntax
         /// </summary>
         public SyntaxTokenList Modifiers { get; }
 
+        //TODO: int?
         /// <summary>
         /// The explicit accessibility.
         /// </summary>

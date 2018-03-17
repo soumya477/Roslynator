@@ -32,6 +32,7 @@ namespace Roslynator.CSharp
         /// </summary>
         ComparisonToNull = EqualsToNull | NotEqualsToNull,
 
+        //TODO: IsNullPattern, NotIsNullPattern
         /// <summary>
         /// <code>x is null</code>
         /// </summary>
@@ -68,7 +69,7 @@ namespace Roslynator.CSharp
         CheckingNotNull = NotEqualsToNull | NotIsNull | HasValue,
 
         /// <summary>
-        /// Expression that uses <see cref="Nullable{T}.HasValue"/>.
+        /// Expression that uses <see cref="Nullable{T}.HasValue"/> property.
         /// </summary>
         HasValueProperty = HasValue | NotHasValue,
 

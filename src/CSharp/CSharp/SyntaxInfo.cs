@@ -442,26 +442,6 @@ namespace Roslynator.CSharp
         }
 
         /// <summary>
-        /// Creates a new <see cref="Syntax.IfStatementInfo"/> from the specified node.
-        /// </summary>
-        /// <param name="node"></param>
-        /// <returns></returns>
-        public static IfStatementInfo IfStatementInfo(SyntaxNode node)
-        {
-            return Syntax.IfStatementInfo.Create(node);
-        }
-
-        /// <summary>
-        /// Creates a new <see cref="Syntax.IfStatementInfo"/> from the specified if statement.
-        /// </summary>
-        /// <param name="ifStatement"></param>
-        /// <returns></returns>
-        public static IfStatementInfo IfStatementInfo(IfStatementSyntax ifStatement)
-        {
-            return Syntax.IfStatementInfo.Create(ifStatement);
-        }
-
-        /// <summary>
         /// Creates a new <see cref="Syntax.IsExpressionInfo"/> from the specified node.
         /// </summary>
         /// <param name="node"></param>

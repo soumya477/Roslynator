@@ -40,6 +40,7 @@ namespace Roslynator.CSharp.Syntax
             get { return TypeParameter?.Identifier.ValueText; }
         }
 
+        //TODO: Node
         /// <summary>
         /// Declaration node that contains this type parameter in its type parameter list.
         /// </summary>

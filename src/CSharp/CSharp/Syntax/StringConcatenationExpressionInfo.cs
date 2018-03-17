@@ -140,6 +140,7 @@ namespace Roslynator.CSharp.Syntax
             return false;
         }
 
+        //TODO: ToInterpolatedStringExpression
         public InterpolatedStringExpressionSyntax ToInterpolatedString()
         {
             ThrowInvalidOperationIfNotInitialized();

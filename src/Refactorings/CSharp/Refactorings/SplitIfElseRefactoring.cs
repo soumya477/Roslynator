@@ -20,7 +20,7 @@ namespace Roslynator.CSharp.Refactorings
             if (ifStatement.Else == null)
                 return;
 
-            foreach (IfStatementOrElseClause ifOrElse in SyntaxInfo.IfStatementInfo(ifStatement))
+            foreach (IfStatementOrElseClause ifOrElse in ifStatement.AsCascade())
             {
                 StatementSyntax statement = ifOrElse.Statement;
 
@@ -56,7 +56,7 @@ namespace Roslynator.CSharp.Refactorings
             {
                 ElseClauseSyntax parentElse = null;
 
-                foreach (IfStatementOrElseClause ifOrElse in SyntaxInfo.IfStatementInfo(ifStatement))
+                foreach (IfStatementOrElseClause ifOrElse in ifStatement.AsCascade())
                 {
                     if (ifOrElse.IsIf)
                     {

@@ -14,6 +14,7 @@ namespace Roslynator.CSharp.Syntax
     /// </summary>
     public readonly struct TypeParameterConstraintInfo : IEquatable<TypeParameterConstraintInfo>
     {
+        //TODO: zredukovat
         private TypeParameterConstraintInfo(
             TypeParameterConstraintSyntax constraint,
             TypeParameterConstraintClauseSyntax constraintClause,
@@ -64,6 +65,7 @@ namespace Roslynator.CSharp.Syntax
             get { return Name?.Identifier.ValueText; }
         }
 
+        //TODO: Node
         /// <summary>
         /// Declaration node that contains this type parameter in its type parameter list.
         /// </summary>

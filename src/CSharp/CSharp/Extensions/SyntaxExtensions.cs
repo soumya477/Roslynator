@@ -835,6 +835,14 @@ namespace Roslynator.CSharp
 
             return (statement?.Kind() == SyntaxKind.Block) ? null : statement;
         }
+
+        public static IfStatementCascade AsCascade(this IfStatementSyntax ifStatement)
+        {
+            if (ifStatement == null)
+                throw new ArgumentNullException(nameof(ifStatement));
+
+            return new IfStatementCascade(ifStatement);
+        }
         #endregion IfStatementSyntax
 
         #region IEnumerable<T>

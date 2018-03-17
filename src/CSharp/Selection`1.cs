@@ -39,6 +39,7 @@ namespace Roslynator
         /// </summary>
         protected abstract IReadOnlyList<T> Items { get; }
 
+        //TODO: OriginalSpan, Span, FullSpan
         /// <summary>
         /// Gets a span that contains selected items.
         /// </summary>
