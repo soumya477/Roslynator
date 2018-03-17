@@ -9,60 +9,62 @@ using static Roslynator.CSharp.Syntax.SyntaxInfoHelpers;
 
 namespace Roslynator.CSharp.Syntax
 {
+    //TODO: MemberAccessInvocationExpressionInfo
     /// <summary>
     /// Provides information about invocation expression.
     /// </summary>
     public readonly struct MemberInvocationExpressionInfo : IEquatable<MemberInvocationExpressionInfo>
     {
         private MemberInvocationExpressionInfo(
-            ExpressionSyntax expression,
-            SimpleNameSyntax name,
-            ArgumentListSyntax argumentList)
+            InvocationExpressionSyntax invocationExpression,
+            MemberAccessExpressionSyntax memberAccessExpression)
         {
-            Expression = expression;
-            Name = name;
-            ArgumentList = argumentList;
+            InvocationExpression = invocationExpression;
+            MemberAccessExpression = memberAccessExpression;
         }
 
         private static MemberInvocationExpressionInfo Default { get; } = new MemberInvocationExpressionInfo();
 
         /// <summary>
+        /// The invocation expression.
+        /// </summary>
+        public InvocationExpressionSyntax InvocationExpression { get; }
+
+        /// <summary>
+        /// The member access expression.
+        /// </summary>
+        public MemberAccessExpressionSyntax MemberAccessExpression { get; }
+
+        /// <summary>
         /// The expression that contains the member being invoked.
         /// </summary>
-        public ExpressionSyntax Expression { get; }
+        public ExpressionSyntax Expression
+        {
+            get { return MemberAccessExpression?.Expression; }
+        }
 
         /// <summary>
         /// The name of the member being invoked.
         /// </summary>
-        public SimpleNameSyntax Name { get; }
+        public SimpleNameSyntax Name
+        {
+            get { return MemberAccessExpression?.Name; }
+        }
 
         /// <summary>
         /// The argumet list.
         /// </summary>
-        public ArgumentListSyntax ArgumentList { get; }
+        public ArgumentListSyntax ArgumentList
+        {
+            get { return InvocationExpression?.ArgumentList; }
+        }
 
         /// <summary>
         /// The list of the arguments.
         /// </summary>
         public SeparatedSyntaxList<ArgumentSyntax> Arguments
         {
-            get { return ArgumentList?.Arguments ?? default(SeparatedSyntaxList<ArgumentSyntax>); }
-        }
-
-        /// <summary>
-        /// The invocation expression.
-        /// </summary>
-        public InvocationExpressionSyntax InvocationExpression
-        {
-            get { return (InvocationExpressionSyntax)ArgumentList?.Parent; }
-        }
-
-        /// <summary>
-        /// The member access expression.
-        /// </summary>
-        public MemberAccessExpressionSyntax MemberAccessExpression
-        {
-            get { return (MemberAccessExpressionSyntax)Expression?.Parent; }
+            get { return InvocationExpression?.ArgumentList.Arguments ?? default(SeparatedSyntaxList<ArgumentSyntax>); }
         }
 
         /// <summary>
@@ -86,7 +88,7 @@ namespace Roslynator.CSharp.Syntax
         /// </summary>
         public bool Success
         {
-            get { return Expression != null; }
+            get { return InvocationExpression != null; }
         }
 
         internal static MemberInvocationExpressionInfo Create(
@@ -131,7 +133,7 @@ namespace Roslynator.CSharp.Syntax
             if (argumentList == null)
                 return Default;
 
-            return new MemberInvocationExpressionInfo(expression, name, argumentList);
+            return new MemberInvocationExpressionInfo(invocationExpression, memberAccessExpression);
         }
 
         internal MemberInvocationExpressionInfo WithName(string name)
@@ -140,7 +142,7 @@ namespace Roslynator.CSharp.Syntax
 
             InvocationExpressionSyntax newInvocation = InvocationExpression.WithExpression(newMemberAccess);
 
-            return new MemberInvocationExpressionInfo(newMemberAccess.Expression, newMemberAccess.Name, newInvocation.ArgumentList);
+            return new MemberInvocationExpressionInfo(newInvocation, newMemberAccess);
         }
 
         /// <summary>

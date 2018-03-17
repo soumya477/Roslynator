@@ -87,7 +87,7 @@ namespace Roslynator.CSharp.Refactorings
 
         private static IEnumerable<BlockSyntax> GetBlockStatements(IfStatementSyntax ifStatement)
         {
-            foreach (IfStatementOrElseClause ifOrElse in SyntaxInfo.IfStatementInfo(ifStatement))
+            foreach (IfStatementOrElseClause ifOrElse in ifStatement.AsCascade())
             {
                 StatementSyntax statement = ifOrElse.Statement;
 

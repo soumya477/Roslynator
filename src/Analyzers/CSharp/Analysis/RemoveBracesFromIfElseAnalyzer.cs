@@ -49,7 +49,7 @@ namespace Roslynator.CSharp.Analysis
 
             context.ReportDiagnostic(DiagnosticDescriptors.RemoveBracesFromIfElse, ifStatement);
 
-            foreach (IfStatementOrElseClause ifOrElse in SyntaxInfo.IfStatementInfo(ifStatement))
+            foreach (IfStatementOrElseClause ifOrElse in ifStatement.AsCascade())
             {
                 if (ifOrElse.Statement is BlockSyntax block)
                     context.ReportBraces(DiagnosticDescriptors.RemoveBracesFromIfElseFadeOut, block);

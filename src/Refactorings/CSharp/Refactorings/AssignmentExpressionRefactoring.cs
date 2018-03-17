@@ -14,7 +14,7 @@ namespace Roslynator.CSharp.Refactorings
         {
             if (context.IsRefactoringEnabled(RefactoringIdentifiers.ExpandAssignmentExpression)
                 && context.Span.IsEmptyAndContainedInSpanOrBetweenSpans(assignmentExpression.OperatorToken)
-                && CSharpFacts.IsCompoundAssignment(assignmentExpression.Kind())
+                && CSharpFacts.IsCompoundAssignmentExpression(assignmentExpression.Kind())
                 && SyntaxInfo.AssignmentExpressionInfo(assignmentExpression).Success)
             {
                 context.RegisterRefactoring(

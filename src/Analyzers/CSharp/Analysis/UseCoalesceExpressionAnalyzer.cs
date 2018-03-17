@@ -47,7 +47,9 @@ namespace Roslynator.CSharp.Analysis
             if (ifStatement.SpanContainsDirectives())
                 return;
 
-            if (!ifStatement.TryGetContainingList(out SyntaxList<StatementSyntax> statements))
+            SyntaxList<StatementSyntax> statements = SyntaxInfo.StatementListInfo(ifStatement).Statements;
+
+            if (!statements.Any())
                 return;
 
             if (IsPartOfLazyInitialization(ifStatement, statements))

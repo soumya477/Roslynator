@@ -140,7 +140,7 @@ namespace Roslynator.CSharp.Syntax
             return false;
         }
 
-        public InterpolatedStringExpressionSyntax ToInterpolatedString()
+        internal InterpolatedStringExpressionSyntax ToInterpolatedStringExpression()
         {
             ThrowInvalidOperationIfNotInitialized();
 
@@ -237,7 +237,7 @@ namespace Roslynator.CSharp.Syntax
             return (InterpolatedStringExpressionSyntax)ParseExpression(StringBuilderCache.GetStringAndFree(sb));
         }
 
-        public LiteralExpressionSyntax ToStringLiteral()
+        internal LiteralExpressionSyntax ToStringLiteralExpression()
         {
             ThrowInvalidOperationIfNotInitialized();
 
@@ -279,7 +279,7 @@ namespace Roslynator.CSharp.Syntax
             return (LiteralExpressionSyntax)ParseExpression(StringBuilderCache.GetStringAndFree(sb));
         }
 
-        public LiteralExpressionSyntax ToMultiLineStringLiteral()
+        internal LiteralExpressionSyntax ToMultiLineStringLiteralExpression()
         {
             ThrowInvalidOperationIfNotInitialized();
 

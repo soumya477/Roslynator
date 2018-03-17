@@ -7,20 +7,20 @@ using System.Diagnostics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Roslynator.CSharp.Syntax
+namespace Roslynator.CSharp
 {
     /// <summary>
-    /// Provides information about if statement.
+    /// Enables to enumerate if statement cascade.
     /// </summary>
-    public readonly struct IfStatementInfo : IEquatable<IfStatementInfo>, IEnumerable<IfStatementOrElseClause>
+    public readonly struct IfStatementCascade : IEquatable<IfStatementCascade>, IEnumerable<IfStatementOrElseClause>
     {
-        private IfStatementInfo(IfStatementSyntax ifStatement)
+        internal IfStatementCascade(IfStatementSyntax ifStatement)
         {
             IfStatement = ifStatement;
 
 #if DEBUG
             //XTEST:
-            Debug.Assert(System.Linq.Enumerable.SequenceEqual(GetChain(), this), nameof(IfStatementInfo));
+            Debug.Assert(System.Linq.Enumerable.SequenceEqual(GetChain(), this), nameof(IfStatementCascade));
 
             IEnumerable<IfStatementOrElseClause> GetChain()
             {
@@ -34,7 +34,7 @@ namespace Roslynator.CSharp.Syntax
                     {
                         StatementSyntax statement = elseClause.Statement;
 
-                        if (statement?.IsKind(Microsoft.CodeAnalysis.CSharp.SyntaxKind.IfStatement) == true)
+                        if (statement.IsKind(Microsoft.CodeAnalysis.CSharp.SyntaxKind.IfStatement))
                         {
                             ifStatement = (IfStatementSyntax)statement;
                             yield return ifStatement;
@@ -59,25 +59,17 @@ namespace Roslynator.CSharp.Syntax
         /// </summary>
         public IfStatementSyntax IfStatement { get; }
 
-        /// <summary>
-        /// Determines whether this struct was initialized with an actual syntax.
-        /// </summary>
-        public bool Success
-        {
-            get { return IfStatement != null; }
-        }
-
-        internal static IfStatementInfo Create(SyntaxNode node)
+        internal static IfStatementCascade Create(SyntaxNode node)
         {
             return Create(node as IfStatementSyntax);
         }
 
-        internal static IfStatementInfo Create(IfStatementSyntax ifStatement)
+        internal static IfStatementCascade Create(IfStatementSyntax ifStatement)
         {
             if (ifStatement == null)
-                return default(IfStatementInfo);
+                return default(IfStatementCascade);
 
-            return new IfStatementInfo(ifStatement);
+            return new IfStatementCascade(ifStatement);
         }
 
         /// <summary>
@@ -121,7 +113,7 @@ namespace Roslynator.CSharp.Syntax
         /// <returns>true if <paramref name="obj" /> and this instance are the same type and represent the same value; otherwise, false. </returns>
         public override bool Equals(object obj)
         {
-            return obj is IfStatementInfo other && Equals(other);
+            return obj is IfStatementCascade other && Equals(other);
         }
 
         /// <summary>
@@ -129,7 +121,7 @@ namespace Roslynator.CSharp.Syntax
         /// </summary>
         /// <param name="other">An object to compare with this object.</param>
         /// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
-        public bool Equals(IfStatementInfo other)
+        public bool Equals(IfStatementCascade other)
         {
             return EqualityComparer<IfStatementSyntax>.Default.Equals(IfStatement, other.IfStatement);
         }
@@ -143,12 +135,12 @@ namespace Roslynator.CSharp.Syntax
             return EqualityComparer<IfStatementSyntax>.Default.GetHashCode(IfStatement);
         }
 
-        public static bool operator ==(IfStatementInfo info1, IfStatementInfo info2)
+        public static bool operator ==(IfStatementCascade info1, IfStatementCascade info2)
         {
             return info1.Equals(info2);
         }
 
-        public static bool operator !=(IfStatementInfo info1, IfStatementInfo info2)
+        public static bool operator !=(IfStatementCascade info1, IfStatementCascade info2)
         {
             return !(info1 == info2);
         }

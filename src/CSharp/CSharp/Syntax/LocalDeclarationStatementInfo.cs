@@ -14,14 +14,9 @@ namespace Roslynator.CSharp.Syntax
     /// </summary>
     public readonly struct LocalDeclarationStatementInfo : IEquatable<LocalDeclarationStatementInfo>
     {
-        private LocalDeclarationStatementInfo(
-            LocalDeclarationStatementSyntax statement,
-            VariableDeclarationSyntax declaration,
-            TypeSyntax type)
+        private LocalDeclarationStatementInfo(LocalDeclarationStatementSyntax statement)
         {
             Statement = statement;
-            Declaration = declaration;
-            Type = type;
         }
 
         private static LocalDeclarationStatementInfo Default { get; } = new LocalDeclarationStatementInfo();
@@ -42,19 +37,25 @@ namespace Roslynator.CSharp.Syntax
         /// <summary>
         /// The type of the declaration.
         /// </summary>
-        public TypeSyntax Type { get; }
+        public TypeSyntax Type
+        {
+            get { return Statement?.Declaration.Type; }
+        }
 
         /// <summary>
         /// The variable declaration.
         /// </summary>
-        public VariableDeclarationSyntax Declaration { get; }
+        public VariableDeclarationSyntax Declaration
+        {
+            get { return Statement?.Declaration; }
+        }
 
         /// <summary>
         /// A list of variables.
         /// </summary>
         public SeparatedSyntaxList<VariableDeclaratorSyntax> Variables
         {
-            get { return Declaration?.Variables ?? default(SeparatedSyntaxList<VariableDeclaratorSyntax>); }
+            get { return Statement?.Declaration.Variables ?? default(SeparatedSyntaxList<VariableDeclaratorSyntax>); }
         }
 
         /// <summary>
@@ -90,7 +91,7 @@ namespace Roslynator.CSharp.Syntax
             if (!variableDeclaration.Variables.Any())
                 return Default;
 
-            return new LocalDeclarationStatementInfo(localDeclarationStatement, variableDeclaration, type);
+            return new LocalDeclarationStatementInfo(localDeclarationStatement);
         }
 
         internal static LocalDeclarationStatementInfo Create(
@@ -118,7 +119,7 @@ namespace Roslynator.CSharp.Syntax
             if (!(declaration.Parent is LocalDeclarationStatementSyntax localDeclarationStatement))
                 return Default;
 
-            return new LocalDeclarationStatementInfo(localDeclarationStatement, declaration, type);
+            return new LocalDeclarationStatementInfo(localDeclarationStatement);
         }
 
         /// <summary>

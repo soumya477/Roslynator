@@ -29,7 +29,7 @@ namespace Roslynator
             if (lastIndex < firstIndex)
                 throw new ArgumentOutOfRangeException(nameof(lastIndex), lastIndex, "Index of the last selected item must be greater or equal to index of the first selected item.");
 
-            Span = span;
+            OriginalSpan = span;
             FirstIndex = firstIndex;
             LastIndex = lastIndex;
         }
@@ -40,9 +40,9 @@ namespace Roslynator
         protected abstract IReadOnlyList<T> Items { get; }
 
         /// <summary>
-        /// Gets a span that contains selected items.
+        /// Gets the original span that was used to determine selected items.
         /// </summary>
-        public TextSpan Span { get; }
+        public TextSpan OriginalSpan { get; }
 
         /// <summary>
         /// Gets an index of the first selected item.

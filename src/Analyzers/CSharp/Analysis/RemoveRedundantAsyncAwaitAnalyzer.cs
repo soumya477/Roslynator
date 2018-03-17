@@ -281,7 +281,7 @@ namespace Roslynator.CSharp.Analysis
         {
             HashSet<AwaitExpressionSyntax> awaitExpressions = null;
 
-            foreach (IfStatementOrElseClause ifOrElse in SyntaxInfo.IfStatementInfo(ifStatement))
+            foreach (IfStatementOrElseClause ifOrElse in ifStatement.AsCascade())
             {
                 if (ifOrElse.IsElse
                     && !endsWithElse)
