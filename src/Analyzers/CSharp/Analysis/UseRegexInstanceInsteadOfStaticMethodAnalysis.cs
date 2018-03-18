@@ -9,7 +9,6 @@ using Roslynator.CSharp.Syntax;
 
 namespace Roslynator.CSharp.Analysis
 {
-    //TODO: test
     internal static class UseRegexInstanceInsteadOfStaticMethodAnalysis
     {
         internal static void Analyze(SyntaxNodeAnalysisContext context, MemberInvocationExpressionInfo invocationInfo)
