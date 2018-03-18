@@ -52,7 +52,7 @@ namespace Roslynator.CSharp.Syntax
 
         public ExpressionSyntax Value
         {
-            get { return Declarator?.Initializer.Value; }
+            get { return Initializer?.Value; }
         }
 
         /// <summary>
