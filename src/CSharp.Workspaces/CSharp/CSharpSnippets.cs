@@ -7,7 +7,7 @@ using static Roslynator.CSharp.CSharpFactory;
 
 namespace Roslynator.CSharp
 {
-    internal static class CSharpSyntax
+    internal static class CSharpSnippets
     {
         #region If
         public static IfStatementSyntax IfReturn(ExpressionSyntax expression)
@@ -139,17 +139,41 @@ namespace Roslynator.CSharp
 
         public static ThrowExpressionSyntax ThrowNewNotImplementedExceptionExpression(SemanticModel semanticModel, int position)
         {
-            return ThrowExpression(
-                ObjectCreationExpression(
-                    semanticModel.GetTypeByMetadataName(MetadataNames.System_NotImplementedException).ToMinimalTypeSyntax(semanticModel, position),
-                    ArgumentList()));
+            return ThrowNewExceptionExpression(MetadataNames.System_NotImplementedException, semanticModel, position);
         }
 
         public static ThrowStatementSyntax ThrowNewNotImplementedExceptionStatement(SemanticModel semanticModel, int position)
         {
+            return ThrowNewExceptionStatement(MetadataNames.System_NotImplementedException, semanticModel, position);
+        }
+
+        private static ThrowExpressionSyntax ThrowNewExceptionExpression(string fullyQualifiedMetadataName, SemanticModel semanticModel, int position)
+        {
+            INamedTypeSymbol exceptionSymbol = semanticModel.GetTypeByMetadataName(fullyQualifiedMetadataName);
+
+            return ThrowNewExceptionExpression(exceptionSymbol, semanticModel, position);
+        }
+
+        private static ThrowExpressionSyntax ThrowNewExceptionExpression(INamedTypeSymbol exceptionSymbol, SemanticModel semanticModel, int position)
+        {
+            return ThrowExpression(
+                ObjectCreationExpression(
+                    exceptionSymbol.ToMinimalTypeSyntax(semanticModel, position),
+                    ArgumentList()));
+        }
+
+        private static ThrowStatementSyntax ThrowNewExceptionStatement(string fullyQualifiedMetadataName, SemanticModel semanticModel, int position)
+        {
+            INamedTypeSymbol exceptionSymbol = semanticModel.GetTypeByMetadataName(fullyQualifiedMetadataName);
+
+            return ThrowNewExceptionStatement(exceptionSymbol, semanticModel, position);
+        }
+
+        private static ThrowStatementSyntax ThrowNewExceptionStatement(INamedTypeSymbol exceptionSymbol, SemanticModel semanticModel, int position)
+        {
             return ThrowStatement(
                 ObjectCreationExpression(
-                    semanticModel.GetTypeByMetadataName(MetadataNames.System_NotImplementedException).ToMinimalTypeSyntax(semanticModel, position),
+                    exceptionSymbol.ToMinimalTypeSyntax(semanticModel, position),
                     ArgumentList()));
         }
     }
