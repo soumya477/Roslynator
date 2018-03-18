@@ -19,7 +19,7 @@ namespace Roslynator.CSharp.Analysis
             if (assignmentExpression.IsParentKind(SyntaxKind.ObjectInitializerExpression))
                 return false;
 
-            if (!SupportsCompoundAssignment(assignmentInfo.Right.Kind()))
+            if (!SupportsCompoundAssignmentExpression(assignmentInfo.Right.Kind()))
                 return false;
 
             BinaryExpressionInfo binaryInfo = SyntaxInfo.BinaryExpressionInfo((BinaryExpressionSyntax)assignmentInfo.Right);

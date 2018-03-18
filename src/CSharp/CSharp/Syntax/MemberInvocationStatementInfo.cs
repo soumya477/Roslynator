@@ -8,21 +8,17 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Roslynator.CSharp.Syntax
 {
+    //TODO: MemberAccessInvocationStatementInfo
     /// <summary>
     /// Provides information about invocation expression in an expression statement.
     /// </summary>
     public readonly struct MemberInvocationStatementInfo : IEquatable<MemberInvocationStatementInfo>
     {
-        private MemberInvocationStatementInfo(
-            InvocationExpressionSyntax invocationExpression,
-            ExpressionSyntax expression,
-            SimpleNameSyntax name,
-            ArgumentListSyntax argumentList)
+        private readonly MemberInvocationExpressionInfo _info;
+
+        private MemberInvocationStatementInfo(MemberInvocationExpressionInfo info)
         {
-            InvocationExpression = invocationExpression;
-            Expression = expression;
-            Name = name;
-            ArgumentList = argumentList;
+            _info = info;
         }
 
         private static MemberInvocationStatementInfo Default { get; } = new MemberInvocationStatementInfo();
@@ -30,30 +26,37 @@ namespace Roslynator.CSharp.Syntax
         /// <summary>
         /// The invocation expression.
         /// </summary>
-        public InvocationExpressionSyntax InvocationExpression { get; }
+        public InvocationExpressionSyntax InvocationExpression => _info.InvocationExpression;
+
+        /// <summary>
+        /// The member access expression.
+        /// </summary>
+        public MemberAccessExpressionSyntax MemberAccessExpression => _info.MemberAccessExpression;
 
         /// <summary>
         /// The expression that contains the member being invoked.
         /// </summary>
-        public ExpressionSyntax Expression { get; }
+        public ExpressionSyntax Expression => _info.Expression;
 
         /// <summary>
         /// The name of the member being invoked.
         /// </summary>
-        public SimpleNameSyntax Name { get; }
+        public SimpleNameSyntax Name => _info.Name;
 
         /// <summary>
         /// The argument list.
         /// </summary>
-        public ArgumentListSyntax ArgumentList { get; }
+        public ArgumentListSyntax ArgumentList => _info.ArgumentList;
 
         /// <summary>
         /// A list of arguments.
         /// </summary>
-        public SeparatedSyntaxList<ArgumentSyntax> Arguments
-        {
-            get { return ArgumentList?.Arguments ?? default(SeparatedSyntaxList<ArgumentSyntax>); }
-        }
+        public SeparatedSyntaxList<ArgumentSyntax> Arguments => _info.Arguments;
+
+        /// <summary>
+        /// The name of the member being invoked.
+        /// </summary>
+        public string NameText => _info.NameText;
 
         /// <summary>
         /// The expression statement that contains the invocation expression.
@@ -64,28 +67,9 @@ namespace Roslynator.CSharp.Syntax
         }
 
         /// <summary>
-        /// The member access expression.
-        /// </summary>
-        public MemberAccessExpressionSyntax MemberAccessExpression
-        {
-            get { return (MemberAccessExpressionSyntax)Expression?.Parent; }
-        }
-
-        /// <summary>
-        /// The name of the member being invoked.
-        /// </summary>
-        public string NameText
-        {
-            get { return Name?.Identifier.ValueText; }
-        }
-
-        /// <summary>
         /// Determines whether this struct was initialized with an actual syntax.
         /// </summary>
-        public bool Success
-        {
-            get { return InvocationExpression != null; }
-        }
+        public bool Success => _info.Success;
 
         internal static MemberInvocationStatementInfo Create(
             SyntaxNode node,
@@ -116,7 +100,7 @@ namespace Roslynator.CSharp.Syntax
             InvocationExpressionSyntax invocationExpression,
             bool allowMissing = false)
         {
-            if (invocationExpression?.Parent?.IsKind(SyntaxKind.ExpressionStatement) != true)
+            if (!invocationExpression.IsParentKind(SyntaxKind.ExpressionStatement))
                 return Default;
 
             return CreateImpl(invocationExpression, allowMissing);
@@ -126,14 +110,7 @@ namespace Roslynator.CSharp.Syntax
         {
             MemberInvocationExpressionInfo info = MemberInvocationExpressionInfo.Create(invocationExpression, allowMissing);
 
-            if (!info.Success)
-                return Default;
-
-            return new MemberInvocationStatementInfo(
-                invocationExpression,
-                info.Expression,
-                info.Name,
-                info.ArgumentList);
+            return new MemberInvocationStatementInfo(info);
         }
 
         /// <summary>
@@ -142,7 +119,7 @@ namespace Roslynator.CSharp.Syntax
         /// <returns></returns>
         public override string ToString()
         {
-            return Statement?.ToString() ?? "";
+            return InvocationExpression?.Parent.ToString() ?? "";
         }
 
         /// <summary>
@@ -162,7 +139,7 @@ namespace Roslynator.CSharp.Syntax
         /// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
         public bool Equals(MemberInvocationStatementInfo other)
         {
-            return EqualityComparer<ExpressionStatementSyntax>.Default.Equals(Statement, other.Statement);
+            return EqualityComparer<SyntaxNode>.Default.Equals(InvocationExpression?.Parent, other.InvocationExpression?.Parent);
         }
 
         /// <summary>
@@ -171,7 +148,7 @@ namespace Roslynator.CSharp.Syntax
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            return EqualityComparer<ExpressionStatementSyntax>.Default.GetHashCode(Statement);
+            return EqualityComparer<SyntaxNode>.Default.GetHashCode(InvocationExpression?.Parent);
         }
 
         public static bool operator ==(MemberInvocationStatementInfo info1, MemberInvocationStatementInfo info2)

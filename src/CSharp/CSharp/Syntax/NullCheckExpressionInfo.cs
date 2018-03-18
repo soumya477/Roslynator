@@ -27,6 +27,7 @@ namespace Roslynator.CSharp.Syntax
 
         private static NullCheckExpressionInfo Default { get; } = new NullCheckExpressionInfo();
 
+        //TODO: NullCheckExpression
         /// <summary>
         /// The null check expression, e.g. "x == null".
         /// </summary>
@@ -38,7 +39,7 @@ namespace Roslynator.CSharp.Syntax
         public ExpressionSyntax Expression { get; }
 
         /// <summary>
-        /// The style of this null check. Always returns only single value from the <see cref="NullCheckStyles"/> enumeration.
+        /// The style of this null check. Always returns only a single value from the <see cref="NullCheckStyles"/> enumeration.
         /// </summary>
         public NullCheckStyles Style { get; }
 

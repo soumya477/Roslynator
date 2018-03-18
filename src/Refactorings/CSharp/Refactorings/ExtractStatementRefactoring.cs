@@ -79,7 +79,7 @@ namespace Roslynator.CSharp.Refactorings
                 case SyntaxKind.IfStatement:
                     return ((IfStatementSyntax)node).IsTopmostIf();
                 case SyntaxKind.ElseClause:
-                    return !((ElseClauseSyntax)node).IsElseIf();
+                    return ((ElseClauseSyntax)node).Statement?.Kind() != SyntaxKind.IfStatement;
             }
 
             return false;

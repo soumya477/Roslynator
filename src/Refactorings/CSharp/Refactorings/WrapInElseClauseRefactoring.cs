@@ -36,9 +36,7 @@ namespace Roslynator.CSharp.Refactorings
 
             var ifStatement = (IfStatementSyntax)prevStatement;
 
-            IfStatementInfo ifStatementInfo = SyntaxInfo.IfStatementInfo(ifStatement);
-
-            foreach (IfStatementOrElseClause ifOrElse in ifStatementInfo)
+            foreach (IfStatementOrElseClause ifOrElse in ifStatement.AsCascade())
             {
                 if (ifOrElse.IsElse)
                     return;
@@ -49,7 +47,7 @@ namespace Roslynator.CSharp.Refactorings
 
             context.RegisterRefactoring(
                 "Wrap in else clause",
-                cancellationToken => RefactorAsync(context.Document, ifStatementInfo, selectedStatements, cancellationToken));
+                cancellationToken => RefactorAsync(context.Document, ifStatement, selectedStatements, cancellationToken));
         }
 
         private static bool IsLastStatementReturnStatement(IfStatementSyntax ifStatement)
@@ -74,14 +72,14 @@ namespace Roslynator.CSharp.Refactorings
 
         private static Task<Document> RefactorAsync(
             Document document,
-            IfStatementInfo ifStatementInfo,
+            IfStatementSyntax ifStatement,
             StatementListSelection selectedStatements,
             CancellationToken cancellationToken)
         {
             StatementSyntax newStatement = null;
 
             if (selectedStatements.Count == 1
-                && !ifStatementInfo.Any(f => f.Statement?.Kind() == SyntaxKind.Block))
+                && !ifStatement.AsCascade().Any(f => f.Statement?.Kind() == SyntaxKind.Block))
             {
                 newStatement = selectedStatements.First();
             }
@@ -92,9 +90,7 @@ namespace Roslynator.CSharp.Refactorings
 
             ElseClauseSyntax elseClause = SyntaxFactory.ElseClause(newStatement).WithFormatterAnnotation();
 
-            IfStatementSyntax lastIfStatement = ifStatementInfo.Last();
-
-            IfStatementSyntax ifStatement = ifStatementInfo.IfStatement;
+            IfStatementSyntax lastIfStatement = ifStatement.AsCascade().Last();
 
             IfStatementSyntax newIfStatement = ifStatement.ReplaceNode(
                 lastIfStatement,

@@ -16,11 +16,9 @@ namespace Roslynator.CSharp.Syntax
     {
         private SingleLocalDeclarationStatementInfo(
             LocalDeclarationStatementSyntax statement,
-            VariableDeclarationSyntax declaration,
             VariableDeclaratorSyntax declarator)
         {
             Statement = statement;
-            Declaration = declaration;
             Declarator = declarator;
         }
 
@@ -32,14 +30,17 @@ namespace Roslynator.CSharp.Syntax
         public LocalDeclarationStatementSyntax Statement { get; }
 
         /// <summary>
-        /// The variable declaration.
-        /// </summary>
-        public VariableDeclarationSyntax Declaration { get; }
-
-        /// <summary>
         /// The variable declarator.
         /// </summary>
         public VariableDeclaratorSyntax Declarator { get; }
+
+        /// <summary>
+        /// The variable declaration.
+        /// </summary>
+        public VariableDeclarationSyntax Declaration
+        {
+            get { return Statement?.Declaration; }
+        }
 
         /// <summary>
         /// The variable initializer, if any.
@@ -67,7 +68,7 @@ namespace Roslynator.CSharp.Syntax
         /// </summary>
         public TypeSyntax Type
         {
-            get { return Declaration?.Type; }
+            get { return Statement?.Declaration.Type; }
         }
 
         /// <summary>
@@ -91,7 +92,7 @@ namespace Roslynator.CSharp.Syntax
         /// </summary>
         public SyntaxToken EqualsToken
         {
-            get { return Initializer?.EqualsToken ?? default(SyntaxToken); }
+            get { return Declarator?.Initializer.EqualsToken ?? default(SyntaxToken); }
         }
 
         /// <summary>
@@ -107,7 +108,7 @@ namespace Roslynator.CSharp.Syntax
         /// </summary>
         public bool Success
         {
-            get { return Declaration != null; }
+            get { return Statement != null; }
         }
 
         internal static SingleLocalDeclarationStatementInfo Create(
@@ -124,7 +125,7 @@ namespace Roslynator.CSharp.Syntax
             if (!Check(variableDeclarator, allowMissing))
                 return Default;
 
-            return new SingleLocalDeclarationStatementInfo(localDeclarationStatement, variableDeclaration, variableDeclarator);
+            return new SingleLocalDeclarationStatementInfo(localDeclarationStatement, variableDeclarator);
         }
 
         internal static SingleLocalDeclarationStatementInfo Create(
@@ -142,7 +143,7 @@ namespace Roslynator.CSharp.Syntax
             if (!Check(variableDeclarator, allowMissing))
                 return Default;
 
-            return new SingleLocalDeclarationStatementInfo(localDeclarationStatement, variableDeclaration, variableDeclarator);
+            return new SingleLocalDeclarationStatementInfo(localDeclarationStatement, variableDeclarator);
         }
 
         internal static SingleLocalDeclarationStatementInfo Create(ExpressionSyntax value)
@@ -164,7 +165,7 @@ namespace Roslynator.CSharp.Syntax
             if (!(declaration.Parent is LocalDeclarationStatementSyntax localDeclarationStatement))
                 return Default;
 
-            return new SingleLocalDeclarationStatementInfo(localDeclarationStatement, declaration, declarator);
+            return new SingleLocalDeclarationStatementInfo(localDeclarationStatement, declarator);
         }
 
         /// <summary>

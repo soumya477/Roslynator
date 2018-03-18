@@ -74,7 +74,7 @@ namespace Roslynator.CSharp.Analysis
             if (!IsLocalDeclaredInScopeOrNonRefOrOutParameterOfEnclosingSymbol(symbol, statementsInfo.Parent, semanticModel, cancellationToken))
                 return;
 
-            foreach (IfStatementOrElseClause ifOrElse in SyntaxInfo.IfStatementInfo(ifStatement))
+            foreach (IfStatementOrElseClause ifOrElse in ifStatement.AsCascade())
             {
                 if (!IsSymbolAssignedInLastStatement(ifOrElse, symbol, semanticModel, cancellationToken))
                     return;

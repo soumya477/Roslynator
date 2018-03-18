@@ -37,20 +37,20 @@ namespace Roslynator.CSharp.CodeFixes
                 {
                     case CompilerDiagnosticIdentifiers.TypeParameterHasSameNameAsTypeParameterFromOuterType:
                         {
-                            TypeParameterInfo typeParameterInfo = SyntaxInfo.TypeParameterInfo(typeParameter);
+                            string name = typeParameter.Identifier.ValueText;
 
-                            if (!typeParameterInfo.Success)
-                                break;
+                            if (string.IsNullOrEmpty(name))
+                                return;
 
                             CodeAction codeAction = CodeAction.Create(
-                                $"Remove type parameter '{typeParameterInfo.Name}'",
+                                $"Remove type parameter '{name}'",
                                 cancellationToken =>
                                 {
-                                    GenericInfo genericInfo = SyntaxInfo.GenericInfo(typeParameterInfo.Declaration);
+                                    GenericInfo genericInfo = SyntaxInfo.GenericInfo(typeParameter);
 
                                     GenericInfo newGenericInfo = genericInfo.RemoveTypeParameter(typeParameter);
 
-                                    TypeParameterConstraintClauseSyntax constraintClause = typeParameterInfo.ConstraintClause;
+                                    TypeParameterConstraintClauseSyntax constraintClause = genericInfo.FindConstraintClause(name);
 
                                     if (constraintClause != null)
                                         newGenericInfo = newGenericInfo.RemoveConstraintClause(constraintClause);

@@ -56,7 +56,9 @@ namespace Roslynator.CSharp.Analysis
             if (value == null)
                 return;
 
-            if (!localDeclarationStatement.TryGetContainingList(out SyntaxList<StatementSyntax> statements))
+            SyntaxList<StatementSyntax> statements = SyntaxInfo.StatementListInfo(localDeclarationStatement).Statements;
+
+            if (!statements.Any())
                 return;
 
             int index = statements.IndexOf(localDeclarationStatement);

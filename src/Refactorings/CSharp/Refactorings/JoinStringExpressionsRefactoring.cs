@@ -48,7 +48,7 @@ namespace Roslynator.CSharp.Refactorings
             StringConcatenationExpressionInfo concatenationInfo,
             CancellationToken cancellationToken)
         {
-            InterpolatedStringExpressionSyntax newExpression = concatenationInfo.ToInterpolatedString();
+            InterpolatedStringExpressionSyntax newExpression = concatenationInfo.ToInterpolatedStringExpression();
 
             return RefactorAsync(document, concatenationInfo, newExpression, cancellationToken);
         }
@@ -60,8 +60,8 @@ namespace Roslynator.CSharp.Refactorings
             CancellationToken cancellationToken = default(CancellationToken))
         {
             ExpressionSyntax newExpression = (multiline)
-                ? concatenationInfo.ToMultiLineStringLiteral()
-                : concatenationInfo.ToStringLiteral();
+                ? concatenationInfo.ToMultiLineStringLiteralExpression()
+                : concatenationInfo.ToStringLiteralExpression();
 
             return RefactorAsync(document, concatenationInfo, newExpression, cancellationToken);
         }
