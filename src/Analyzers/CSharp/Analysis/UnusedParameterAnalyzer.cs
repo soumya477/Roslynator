@@ -370,7 +370,7 @@ namespace Roslynator.CSharp.Analysis
             }
         }
 
-        //XTODO: UnusedMemberWalker
+        //XPERF:
         private static bool IsReferencedAsMethodGroup(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax methodDeclaration)
         {
             ISymbol methodSymbol = context.SemanticModel.GetDeclaredSymbol(methodDeclaration, context.CancellationToken);

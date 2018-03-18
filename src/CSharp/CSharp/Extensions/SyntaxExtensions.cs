@@ -32,10 +32,7 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         public static bool IsAutoImplemented(this AccessorDeclarationSyntax accessorDeclaration)
         {
-            if (accessorDeclaration == null)
-                throw new ArgumentNullException(nameof(accessorDeclaration));
-
-            return accessorDeclaration.SemicolonToken.Kind() == SyntaxKind.SemicolonToken
+            return accessorDeclaration?.SemicolonToken.Kind() == SyntaxKind.SemicolonToken
                 && accessorDeclaration.BodyOrExpressionBody() == null;
         }
 
@@ -576,19 +573,6 @@ namespace Roslynator.CSharp
             return null;
         }
 
-        /// <summary>
-        /// Returns true if the specified else clause's statement is if statement.
-        /// </summary>
-        /// <param name="elseClause"></param>
-        /// <returns></returns>
-        public static bool IsElseIf(this ElseClauseSyntax elseClause)
-        {
-            if (elseClause == null)
-                throw new ArgumentNullException(nameof(elseClause));
-
-            return elseClause.Statement?.Kind() == SyntaxKind.IfStatement;
-        }
-
         internal static StatementSyntax EmbeddedStatement(this ElseClauseSyntax elseClause, bool allowIfStatement = true)
         {
             StatementSyntax statement = elseClause.Statement;
@@ -729,28 +713,10 @@ namespace Roslynator.CSharp
 
         internal static bool IsNumericLiteralExpression(this ExpressionSyntax expression, string valueText)
         {
-            if (expression == null)
-                throw new ArgumentNullException(nameof(expression));
-
             return expression.IsKind(SyntaxKind.NumericLiteralExpression)
                 && string.Equals(((LiteralExpressionSyntax)expression).Token.ValueText, valueText, StringComparison.Ordinal);
         }
         #endregion ExpressionSyntax
-
-        #region FieldDeclarationSyntax
-        /// <summary>
-        /// Returns true if the specified field declaration is a const declaration.
-        /// </summary>
-        /// <param name="fieldDeclaration"></param>
-        /// <returns></returns>
-        public static bool IsConst(this FieldDeclarationSyntax fieldDeclaration)
-        {
-            if (fieldDeclaration == null)
-                throw new ArgumentNullException(nameof(fieldDeclaration));
-
-            return fieldDeclaration.Modifiers.Contains(SyntaxKind.ConstKeyword);
-        }
-        #endregion FieldDeclarationSyntax
 
         #region FixedStatementSyntax
         internal static StatementSyntax EmbeddedStatement(this FixedStatementSyntax fixedStatement)
@@ -797,26 +763,8 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         public static bool IsSimpleIf(this IfStatementSyntax ifStatement)
         {
-            if (ifStatement == null)
-                throw new ArgumentNullException(nameof(ifStatement));
-
-            return !ifStatement.IsParentKind(SyntaxKind.ElseClause)
+            return ifStatement?.IsParentKind(SyntaxKind.ElseClause) == false
                 && ifStatement.Else == null;
-        }
-
-        /// <summary>
-        /// Returns true if the specified if statement represents a simple if-else.
-        /// Simple if-else is defined as follows: it is not a child of an else clause and it has an else clause and the else clause does not continue with another if statement.
-        /// </summary>
-        /// <param name="ifStatement"></param>
-        /// <returns></returns>
-        public static bool IsSimpleIfElse(this IfStatementSyntax ifStatement)
-        {
-            if (ifStatement == null)
-                throw new ArgumentNullException(nameof(ifStatement));
-
-            return !ifStatement.IsParentKind(SyntaxKind.ElseClause)
-                && ifStatement.Else?.Statement?.IsKind(SyntaxKind.IfStatement) == false;
         }
 
         /// <summary>
@@ -853,10 +801,7 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         public static bool IsTopmostIf(this IfStatementSyntax ifStatement)
         {
-            if (ifStatement == null)
-                throw new ArgumentNullException(nameof(ifStatement));
-
-            return !ifStatement.IsParentKind(SyntaxKind.ElseClause);
+            return ifStatement?.IsParentKind(SyntaxKind.ElseClause) == false;
         }
 
         internal static IfStatementSyntax GetNextIf(this IfStatementSyntax ifStatement)
@@ -889,6 +834,14 @@ namespace Roslynator.CSharp
             StatementSyntax statement = ifStatement.Statement;
 
             return (statement?.Kind() == SyntaxKind.Block) ? null : statement;
+        }
+
+        public static IfStatementCascade AsCascade(this IfStatementSyntax ifStatement)
+        {
+            if (ifStatement == null)
+                throw new ArgumentNullException(nameof(ifStatement));
+
+            return new IfStatementCascade(ifStatement);
         }
         #endregion IfStatementSyntax
 
@@ -1055,10 +1008,7 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         public static bool IsVerbatim(this InterpolatedStringExpressionSyntax interpolatedString)
         {
-            if (interpolatedString == null)
-                throw new ArgumentNullException(nameof(interpolatedString));
-
-            return interpolatedString.StringStartToken.ValueText.Contains("@");
+            return interpolatedString?.StringStartToken.ValueText.Contains("@") == true;
         }
         #endregion InterpolatedStringExpressionSyntax
 
@@ -1123,9 +1073,6 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         public static bool IsHexNumericLiteral(this LiteralExpressionSyntax literalExpression)
         {
-            if (literalExpression == null)
-                throw new ArgumentNullException(nameof(literalExpression));
-
             return literalExpression.IsKind(SyntaxKind.NumericLiteralExpression)
                 && literalExpression.Token.Text.StartsWith("0x", StringComparison.OrdinalIgnoreCase);
         }
@@ -1492,10 +1439,7 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         public static bool IsParams(this ParameterSyntax parameter)
         {
-            if (parameter == null)
-                throw new ArgumentNullException(nameof(parameter));
-
-            return parameter.Modifiers.Contains(SyntaxKind.ParamsKeyword);
+            return parameter?.Modifiers.Contains(SyntaxKind.ParamsKeyword) == true;
         }
 
         internal static SeparatedSyntaxList<ParameterSyntax> GetContainingList(this ParameterSyntax parameter)
@@ -1758,7 +1702,9 @@ namespace Roslynator.CSharp
             if (statement == null)
                 throw new ArgumentNullException(nameof(statement));
 
-            if (statement.TryGetContainingList(out SyntaxList<StatementSyntax> statements))
+            SyntaxList<StatementSyntax> statements = SyntaxInfo.StatementListInfo(statement).Statements;
+
+            if (statements.Any())
             {
                 int index = statements.IndexOf(statement);
 
@@ -1780,7 +1726,9 @@ namespace Roslynator.CSharp
             if (statement == null)
                 throw new ArgumentNullException(nameof(statement));
 
-            if (statement.TryGetContainingList(out SyntaxList<StatementSyntax> statements))
+            SyntaxList<StatementSyntax> statements = SyntaxInfo.StatementListInfo(statement).Statements;
+
+            if (statements.Any())
             {
                 int index = statements.IndexOf(statement);
 
@@ -1800,27 +1748,9 @@ namespace Roslynator.CSharp
         /// <returns>True if the statement is contained in the list; otherwise, false.</returns>
         public static bool TryGetContainingList(this StatementSyntax statement, out SyntaxList<StatementSyntax> statements)
         {
-            SyntaxNode parent = statement?.Parent;
+            statements = SyntaxInfo.StatementListInfo(statement).Statements;
 
-            switch (parent?.Kind())
-            {
-                case SyntaxKind.Block:
-                    {
-                        statements = ((BlockSyntax)parent).Statements;
-                        return true;
-                    }
-                case SyntaxKind.SwitchSection:
-                    {
-                        statements = ((SwitchSectionSyntax)parent).Statements;
-                        return true;
-                    }
-                default:
-                    {
-                        Debug.Assert(parent == null || statement.IsEmbedded(), parent.Kind().ToString());
-                        statements = default(SyntaxList<StatementSyntax>);
-                        return false;
-                    }
-            }
+            return statements.Any();
         }
 
         private static StatementSyntax SingleNonBlockStatementOrDefault(this StatementSyntax statement, bool recursive = false)
@@ -2366,7 +2296,7 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         public static bool IsParentKind(this SyntaxNode node, SyntaxKind kind)
         {
-            return node?.Parent?.Kind() == kind;
+            return node?.Parent.IsKind(kind) == true;
         }
 
         /// <summary>
@@ -3321,7 +3251,7 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         public static bool IsParentKind(this SyntaxToken token, SyntaxKind kind)
         {
-            return token.Parent?.IsKind(kind) == true;
+            return token.Parent.IsKind(kind);
         }
 
         /// <summary>

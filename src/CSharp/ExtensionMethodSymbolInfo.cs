@@ -22,12 +22,12 @@ namespace Roslynator
             get { return ReducedSymbol ?? Symbol; }
         }
 
-        public bool IsFromReduced
+        public bool IsReduced
         {
             get { return Symbol != null && !object.ReferenceEquals(ReducedSymbol, Symbol); }
         }
 
-        public bool IsFromOrdinary
+        public bool IsOrdinary
         {
             get { return Symbol != null && object.ReferenceEquals(ReducedSymbol, Symbol); }
         }

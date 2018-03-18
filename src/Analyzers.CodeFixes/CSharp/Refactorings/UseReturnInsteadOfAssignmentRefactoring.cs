@@ -17,27 +17,6 @@ namespace Roslynator.CSharp.Refactorings
 {
     internal static class UseReturnInsteadOfAssignmentRefactoring
     {
-        private static LocalDeclarationStatementSyntax FindLocalDeclarationStatementAbove(SyntaxList<StatementSyntax> statements, int i)
-        {
-            i--;
-
-            while (i >=0)
-            {
-                if (!statements[i].IsKind(SyntaxKind.LocalFunctionStatement))
-                    break;
-
-                i--;
-            }
-
-            if (i >= 0
-                && statements[i].IsKind(SyntaxKind.LocalDeclarationStatement))
-            {
-                return (LocalDeclarationStatementSyntax)statements[i];
-            }
-
-            return null;
-        }
-
         public static async Task<Document> RefactorAsync(
             Document document,
             StatementSyntax statement,
@@ -55,9 +34,8 @@ namespace Roslynator.CSharp.Refactorings
                     {
                         var ifStatement = (IfStatementSyntax)statement;
 
-                        IfStatementInfo ifStatementInfo = SyntaxInfo.IfStatementInfo(ifStatement);
-
-                        IEnumerable<ExpressionStatementSyntax> expressionStatements = ifStatementInfo
+                        IEnumerable<ExpressionStatementSyntax> expressionStatements = ifStatement
+                            .AsCascade()
                             .Select(ifOrElse => (ExpressionStatementSyntax)GetLastStatementOrDefault(ifOrElse.Statement));
 
                         IfStatementSyntax newIfStatement = ifStatement.ReplaceNodes(
@@ -72,7 +50,7 @@ namespace Roslynator.CSharp.Refactorings
                         int count = 0;
                         bool endsWithElse = false;
 
-                        foreach (IfStatementOrElseClause ifOrElse in ifStatementInfo)
+                        foreach (IfStatementOrElseClause ifOrElse in ifStatement.AsCascade())
                         {
                             count++;
                             endsWithElse = ifOrElse.IsElse;
@@ -202,6 +180,27 @@ namespace Roslynator.CSharp.Refactorings
             }
 
             return statementsInfo.ReplaceNode(statementsInfo[index], newStatement);
+        }
+
+        private static LocalDeclarationStatementSyntax FindLocalDeclarationStatementAbove(SyntaxList<StatementSyntax> statements, int i)
+        {
+            i--;
+
+            while (i >= 0)
+            {
+                if (!statements[i].IsKind(SyntaxKind.LocalFunctionStatement))
+                    break;
+
+                i--;
+            }
+
+            if (i >= 0
+                && statements[i].IsKind(SyntaxKind.LocalDeclarationStatement))
+            {
+                return (LocalDeclarationStatementSyntax)statements[i];
+            }
+
+            return null;
         }
 
         private static VariableDeclaratorSyntax FindVariableDeclarator(SemanticModel semanticModel, ISymbol symbol, SeparatedSyntaxList<VariableDeclaratorSyntax> declarators, CancellationToken cancellationToken)

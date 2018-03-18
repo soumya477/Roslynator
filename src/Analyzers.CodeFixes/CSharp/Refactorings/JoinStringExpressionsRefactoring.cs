@@ -28,16 +28,16 @@ namespace Roslynator.CSharp.Refactorings
                 if (analysis.ContainsVerbatimExpression
                     && concatenationInfo.ContainsMultiLineExpression())
                 {
-                    newNode = concatenationInfo.ToMultiLineStringLiteral();
+                    newNode = concatenationInfo.ToMultiLineStringLiteralExpression();
                 }
                 else
                 {
-                    newNode = concatenationInfo.ToStringLiteral();
+                    newNode = concatenationInfo.ToStringLiteralExpression();
                 }
             }
             else
             {
-                newNode = concatenationInfo.ToInterpolatedString();
+                newNode = concatenationInfo.ToInterpolatedStringExpression();
             }
 
             newNode = newNode.WithTriviaFrom(binaryExpression);

@@ -58,7 +58,7 @@ namespace Roslynator.CSharp
 
             int cnt = 0;
 
-            foreach (IfStatementOrElseClause ifOrElse in SyntaxInfo.IfStatementInfo(ifStatement))
+            foreach (IfStatementOrElseClause ifOrElse in ifStatement.AsCascade())
             {
                 cnt++;
 

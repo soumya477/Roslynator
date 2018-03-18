@@ -21,7 +21,7 @@ namespace Roslynator.CSharp.Refactorings
 
             SemanticModel semanticModel = await context.GetSemanticModelAsync().ConfigureAwait(false);
 
-            foreach (IfStatementOrElseClause ifOrElse in SyntaxInfo.IfStatementInfo(ifStatement))
+            foreach (IfStatementOrElseClause ifOrElse in ifStatement.AsCascade())
             {
                 if (ifOrElse.IsIf)
                 {
@@ -46,7 +46,7 @@ namespace Roslynator.CSharp.Refactorings
         {
             ExpressionSyntax condition = ifStatement.Condition?.WalkDownParentheses();
 
-            return condition?.IsKind(SyntaxKind.EqualsExpression, SyntaxKind.LogicalOrExpression) == true
+            return condition.IsKind(SyntaxKind.EqualsExpression, SyntaxKind.LogicalOrExpression)
                 && IsFixableCondition((BinaryExpressionSyntax)condition, null, semanticModel, cancellationToken)
                 && !ContainsBreakStatementThatBelongsToParentLoop(ifStatement.Statement);
         }
@@ -85,7 +85,7 @@ namespace Roslynator.CSharp.Refactorings
 
                             ExpressionSyntax left = binaryExpression.Left?.WalkDownParentheses();
 
-                            if (left?.IsKind(SyntaxKind.LogicalOrExpression, SyntaxKind.EqualsExpression) == true)
+                            if (left.IsKind(SyntaxKind.LogicalOrExpression, SyntaxKind.EqualsExpression))
                             {
                                 binaryExpression = (BinaryExpressionSyntax)left;
                                 success = true;
@@ -173,7 +173,7 @@ namespace Roslynator.CSharp.Refactorings
 
         private static IEnumerable<SwitchSectionSyntax> CreateSwitchSections(IfStatementSyntax ifStatement)
         {
-            foreach (IfStatementOrElseClause ifOrElse in SyntaxInfo.IfStatementInfo(ifStatement))
+            foreach (IfStatementOrElseClause ifOrElse in ifStatement.AsCascade())
             {
                 if (ifOrElse.IsIf)
                 {

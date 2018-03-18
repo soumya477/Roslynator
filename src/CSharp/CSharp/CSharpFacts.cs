@@ -261,9 +261,14 @@ namespace Roslynator.CSharp
                 SyntaxKind.PostDecrementExpression);
         }
 
-        public static bool IsCompoundAssignment(SyntaxKind assignmentExpressionKind)
+        /// <summary>
+        /// Returns true if a syntax of the specified kind is a compound assignment expression.
+        /// </summary>
+        /// <param name="kind"></param>
+        /// <returns></returns>
+        public static bool IsCompoundAssignmentExpression(SyntaxKind kind)
         {
-            switch (assignmentExpressionKind)
+            switch (kind)
             {
                 case SyntaxKind.AddAssignmentExpression:
                 case SyntaxKind.SubtractAssignmentExpression:
@@ -282,11 +287,11 @@ namespace Roslynator.CSharp
         }
 
         /// <summary>
-        /// Returns true if a syntax of the specified kind can be simplified to a compound assignment.
+        /// Returns true if a syntax of the specified kind is a binary expression that can be simplified to a compound assignment expression.
         /// </summary>
         /// <param name="binaryExpressionKind"></param>
         /// <returns></returns>
-        public static bool SupportsCompoundAssignment(SyntaxKind binaryExpressionKind)
+        internal static bool SupportsCompoundAssignmentExpression(SyntaxKind binaryExpressionKind)
         {
             switch (binaryExpressionKind)
             {
@@ -554,17 +559,6 @@ namespace Roslynator.CSharp
                 return "read-only";
 
             return SyntaxFacts.GetText(kind);
-        }
-
-        internal static bool ExistsImplicitNumericConversion(ITypeSymbol from, ITypeSymbol to)
-        {
-            if (from == null)
-                throw new ArgumentNullException(nameof(from));
-
-            if (to == null)
-                throw new ArgumentNullException(nameof(to));
-
-            return ExistsImplicitNumericConversion(from.SpecialType, to.SpecialType);
         }
 
         // http://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/implicit-numeric-conversions-table

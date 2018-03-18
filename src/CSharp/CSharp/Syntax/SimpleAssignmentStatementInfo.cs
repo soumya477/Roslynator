@@ -3,9 +3,9 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Roslynator.CSharp.Syntax.SyntaxInfoHelpers;
-using Microsoft.CodeAnalysis.CSharp;
 
 namespace Roslynator.CSharp.Syntax
 {
@@ -14,21 +14,11 @@ namespace Roslynator.CSharp.Syntax
     /// </summary>
     public readonly struct SimpleAssignmentStatementInfo : IEquatable<SimpleAssignmentStatementInfo>
     {
-        private SimpleAssignmentStatementInfo(
-            AssignmentExpressionSyntax assignmentExpression,
-            ExpressionSyntax left,
-            ExpressionSyntax right)
-        {
-            AssignmentExpression = assignmentExpression;
-            Left = left;
-            Right = right;
-        }
+        private readonly SimpleAssignmentExpressionInfo _info;
 
         private SimpleAssignmentStatementInfo(SimpleAssignmentExpressionInfo info)
         {
-            AssignmentExpression = info.AssignmentExpression;
-            Left = info.Left;
-            Right = info.Right;
+            _info = info;
         }
 
         private static SimpleAssignmentStatementInfo Default { get; } = new SimpleAssignmentStatementInfo();
@@ -36,25 +26,22 @@ namespace Roslynator.CSharp.Syntax
         /// <summary>
         /// The simple assignment expression.
         /// </summary>
-        public AssignmentExpressionSyntax AssignmentExpression { get; }
+        public AssignmentExpressionSyntax AssignmentExpression => _info.AssignmentExpression;
 
         /// <summary>
         /// The expression on the left of the assignment operator.
         /// </summary>
-        public ExpressionSyntax Left { get; }
+        public ExpressionSyntax Left => _info.Left;
 
         /// <summary>
         /// The expression of the right of the assignment operator.
         /// </summary>
-        public ExpressionSyntax Right { get; }
+        public ExpressionSyntax Right => _info.Right;
 
         /// <summary>
         /// The operator of the simple assignment expression.
         /// </summary>
-        public SyntaxToken OperatorToken
-        {
-            get { return AssignmentExpression?.OperatorToken ?? default(SyntaxToken); }
-        }
+        public SyntaxToken OperatorToken => _info.OperatorToken;
 
         /// <summary>
         /// The expression statement the simple assignment expression is contained in.
@@ -67,10 +54,7 @@ namespace Roslynator.CSharp.Syntax
         /// <summary>
         /// Determines whether this struct was initialized with an actual syntax.
         /// </summary>
-        public bool Success
-        {
-            get { return AssignmentExpression != null; }
-        }
+        public bool Success => _info.Success;
 
         internal static SimpleAssignmentStatementInfo Create(
             StatementSyntax statement,
@@ -111,10 +95,7 @@ namespace Roslynator.CSharp.Syntax
         {
             SimpleAssignmentExpressionInfo info = SimpleAssignmentExpressionInfo.Create(assignmentExpression, walkDownParentheses, allowMissing);
 
-            if (info.Success)
-                return new SimpleAssignmentStatementInfo(info);
-
-            return Default;
+            return new SimpleAssignmentStatementInfo(info);
         }
 
         /// <summary>
@@ -123,7 +104,7 @@ namespace Roslynator.CSharp.Syntax
         /// <returns></returns>
         public override string ToString()
         {
-            return Statement?.ToString() ?? "";
+            return AssignmentExpression?.Parent.ToString() ?? "";
         }
 
         /// <summary>
@@ -143,7 +124,7 @@ namespace Roslynator.CSharp.Syntax
         /// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
         public bool Equals(SimpleAssignmentStatementInfo other)
         {
-            return EqualityComparer<ExpressionStatementSyntax>.Default.Equals(Statement, other.Statement);
+            return EqualityComparer<SyntaxNode>.Default.Equals(AssignmentExpression?.Parent, other.AssignmentExpression?.Parent);
         }
 
         /// <summary>
@@ -152,7 +133,7 @@ namespace Roslynator.CSharp.Syntax
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            return EqualityComparer<ExpressionStatementSyntax>.Default.GetHashCode(Statement);
+            return EqualityComparer<SyntaxNode>.Default.GetHashCode(AssignmentExpression?.Parent);
         }
 
         public static bool operator ==(SimpleAssignmentStatementInfo info1, SimpleAssignmentStatementInfo info2)

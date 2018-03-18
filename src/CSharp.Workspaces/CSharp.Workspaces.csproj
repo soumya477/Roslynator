@@ -10,7 +10,7 @@
     <RootNamespace>Roslynator</RootNamespace>
     <CodeAnalysisRuleSet>..\global.ruleset</CodeAnalysisRuleSet>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Roslynator.CSharp.Workspaces.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>CSharp.Workspaces.snk</AssemblyOriginatorKeyFile>
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
 

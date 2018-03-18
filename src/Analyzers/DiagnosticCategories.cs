@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Roslynator.CSharp
+namespace Roslynator
 {
     public static class DiagnosticCategories
     {

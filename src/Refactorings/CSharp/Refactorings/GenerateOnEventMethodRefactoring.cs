@@ -17,12 +17,15 @@ namespace Roslynator.CSharp.Refactorings
     {
         public static async Task ComputeRefactoringAsync(RefactoringContext context, EventFieldDeclarationSyntax eventFieldDeclaration)
         {
-            SemanticModel semanticModel = null;
+            if (eventFieldDeclaration.IsParentKind(SyntaxKind.InterfaceDeclaration))
+                return;
 
             VariableDeclarationSyntax variableDeclaration = eventFieldDeclaration.Declaration;
 
             if (variableDeclaration == null)
                 return;
+
+            SemanticModel semanticModel = null;
 
             foreach (VariableDeclaratorSyntax variableDeclarator in variableDeclaration.Variables)
             {
@@ -38,8 +41,8 @@ namespace Roslynator.CSharp.Refactorings
 
                 INamedTypeSymbol containingType = eventSymbol.ContainingType;
 
-                if (containingType?.IsInterface() != false)
-                    continue;
+                if (containingType == null)
+                    return;
 
                 if (!(eventSymbol.Type is INamedTypeSymbol eventHandlerType))
                     continue;
@@ -115,7 +118,7 @@ namespace Roslynator.CSharp.Refactorings
 
             return MethodDeclaration(
                 default(SyntaxList<AttributeListSyntax>),
-                (eventSymbol.ContainingType.IsSealed || eventSymbol.ContainingType.IsStruct())
+                (eventSymbol.ContainingType.IsSealed || eventSymbol.ContainingType.TypeKind == TypeKind.Struct)
                     ? Modifiers.Private()
                     : Modifiers.ProtectedVirtual(),
                 VoidType(),
