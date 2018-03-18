@@ -63,8 +63,8 @@ namespace Roslynator.VisualStudio
             refactorings.Add(new BaseModel(RefactoringIdentifiers.DuplicateMember, "Duplicate member", IsEnabled(RefactoringIdentifiers.DuplicateMember)));
             refactorings.Add(new BaseModel(RefactoringIdentifiers.DuplicateParameter, "Duplicate parameter", IsEnabled(RefactoringIdentifiers.DuplicateParameter)));
             refactorings.Add(new BaseModel(RefactoringIdentifiers.DuplicateStatement, "Duplicate statement", IsEnabled(RefactoringIdentifiers.DuplicateStatement)));
-            refactorings.Add(new BaseModel(RefactoringIdentifiers.ExpandAssignmentExpression, "Expand assignment expression", IsEnabled(RefactoringIdentifiers.ExpandAssignmentExpression)));
             refactorings.Add(new BaseModel(RefactoringIdentifiers.ExpandCoalesceExpression, "Expand coalesce expression", IsEnabled(RefactoringIdentifiers.ExpandCoalesceExpression)));
+            refactorings.Add(new BaseModel(RefactoringIdentifiers.ExpandCompoundAssignmentOperator, "Expand compound assignment expression", IsEnabled(RefactoringIdentifiers.ExpandCompoundAssignmentOperator)));
             refactorings.Add(new BaseModel(RefactoringIdentifiers.ExpandEvent, "Expand event", IsEnabled(RefactoringIdentifiers.ExpandEvent)));
             refactorings.Add(new BaseModel(RefactoringIdentifiers.ExpandExpressionBody, "Expand expression body", IsEnabled(RefactoringIdentifiers.ExpandExpressionBody)));
             refactorings.Add(new BaseModel(RefactoringIdentifiers.ExpandInitializer, "Expand initializer", IsEnabled(RefactoringIdentifiers.ExpandInitializer)));
