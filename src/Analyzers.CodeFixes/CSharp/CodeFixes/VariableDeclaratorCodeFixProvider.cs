@@ -50,7 +50,7 @@ namespace Roslynator.CSharp.CodeFixes
                     case DiagnosticIdentifiers.RemoveRedundantFieldInitialization:
                         {
                             CodeAction codeAction = CodeAction.Create(
-                                "Remove redundant field initialization",
+                                "Remove redundant initialization",
                                 cancellationToken => RemoveRedundantFieldInitializationRefactoring.RefactorAsync(context.Document, declarator, cancellationToken),
                                 GetEquivalenceKey(diagnostic));
 

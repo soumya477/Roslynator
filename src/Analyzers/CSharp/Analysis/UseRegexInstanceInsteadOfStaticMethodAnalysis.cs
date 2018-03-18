@@ -9,6 +9,7 @@ using Roslynator.CSharp.Syntax;
 
 namespace Roslynator.CSharp.Analysis
 {
+    //TODO: test
     internal static class UseRegexInstanceInsteadOfStaticMethodAnalysis
     {
         internal static void Analyze(SyntaxNodeAnalysisContext context, MemberInvocationExpressionInfo invocationInfo)
@@ -24,7 +25,7 @@ namespace Roslynator.CSharp.Analysis
             if (!SymbolUtility.IsPublicStaticNonGeneric(methodSymbol))
                 return;
 
-            if (methodSymbol.ContainingType?.Equals(MetadataNames.System_Text_RegularExpressions_Regex) != true)
+            if (methodSymbol.ContainingType?.Equals(context.GetTypeByMetadataName(MetadataNames.System_Text_RegularExpressions_Regex)) != true)
                 return;
 
             SeparatedSyntaxList<ArgumentSyntax> arguments = invocationInfo.Arguments;
