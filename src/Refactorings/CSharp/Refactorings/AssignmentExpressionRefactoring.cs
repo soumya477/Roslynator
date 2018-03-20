@@ -12,14 +12,14 @@ namespace Roslynator.CSharp.Refactorings
     {
         public static async Task ComputeRefactoringsAsync(RefactoringContext context, AssignmentExpressionSyntax assignmentExpression)
         {
-            if (context.IsRefactoringEnabled(RefactoringIdentifiers.ExpandAssignmentExpression)
+            if (context.IsRefactoringEnabled(RefactoringIdentifiers.ExpandCompoundAssignmentOperator)
                 && context.Span.IsEmptyAndContainedInSpanOrBetweenSpans(assignmentExpression.OperatorToken)
                 && CSharpFacts.IsCompoundAssignmentExpression(assignmentExpression.Kind())
                 && SyntaxInfo.AssignmentExpressionInfo(assignmentExpression).Success)
             {
                 context.RegisterRefactoring(
-                    "Expand assignment",
-                    ct => ExpandAssignmentExpressionRefactoring.RefactorAsync(context.Document, assignmentExpression, ct));
+                    $"Expand {assignmentExpression.OperatorToken}",
+                    ct => ExpandCompoundAssignmentOperatorRefactoring.RefactorAsync(context.Document, assignmentExpression, ct));
             }
 
             if (context.IsAnyRefactoringEnabled(RefactoringIdentifiers.AddCastExpression, RefactoringIdentifiers.CallToMethod)

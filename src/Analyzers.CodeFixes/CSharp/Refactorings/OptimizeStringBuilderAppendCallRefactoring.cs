@@ -18,10 +18,10 @@ namespace Roslynator.CSharp.Refactorings
     {
         public static Task<Document> RefactorAsync(
             Document document,
-            MemberInvocationExpressionInfo invocationInfo,
+            SimpleMemberInvocationExpressionInfo invocationInfo,
             CancellationToken cancellationToken)
         {
-            MemberInvocationExpressionInfo invocationInfo2 = SyntaxInfo.MemberInvocationExpressionInfo(invocationInfo.Expression);
+            SimpleMemberInvocationExpressionInfo invocationInfo2 = SyntaxInfo.SimpleMemberInvocationExpressionInfo(invocationInfo.Expression);
 
             SyntaxTriviaList trivia = invocationInfo2.InvocationExpression
                 .GetTrailingTrivia()
@@ -39,7 +39,7 @@ namespace Roslynator.CSharp.Refactorings
         public static async Task<Document> RefactorAsync(
             Document document,
             ArgumentSyntax argument,
-            MemberInvocationExpressionInfo invocationInfo,
+            SimpleMemberInvocationExpressionInfo invocationInfo,
             CancellationToken cancellationToken)
         {
             SemanticModel semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
@@ -127,7 +127,7 @@ namespace Roslynator.CSharp.Refactorings
 
         private static InvocationExpressionSyntax ConvertInterpolatedStringExpressionToInvocationExpression(
             InterpolatedStringExpressionSyntax interpolatedString,
-            MemberInvocationExpressionInfo invocationInfo,
+            SimpleMemberInvocationExpressionInfo invocationInfo,
             SemanticModel semanticModel)
         {
             bool isVerbatim = interpolatedString.IsVerbatim();
@@ -185,7 +185,7 @@ namespace Roslynator.CSharp.Refactorings
             InvocationExpressionSyntax innerInvocationExpression,
             InvocationExpressionSyntax outerInvocationExpression)
         {
-            MemberInvocationExpressionInfo invocationInfo = SyntaxInfo.MemberInvocationExpressionInfo(innerInvocationExpression);
+            SimpleMemberInvocationExpressionInfo invocationInfo = SyntaxInfo.SimpleMemberInvocationExpressionInfo(innerInvocationExpression);
 
             switch (invocationInfo.NameText)
             {

@@ -96,12 +96,4 @@
     <Rule Id="RCS1114" Action="None" />
     <Rule Id="RCS1114FadeOut" Action="None" />
   </Rules>
-  <Rules AnalyzerId="Roslynator.Internal.CSharp.Analyzers" RuleNamespace="Roslynator.Internal.CSharp.Analyzers">
-    <Rule Id="RCS9001" Action="None" />
-    <Rule Id="RCS9002" Action="None" />
-    <Rule Id="RCS9003" Action="None" />
-    <Rule Id="RCS9004" Action="None" />
-    <Rule Id="RCS9005" Action="None" />
-    <Rule Id="RCS9006" Action="None" />
-  </Rules>
 </RuleSet>

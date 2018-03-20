@@ -23,7 +23,7 @@ namespace Roslynator.CSharp.Analysis
             if (invocationExpression.SpanContainsDirectives())
                 return;
 
-            MemberInvocationExpressionInfo invocationInfo = MemberInvocationExpressionInfo(invocationExpression);
+            SimpleMemberInvocationExpressionInfo invocationInfo = SimpleMemberInvocationExpressionInfo(invocationExpression);
 
             if (!invocationInfo.Success)
                 return;
@@ -36,7 +36,7 @@ namespace Roslynator.CSharp.Analysis
             if (argument1 == null)
                 return;
 
-            MemberInvocationExpressionInfo invocationInfo2 = MemberInvocationExpressionInfo(invocationInfo.Expression);
+            SimpleMemberInvocationExpressionInfo invocationInfo2 = SimpleMemberInvocationExpressionInfo(invocationInfo.Expression);
 
             if (!invocationInfo2.Success)
                 return;

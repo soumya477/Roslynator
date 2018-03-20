@@ -11,7 +11,7 @@ namespace Roslynator.CSharp.Analysis
 {
     internal static class CallStringConcatInsteadOfStringJoinAnalysis
     {
-        public static void Analyze(SyntaxNodeAnalysisContext context, MemberInvocationExpressionInfo invocationInfo)
+        public static void Analyze(SyntaxNodeAnalysisContext context, SimpleMemberInvocationExpressionInfo invocationInfo)
         {
             InvocationExpressionSyntax invocation = invocationInfo.InvocationExpression;
 

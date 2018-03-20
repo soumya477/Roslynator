@@ -83,7 +83,7 @@ namespace Roslynator.CSharp.Analysis
 
             return groupNumber != 0
                 && groupNumber == GetGroupNumber(node)
-                && OperatorPrecedence.GetPrecedence(node) < OperatorPrecedence.GetPrecedence(binaryExpressionKind);
+                && CSharpFacts.GetOperatorPrecedence(node.Kind()) < CSharpFacts.GetOperatorPrecedence(binaryExpressionKind);
         }
 
         private static int GetGroupNumber(SyntaxNode node)

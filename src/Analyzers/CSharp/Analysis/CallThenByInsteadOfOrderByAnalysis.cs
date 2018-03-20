@@ -11,14 +11,14 @@ namespace Roslynator.CSharp.Analysis
 {
     internal static class CallThenByInsteadOfOrderByAnalysis
     {
-        public static void Analyze(SyntaxNodeAnalysisContext context, MemberInvocationExpressionInfo invocationInfo)
+        public static void Analyze(SyntaxNodeAnalysisContext context, SimpleMemberInvocationExpressionInfo invocationInfo)
         {
             ExpressionSyntax expression = invocationInfo.Expression;
 
             if (expression.Kind() != SyntaxKind.InvocationExpression)
                 return;
 
-            MemberInvocationExpressionInfo invocationInfo2 = SyntaxInfo.MemberInvocationExpressionInfo((InvocationExpressionSyntax)expression);
+            SimpleMemberInvocationExpressionInfo invocationInfo2 = SyntaxInfo.SimpleMemberInvocationExpressionInfo((InvocationExpressionSyntax)expression);
 
             if (!invocationInfo2.Success)
                 return;

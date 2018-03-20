@@ -15,7 +15,7 @@ namespace Roslynator.CSharp.Analysis
     {
         public static void Analyze(
             SyntaxNodeAnalysisContext context,
-            MemberInvocationExpressionInfo invocationInfo)
+            SimpleMemberInvocationExpressionInfo invocationInfo)
         {
             InvocationExpressionSyntax invocationExpression = invocationInfo.InvocationExpression;
 
