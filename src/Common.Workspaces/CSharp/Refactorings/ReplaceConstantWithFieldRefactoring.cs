@@ -21,7 +21,7 @@ namespace Roslynator.CSharp.Refactorings
                 .RemoveModifier(SyntaxKind.ConstKeyword)
                 .InsertModifier(SyntaxKind.ReadOnlyKeyword, ModifierComparer.Instance);
 
-            var containingDeclaration = (MemberDeclarationSyntax)newField.Parent;
+            var containingDeclaration = (MemberDeclarationSyntax)field.Parent;
 
             SemanticModel semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
 
