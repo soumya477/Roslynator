@@ -579,79 +579,79 @@ namespace Roslynator.CSharp
         }
 
         /// <summary>
-        /// Creates a new <see cref="Syntax.MemberInvocationExpressionInfo"/> from the specified node.
+        /// Creates a new <see cref="Syntax.SimpleMemberInvocationExpressionInfo"/> from the specified node.
         /// </summary>
         /// <param name="node"></param>
         /// <param name="walkDownParentheses"></param>
         /// <param name="allowMissing"></param>
         /// <returns></returns>
-        public static MemberInvocationExpressionInfo MemberInvocationExpressionInfo(
+        public static SimpleMemberInvocationExpressionInfo SimpleMemberInvocationExpressionInfo(
             SyntaxNode node,
             bool walkDownParentheses = true,
             bool allowMissing = false)
         {
-            return Syntax.MemberInvocationExpressionInfo.Create(
+            return Syntax.SimpleMemberInvocationExpressionInfo.Create(
                 node,
                 walkDownParentheses,
                 allowMissing);
         }
 
         /// <summary>
-        /// Creates a new <see cref="Syntax.MemberInvocationExpressionInfo"/> from the specified invocation expression.
+        /// Creates a new <see cref="Syntax.SimpleMemberInvocationExpressionInfo"/> from the specified invocation expression.
         /// </summary>
         /// <param name="invocationExpression"></param>
         /// <param name="allowMissing"></param>
         /// <returns></returns>
-        public static MemberInvocationExpressionInfo MemberInvocationExpressionInfo(
+        public static SimpleMemberInvocationExpressionInfo SimpleMemberInvocationExpressionInfo(
             InvocationExpressionSyntax invocationExpression,
             bool allowMissing = false)
         {
-            return Syntax.MemberInvocationExpressionInfo.Create(
+            return Syntax.SimpleMemberInvocationExpressionInfo.Create(
                 invocationExpression,
                 allowMissing);
         }
 
         /// <summary>
-        /// Creates a new <see cref="Syntax.MemberInvocationStatementInfo"/> from the specified node.
+        /// Creates a new <see cref="Syntax.SimpleMemberInvocationStatementInfo"/> from the specified node.
         /// </summary>
         /// <param name="node"></param>
         /// <param name="allowMissing"></param>
         /// <returns></returns>
-        public static MemberInvocationStatementInfo MemberInvocationStatementInfo(
+        public static SimpleMemberInvocationStatementInfo SimpleMemberInvocationStatementInfo(
             SyntaxNode node,
             bool allowMissing = false)
         {
-            return Syntax.MemberInvocationStatementInfo.Create(
+            return Syntax.SimpleMemberInvocationStatementInfo.Create(
                 node,
                 allowMissing);
         }
 
         /// <summary>
-        /// Creates a new <see cref="Syntax.MemberInvocationStatementInfo"/> from the specified expression statement.
+        /// Creates a new <see cref="Syntax.SimpleMemberInvocationStatementInfo"/> from the specified expression statement.
         /// </summary>
         /// <param name="expressionStatement"></param>
         /// <param name="allowMissing"></param>
         /// <returns></returns>
-        public static MemberInvocationStatementInfo MemberInvocationStatementInfo(
+        public static SimpleMemberInvocationStatementInfo SimpleMemberInvocationStatementInfo(
             ExpressionStatementSyntax expressionStatement,
             bool allowMissing = false)
         {
-            return Syntax.MemberInvocationStatementInfo.Create(
+            return Syntax.SimpleMemberInvocationStatementInfo.Create(
                 expressionStatement,
                 allowMissing);
         }
 
         /// <summary>
-        /// Creates a new <see cref="Syntax.MemberInvocationStatementInfo"/> from the specified invocation expression.
+        /// Creates a new <see cref="Syntax.SimpleMemberInvocationStatementInfo"/> from the specified invocation expression.
         /// </summary>
         /// <param name="invocationExpression"></param>
         /// <param name="allowMissing"></param>
         /// <returns></returns>
-        public static MemberInvocationStatementInfo MemberInvocationStatementInfo(
+        public static SimpleMemberInvocationStatementInfo SimpleMemberInvocationStatementInfo(
             InvocationExpressionSyntax invocationExpression,
             bool allowMissing = false)
         {
-            return Syntax.MemberInvocationStatementInfo.Create(
+            return Syntax.SimpleMemberInvocationStatementInfo.Create(
                 invocationExpression,
                 allowMissing);
         }

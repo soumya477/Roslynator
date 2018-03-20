@@ -11,19 +11,15 @@ using static Roslynator.CSharp.CSharpFactory;
 
 namespace Roslynator.CSharp
 {
-    //TODO: Negator
-    internal static class Negation
+    internal static class Negator
     {
         public static ExpressionSyntax LogicallyNegate(
             ExpressionSyntax expression,
-            SemanticModel semanticModel,
+            SemanticModel semanticModel = null,
             CancellationToken cancellationToken = default(CancellationToken))
         {
             if (expression == null)
                 throw new ArgumentNullException(nameof(expression));
-
-            if (semanticModel == null)
-                throw new ArgumentNullException(nameof(semanticModel));
 
             ExpressionSyntax newExpression = LogicallyNegateImpl(expression, semanticModel, cancellationToken);
 
@@ -79,7 +75,9 @@ namespace Roslynator.CSharp
                 case SyntaxKind.GreaterThanExpression:
                 case SyntaxKind.GreaterThanOrEqualExpression:
                     {
-                        return NegateLessThanGreaterThan((BinaryExpressionSyntax)expression, semanticModel, cancellationToken);
+                        return (semanticModel != null)
+                            ? NegateLessThanGreaterThan((BinaryExpressionSyntax)expression, semanticModel, cancellationToken)
+                            : DefaultNegate(expression);
                     }
                 case SyntaxKind.IsExpression:
                 case SyntaxKind.AsExpression:
@@ -389,17 +387,9 @@ namespace Roslynator.CSharp
 
         private static ExpressionSyntax DefaultNegate(ExpressionSyntax expression)
         {
-            if (expression?.IsMissing == false)
-            {
-                if (!expression.IsKind(SyntaxKind.ParenthesizedExpression))
-                    expression = expression.Parenthesize();
+            Debug.Assert(expression.Kind() != SyntaxKind.ParenthesizedExpression, expression.Kind().ToString());
 
-                return LogicalNotExpression(expression);
-            }
-
-            Debug.Fail(expression.Kind().ToString());
-
-            return expression;
+            return LogicalNotExpression(expression.Parenthesize());
         }
     }
 }

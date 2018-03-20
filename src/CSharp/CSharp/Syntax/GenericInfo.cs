@@ -56,12 +56,13 @@ namespace Roslynator.CSharp.Syntax
 
         private static GenericInfo Default { get; } = new GenericInfo();
 
-        //TODO: Node
+        //TODO: Node, DeclarationOrStatement
         /// <summary>
         /// The declaration node (for example <see cref="ClassDeclarationSyntax"/> for a class).
         /// </summary>
         public SyntaxNode Declaration { get; }
 
+        //TODO: del
         /// <summary>
         /// The kind of this generic syntax.
         /// </summary>
@@ -286,7 +287,7 @@ namespace Roslynator.CSharp.Syntax
         {
             ThrowInvalidOperationIfNotInitialized();
 
-            switch (Kind)
+            switch (Declaration.Kind())
             {
                 case SyntaxKind.ClassDeclaration:
                     return new GenericInfo(((ClassDeclarationSyntax)Declaration).WithTypeParameterList(typeParameterList));
@@ -302,7 +303,7 @@ namespace Roslynator.CSharp.Syntax
                     return new GenericInfo(((StructDeclarationSyntax)Declaration).WithTypeParameterList(typeParameterList));
             }
 
-            Debug.Fail(Kind.ToString());
+            Debug.Fail(Declaration.Kind().ToString());
             return this;
         }
 
@@ -317,7 +318,7 @@ namespace Roslynator.CSharp.Syntax
 
             var self = this;
 
-            switch (self.Kind)
+            switch (self.Declaration.Kind())
             {
                 case SyntaxKind.ClassDeclaration:
                     return new GenericInfo(((ClassDeclarationSyntax)self.Declaration).WithTypeParameterList(RemoveTypeParameter()));
@@ -333,7 +334,7 @@ namespace Roslynator.CSharp.Syntax
                     return new GenericInfo(((StructDeclarationSyntax)self.Declaration).WithTypeParameterList(RemoveTypeParameter()));
             }
 
-            Debug.Fail(Kind.ToString());
+            Debug.Fail(self.Declaration.Kind().ToString());
             return this;
 
             TypeParameterListSyntax RemoveTypeParameter()
@@ -355,7 +356,7 @@ namespace Roslynator.CSharp.Syntax
         {
             ThrowInvalidOperationIfNotInitialized();
 
-            switch (Kind)
+            switch (Declaration.Kind())
             {
                 case SyntaxKind.ClassDeclaration:
                     return new GenericInfo(((ClassDeclarationSyntax)Declaration).WithConstraintClauses(constraintClauses));
@@ -371,7 +372,7 @@ namespace Roslynator.CSharp.Syntax
                     return new GenericInfo(((StructDeclarationSyntax)Declaration).WithConstraintClauses(constraintClauses));
             }
 
-            Debug.Fail(Kind.ToString());
+            Debug.Fail(Declaration.Kind().ToString());
             return this;
         }
 
@@ -384,7 +385,7 @@ namespace Roslynator.CSharp.Syntax
         {
             ThrowInvalidOperationIfNotInitialized();
 
-            switch (Kind)
+            switch (Declaration.Kind())
             {
                 case SyntaxKind.ClassDeclaration:
                     return new GenericInfo(((ClassDeclarationSyntax)Declaration).WithConstraintClauses(ConstraintClauses.Remove(constraintClause)));
@@ -400,7 +401,7 @@ namespace Roslynator.CSharp.Syntax
                     return new GenericInfo(((StructDeclarationSyntax)Declaration).WithConstraintClauses(ConstraintClauses.Remove(constraintClause)));
             }
 
-            Debug.Fail(Kind.ToString());
+            Debug.Fail(Declaration.Kind().ToString());
             return this;
         }
 

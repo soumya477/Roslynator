@@ -24,7 +24,7 @@ namespace Roslynator.CSharp.Refactorings
 
             InvocationExpressionSyntax invocationExpression = GetInvocationExpression(expressionStatement);
 
-            MemberInvocationExpressionInfo invocationInfo = SyntaxInfo.MemberInvocationExpressionInfo(invocationExpression);
+            SimpleMemberInvocationExpressionInfo invocationInfo = SyntaxInfo.SimpleMemberInvocationExpressionInfo(invocationExpression);
 
             ITypeSymbol returnType = semanticModel.GetMethodSymbol(invocationExpression, cancellationToken).ReturnType;
 
@@ -87,9 +87,9 @@ namespace Roslynator.CSharp.Refactorings
 
         private static string GetTextToAppend(ExpressionStatementSyntax expressionStatement)
         {
-            MemberInvocationExpressionInfo invocationInfo = SyntaxInfo.MemberInvocationExpressionInfo(GetInvocationExpression(expressionStatement));
+            SimpleMemberInvocationExpressionInfo invocationInfo = SyntaxInfo.SimpleMemberInvocationExpressionInfo(GetInvocationExpression(expressionStatement));
 
-            MemberInvocationExpressionInfo firstMemberInvocation = UseMethodChainingAnalysis.WalkDownMethodChain(invocationInfo);
+            SimpleMemberInvocationExpressionInfo firstMemberInvocation = UseMethodChainingAnalysis.WalkDownMethodChain(invocationInfo);
 
             InvocationExpressionSyntax invocationExpression = invocationInfo.InvocationExpression;
 

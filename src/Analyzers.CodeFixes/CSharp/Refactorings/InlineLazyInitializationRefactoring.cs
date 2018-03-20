@@ -27,7 +27,7 @@ namespace Roslynator.CSharp.Refactorings
 
             StatementSyntax expressionStatement = (ExpressionStatementSyntax)statements[index + 1];
 
-            MemberInvocationStatementInfo invocationInfo = SyntaxInfo.MemberInvocationStatementInfo((ExpressionStatementSyntax)expressionStatement);
+            SimpleMemberInvocationStatementInfo invocationInfo = SyntaxInfo.SimpleMemberInvocationStatementInfo((ExpressionStatementSyntax)expressionStatement);
 
             ExpressionSyntax expression = invocationInfo.Expression;
 

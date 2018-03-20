@@ -59,7 +59,7 @@ namespace Roslynator.CSharp.Analysis
 
             ExpressionSyntax expression = GetMethodExpression(methodDeclaration);
 
-            MemberInvocationExpressionInfo invocationInfo = SyntaxInfo.MemberInvocationExpressionInfo(expression);
+            SimpleMemberInvocationExpressionInfo invocationInfo = SyntaxInfo.SimpleMemberInvocationExpressionInfo(expression);
 
             if (!invocationInfo.Success)
                 return;
