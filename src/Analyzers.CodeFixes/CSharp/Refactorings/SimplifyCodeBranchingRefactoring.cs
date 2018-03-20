@@ -26,7 +26,7 @@ namespace Roslynator.CSharp.Refactorings
             {
                 SemanticModel semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
 
-                ExpressionSyntax newCondition = Negation.LogicallyNegate(condition, semanticModel, cancellationToken);
+                ExpressionSyntax newCondition = Negator.LogicallyNegate(condition, semanticModel, cancellationToken);
 
                 StatementSyntax statement = elseClause.Statement;
 
@@ -94,7 +94,7 @@ namespace Roslynator.CSharp.Refactorings
 
                 SemanticModel semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
 
-                ExpressionSyntax newCondition = Negation.LogicallyNegate(condition, semanticModel, cancellationToken);
+                ExpressionSyntax newCondition = Negator.LogicallyNegate(condition, semanticModel, cancellationToken);
 
                 SyntaxNode newNode = block.Parent;
 
