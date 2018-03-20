@@ -9,7 +9,6 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Roslynator.CSharp.Syntax
 {
-    //TODO: GenericDeclarationInfo
     /// <summary>
     /// Provides information about generic syntax (class, struct, interface, delegate, method or local function).
     /// </summary>
