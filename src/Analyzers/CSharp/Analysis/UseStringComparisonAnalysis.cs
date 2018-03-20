@@ -14,7 +14,7 @@ namespace Roslynator.CSharp.Analysis
 {
     internal static class UseStringComparisonAnalysis
     {
-        public static void Analyze(SyntaxNodeAnalysisContext context, MemberInvocationExpressionInfo invocationInfo)
+        public static void Analyze(SyntaxNodeAnalysisContext context, SimpleMemberInvocationExpressionInfo invocationInfo)
         {
             ExpressionSyntax expression = invocationInfo.InvocationExpression.WalkUpParentheses();
 
@@ -24,7 +24,7 @@ namespace Roslynator.CSharp.Analysis
 
             if (kind == SyntaxKind.SimpleMemberAccessExpression)
             {
-                MemberInvocationExpressionInfo invocationInfo2 = SyntaxInfo.MemberInvocationExpressionInfo(parent.Parent);
+                SimpleMemberInvocationExpressionInfo invocationInfo2 = SyntaxInfo.SimpleMemberInvocationExpressionInfo(parent.Parent);
 
                 if (!invocationInfo2.Success)
                     return;
@@ -44,8 +44,8 @@ namespace Roslynator.CSharp.Analysis
 
         private static void Analyze(
             SyntaxNodeAnalysisContext context,
-            MemberInvocationExpressionInfo invocationInfo,
-            MemberInvocationExpressionInfo invocationInfo2)
+            SimpleMemberInvocationExpressionInfo invocationInfo,
+            SimpleMemberInvocationExpressionInfo invocationInfo2)
         {
             if (invocationInfo2.InvocationExpression.SpanContainsDirectives())
                 return;
@@ -71,13 +71,13 @@ namespace Roslynator.CSharp.Analysis
 
             string name = invocationInfo.NameText;
 
-            MemberInvocationExpressionInfo invocationInfo3;
+            SimpleMemberInvocationExpressionInfo invocationInfo3;
 
             bool isStringLiteral = argumentExpression.IsKind(SyntaxKind.StringLiteralExpression);
 
             if (!isStringLiteral)
             {
-                invocationInfo3 = SyntaxInfo.MemberInvocationExpressionInfo(argumentExpression);
+                invocationInfo3 = SyntaxInfo.SimpleMemberInvocationExpressionInfo(argumentExpression);
 
                 if (!invocationInfo3.Success)
                     return;
@@ -123,7 +123,7 @@ namespace Roslynator.CSharp.Analysis
 
         private static void Analyze(
             SyntaxNodeAnalysisContext context,
-            MemberInvocationExpressionInfo invocationInfo,
+            SimpleMemberInvocationExpressionInfo invocationInfo,
             ArgumentSyntax argument)
         {
             if (!(argument.Parent is ArgumentListSyntax argumentList))
@@ -134,7 +134,7 @@ namespace Roslynator.CSharp.Analysis
             if (arguments.Count != 2)
                 return;
 
-            MemberInvocationExpressionInfo equalsInvocation = SyntaxInfo.MemberInvocationExpressionInfo(argumentList.Parent);
+            SimpleMemberInvocationExpressionInfo equalsInvocation = SyntaxInfo.SimpleMemberInvocationExpressionInfo(argumentList.Parent);
 
             if (!equalsInvocation.Success)
                 return;
@@ -164,7 +164,7 @@ namespace Roslynator.CSharp.Analysis
 
         private static bool IsFixable(
             SyntaxNodeAnalysisContext context,
-            MemberInvocationExpressionInfo invocationInfo,
+            SimpleMemberInvocationExpressionInfo invocationInfo,
             ArgumentSyntax argument,
             SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
@@ -178,7 +178,7 @@ namespace Roslynator.CSharp.Analysis
 
                     if (kind == SyntaxKind.InvocationExpression)
                     {
-                        return TryCreateCaseChangingInvocation(expression, out MemberInvocationExpressionInfo invocationInfo2)
+                        return TryCreateCaseChangingInvocation(expression, out SimpleMemberInvocationExpressionInfo invocationInfo2)
                             && invocationInfo.NameText == invocationInfo2.NameText
                             && CheckSymbol(invocationInfo, context.SemanticModel, context.CancellationToken)
                             && CheckSymbol(invocationInfo2, context.SemanticModel, context.CancellationToken);
@@ -200,7 +200,7 @@ namespace Roslynator.CSharp.Analysis
 
         private static void Analyze(
             SyntaxNodeAnalysisContext context,
-            MemberInvocationExpressionInfo invocationInfo,
+            SimpleMemberInvocationExpressionInfo invocationInfo,
             ExpressionSyntax leftOrRight,
             BinaryExpressionSyntax binaryExpression)
         {
@@ -214,7 +214,7 @@ namespace Roslynator.CSharp.Analysis
 
                     if (kind == SyntaxKind.InvocationExpression)
                     {
-                        if (TryCreateCaseChangingInvocation(right, out MemberInvocationExpressionInfo invocationInfo2)
+                        if (TryCreateCaseChangingInvocation(right, out SimpleMemberInvocationExpressionInfo invocationInfo2)
                             && invocationInfo.NameText == invocationInfo2.NameText
                             && CheckSymbol(invocationInfo, context.SemanticModel, context.CancellationToken)
                             && CheckSymbol(invocationInfo2, context.SemanticModel, context.CancellationToken))
@@ -238,9 +238,9 @@ namespace Roslynator.CSharp.Analysis
             }
         }
 
-        private static bool TryCreateCaseChangingInvocation(ExpressionSyntax expression, out MemberInvocationExpressionInfo invocationInfo)
+        private static bool TryCreateCaseChangingInvocation(ExpressionSyntax expression, out SimpleMemberInvocationExpressionInfo invocationInfo)
         {
-            invocationInfo = SyntaxInfo.MemberInvocationExpressionInfo(expression);
+            invocationInfo = SyntaxInfo.SimpleMemberInvocationExpressionInfo(expression);
 
             if (invocationInfo.Success
                 && !invocationInfo.Arguments.Any())
@@ -253,12 +253,12 @@ namespace Roslynator.CSharp.Analysis
                     || name == "ToUpperInvariant";
             }
 
-            invocationInfo = default(MemberInvocationExpressionInfo);
+            invocationInfo = default(SimpleMemberInvocationExpressionInfo);
             return false;
         }
 
         private static bool CheckSymbol(
-            MemberInvocationExpressionInfo invocationInfo,
+            SimpleMemberInvocationExpressionInfo invocationInfo,
             SemanticModel semanticModel,
             CancellationToken cancellationToken)
         {
@@ -270,7 +270,7 @@ namespace Roslynator.CSharp.Analysis
                 && !methodSymbol.Parameters.Any();
         }
 
-        private static void ReportDiagnostic(SyntaxNodeAnalysisContext context, MemberInvocationExpressionInfo invocationInfo)
+        private static void ReportDiagnostic(SyntaxNodeAnalysisContext context, SimpleMemberInvocationExpressionInfo invocationInfo)
         {
             ReportDiagnostic(context, invocationInfo.InvocationExpression);
         }

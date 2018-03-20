@@ -17,7 +17,7 @@ namespace Roslynator.CSharp.Refactorings
             InvocationExpressionSyntax invocation,
             CancellationToken cancellationToken)
         {
-            MemberInvocationExpressionInfo info = SyntaxInfo.MemberInvocationExpressionInfo(invocation);
+            SimpleMemberInvocationExpressionInfo info = SyntaxInfo.SimpleMemberInvocationExpressionInfo(invocation);
 
             SemanticModel semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
 

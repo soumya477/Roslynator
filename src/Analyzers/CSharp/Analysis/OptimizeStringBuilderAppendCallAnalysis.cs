@@ -12,7 +12,7 @@ namespace Roslynator.CSharp.Analysis
 {
     internal static class OptimizeStringBuilderAppendCallAnalysis
     {
-        public static void Analyze(SyntaxNodeAnalysisContext context, MemberInvocationExpressionInfo invocationInfo)
+        public static void Analyze(SyntaxNodeAnalysisContext context, SimpleMemberInvocationExpressionInfo invocationInfo)
         {
             INamedTypeSymbol stringBuilderSymbol = context.GetTypeByMetadataName(MetadataNames.System_Text_StringBuilder);
 
@@ -40,7 +40,7 @@ namespace Roslynator.CSharp.Analysis
             {
                 if (methodSymbol.IsName("AppendLine"))
                 {
-                    MemberInvocationExpressionInfo invocationInfo2 = SyntaxInfo.MemberInvocationExpressionInfo(invocationInfo.Expression);
+                    SimpleMemberInvocationExpressionInfo invocationInfo2 = SyntaxInfo.SimpleMemberInvocationExpressionInfo(invocationInfo.Expression);
 
                     if (invocationInfo2.Success
                         && invocationInfo2.NameText == "Append"
@@ -134,7 +134,7 @@ namespace Roslynator.CSharp.Analysis
 
         private static bool IsFixable(InvocationExpressionSyntax invocationExpression, SemanticModel semanticModel, CancellationToken cancellationToken)
         {
-            MemberInvocationExpressionInfo invocationInfo = SyntaxInfo.MemberInvocationExpressionInfo(invocationExpression);
+            SimpleMemberInvocationExpressionInfo invocationInfo = SyntaxInfo.SimpleMemberInvocationExpressionInfo(invocationExpression);
 
             if (!invocationInfo.Success)
                 return false;

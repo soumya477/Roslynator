@@ -41,7 +41,7 @@ namespace Roslynator.CSharp.CodeFixes
 
             if (node is ArgumentSyntax argument)
             {
-                MemberInvocationExpressionInfo invocationInfo = SyntaxInfo.MemberInvocationExpressionInfo((InvocationExpressionSyntax)argument.Parent.Parent);
+                SimpleMemberInvocationExpressionInfo invocationInfo = SyntaxInfo.SimpleMemberInvocationExpressionInfo((InvocationExpressionSyntax)argument.Parent.Parent);
 
                 CodeAction codeAction = CodeAction.Create(
                     $"Optimize '{invocationInfo.NameText}' call",
@@ -52,7 +52,7 @@ namespace Roslynator.CSharp.CodeFixes
             }
             else if (node is InvocationExpressionSyntax invocationExpression)
             {
-                MemberInvocationExpressionInfo invocationInfo = SyntaxInfo.MemberInvocationExpressionInfo(invocationExpression);
+                SimpleMemberInvocationExpressionInfo invocationInfo = SyntaxInfo.SimpleMemberInvocationExpressionInfo(invocationExpression);
 
                 CodeAction codeAction = CodeAction.Create(
                     $"Optimize '{invocationInfo.NameText}' call",

@@ -110,7 +110,7 @@ namespace Roslynator.CSharp.Refactorings
         {
             var statement = (ExpressionStatementSyntax)ifStatement.SingleNonBlockStatementOrDefault();
 
-            MemberInvocationStatementInfo invocationInfo = SyntaxInfo.MemberInvocationStatementInfo(statement);
+            SimpleMemberInvocationStatementInfo invocationInfo = SyntaxInfo.SimpleMemberInvocationStatementInfo(statement);
 
             int insertIndex = invocationInfo.Expression.Span.End - statement.FullSpan.Start;
             StatementSyntax newStatement = SyntaxFactory.ParseStatement(statement.ToFullString().Insert(insertIndex, "?"));
