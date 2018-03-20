@@ -55,7 +55,7 @@ namespace Roslynator.CSharp.CodeFixes
                                     if (constraintClause != null)
                                         newGenericInfo = newGenericInfo.RemoveConstraintClause(constraintClause);
 
-                                    return context.Document.ReplaceNodeAsync(genericInfo.Declaration, newGenericInfo.Declaration, cancellationToken);
+                                    return context.Document.ReplaceNodeAsync(genericInfo.Node, newGenericInfo.Node, cancellationToken);
                                 },
                                 GetEquivalenceKey(diagnostic));
 

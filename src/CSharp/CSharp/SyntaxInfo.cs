@@ -332,6 +332,16 @@ namespace Roslynator.CSharp
         }
 
         /// <summary>
+        /// Creates a new <see cref="Syntax.GenericInfo"/> from the specified node.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        public static GenericInfo GenericInfo(SyntaxNode node)
+        {
+            return Syntax.GenericInfo.Create(node);
+        }
+
+        /// <summary>
         /// Creates a new <see cref="Syntax.GenericInfo"/> from the specified type parameter constraint.
         /// </summary>
         /// <param name="typeParameterConstraint"></param>
@@ -349,16 +359,6 @@ namespace Roslynator.CSharp
         public static GenericInfo GenericInfo(TypeParameterConstraintClauseSyntax constraintClause)
         {
             return Syntax.GenericInfo.Create(constraintClause);
-        }
-
-        /// <summary>
-        /// Creates a new <see cref="Syntax.GenericInfo"/> from the specified declaration.
-        /// </summary>
-        /// <param name="declaration"></param>
-        /// <returns></returns>
-        public static GenericInfo GenericInfo(SyntaxNode declaration)
-        {
-            return Syntax.GenericInfo.Create(declaration);
         }
 
         /// <summary>
@@ -382,13 +382,13 @@ namespace Roslynator.CSharp
         }
 
         /// <summary>
-        /// Creates a new <see cref="Syntax.GenericInfo"/> from the specified class declaration.
+        /// Creates a new <see cref="Syntax.GenericInfo"/> from the specified type declaration.
         /// </summary>
-        /// <param name="classDeclaration"></param>
+        /// <param name="typeDeclaration"></param>
         /// <returns></returns>
-        public static GenericInfo GenericInfo(ClassDeclarationSyntax classDeclaration)
+        public static GenericInfo GenericInfo(TypeDeclarationSyntax typeDeclaration)
         {
-            return Syntax.GenericInfo.Create(classDeclaration);
+            return Syntax.GenericInfo.Create(typeDeclaration);
         }
 
         /// <summary>
@@ -399,16 +399,6 @@ namespace Roslynator.CSharp
         public static GenericInfo GenericInfo(DelegateDeclarationSyntax delegateDeclaration)
         {
             return Syntax.GenericInfo.Create(delegateDeclaration);
-        }
-
-        /// <summary>
-        /// Creates a new <see cref="Syntax.GenericInfo"/> from the specified interface declaration.
-        /// </summary>
-        /// <param name="interfaceDeclaration"></param>
-        /// <returns></returns>
-        public static GenericInfo GenericInfo(InterfaceDeclarationSyntax interfaceDeclaration)
-        {
-            return Syntax.GenericInfo.Create(interfaceDeclaration);
         }
 
         /// <summary>
@@ -429,16 +419,6 @@ namespace Roslynator.CSharp
         public static GenericInfo GenericInfo(MethodDeclarationSyntax methodDeclaration)
         {
             return Syntax.GenericInfo.Create(methodDeclaration);
-        }
-
-        /// <summary>
-        /// Creates a new <see cref="Syntax.GenericInfo"/> from the specified struct declaration.
-        /// </summary>
-        /// <param name="structDeclaration"></param>
-        /// <returns></returns>
-        public static GenericInfo GenericInfo(StructDeclarationSyntax structDeclaration)
-        {
-            return Syntax.GenericInfo.Create(structDeclaration);
         }
 
         internal static HexNumericLiteralExpressionInfo HexNumericLiteralExpressionInfo(SyntaxNode node, bool walkDownParentheses = true)

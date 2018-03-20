@@ -31,7 +31,7 @@ namespace Roslynator.CSharp.Refactorings
                         {
                             GenericInfo newInfo = ToMultiLine(genericInfo);
 
-                            return context.Document.ReplaceNodeAsync(genericInfo.Declaration, newInfo.Declaration, cancellationToken);
+                            return context.Document.ReplaceNodeAsync(genericInfo.Node, newInfo.Node, cancellationToken);
                         });
                 }
             }
@@ -43,14 +43,14 @@ namespace Roslynator.CSharp.Refactorings
                     {
                         GenericInfo newInfo = ToSingleLine(genericInfo);
 
-                        return context.Document.ReplaceNodeAsync(genericInfo.Declaration, newInfo.Declaration, cancellationToken);
+                        return context.Document.ReplaceNodeAsync(genericInfo.Node, newInfo.Node, cancellationToken);
                     });
             }
         }
 
         private static GenericInfo ToSingleLine(GenericInfo info)
         {
-            SyntaxNode declaration = info.Declaration;
+            SyntaxNode declaration = info.Node;
 
             SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses = info.ConstraintClauses;
 
@@ -81,7 +81,7 @@ namespace Roslynator.CSharp.Refactorings
 
         private static GenericInfo ToMultiLine(GenericInfo info)
         {
-            SyntaxNode declaration = info.Declaration;
+            SyntaxNode declaration = info.Node;
             SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses = info.ConstraintClauses;
 
             TypeParameterConstraintClauseSyntax first = constraintClauses.First();

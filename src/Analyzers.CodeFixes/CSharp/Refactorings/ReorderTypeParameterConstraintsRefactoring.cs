@@ -22,7 +22,7 @@ namespace Roslynator.CSharp.Refactorings
 
             GenericInfo newInfo = genericInfo.WithConstraintClauses(newConstraintClauses);
 
-            return document.ReplaceNodeAsync(genericInfo.Declaration, newInfo.Declaration, cancellationToken);
+            return document.ReplaceNodeAsync(genericInfo.Node, newInfo.Node, cancellationToken);
         }
 
         private static SyntaxList<TypeParameterConstraintClauseSyntax> SortConstraints(
