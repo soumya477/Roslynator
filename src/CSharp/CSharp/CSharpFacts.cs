@@ -731,6 +731,15 @@ namespace Roslynator.CSharp
             }
         }
 
+        public static bool IsConstraint(SyntaxKind kind)
+        {
+            return kind.Is(
+                SyntaxKind.ClassConstraint,
+                SyntaxKind.ConstructorConstraint,
+                SyntaxKind.StructConstraint,
+                SyntaxKind.TypeConstraint);
+        }
+
         internal static SyntaxKind GetCompoundAssignmentKind(SyntaxKind binaryExpressionKind)
         {
             switch (binaryExpressionKind)
