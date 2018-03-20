@@ -37,7 +37,7 @@ namespace Roslynator.CSharp.Analysis
             if (!ParentIsElementAccessOrForEachExpression(invocation.WalkUpParentheses()))
                 return false;
 
-            MemberInvocationExpressionInfo info = SyntaxInfo.MemberInvocationExpressionInfo(invocation);
+            SimpleMemberInvocationExpressionInfo info = SyntaxInfo.SimpleMemberInvocationExpressionInfo(invocation);
 
             if (!info.Success)
                 return false;

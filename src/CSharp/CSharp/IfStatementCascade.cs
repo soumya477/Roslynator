@@ -59,19 +59,6 @@ namespace Roslynator.CSharp
         /// </summary>
         public IfStatementSyntax IfStatement { get; }
 
-        internal static IfStatementCascade Create(SyntaxNode node)
-        {
-            return Create(node as IfStatementSyntax);
-        }
-
-        internal static IfStatementCascade Create(IfStatementSyntax ifStatement)
-        {
-            if (ifStatement == null)
-                return default(IfStatementCascade);
-
-            return new IfStatementCascade(ifStatement);
-        }
-
         /// <summary>
         /// Gets the enumerator for the if-else cascade.
         /// </summary>
@@ -237,31 +224,31 @@ namespace Roslynator.CSharp
 
         private class EnumeratorImpl : IEnumerator<IfStatementOrElseClause>
         {
-            private Enumerator _e;
+            private Enumerator _en;
 
             internal EnumeratorImpl(IfStatementSyntax ifStatement)
             {
-                _e = new Enumerator(ifStatement);
+                _en = new Enumerator(ifStatement);
             }
 
             public IfStatementOrElseClause Current
             {
-                get { return _e.Current; }
+                get { return _en.Current; }
             }
 
             object IEnumerator.Current
             {
-                get { return _e.Current; }
+                get { return _en.Current; }
             }
 
             public bool MoveNext()
             {
-                return _e.MoveNext();
+                return _en.MoveNext();
             }
 
             public void Reset()
             {
-                _e.Reset();
+                _en.Reset();
             }
 
             public void Dispose()

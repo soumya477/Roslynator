@@ -92,7 +92,7 @@ namespace Roslynator.CSharp.Syntax
         /// </summary>
         public SyntaxToken EqualsToken
         {
-            get { return Declarator?.Initializer.EqualsToken ?? default(SyntaxToken); }
+            get { return Initializer?.EqualsToken ?? default(SyntaxToken); }
         }
 
         /// <summary>

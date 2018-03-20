@@ -180,7 +180,7 @@ namespace Roslynator.CSharp.Analysis
             if (expression?.IsMissing != false)
                 return;
 
-            if (OperatorPrecedence.GetPrecedence(expression.Kind()) > OperatorPrecedence.GetPrecedence(SyntaxKind.AwaitExpression))
+            if (CSharpFacts.GetOperatorPrecedence(expression.Kind()) > CSharpFacts.GetOperatorPrecedence(SyntaxKind.AwaitExpression))
                 return;
 
             AnalyzeParenthesizedExpression(context, parenthesizedExpression);

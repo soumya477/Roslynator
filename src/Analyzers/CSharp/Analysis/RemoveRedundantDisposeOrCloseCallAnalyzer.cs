@@ -47,7 +47,7 @@ namespace Roslynator.CSharp.Analysis
             if (lastStatement.SpanContainsDirectives())
                 return;
 
-            MemberInvocationStatementInfo info = SyntaxInfo.MemberInvocationStatementInfo(lastStatement);
+            SimpleMemberInvocationStatementInfo info = SyntaxInfo.SimpleMemberInvocationStatementInfo(lastStatement);
 
             if (!info.Success)
                 return;

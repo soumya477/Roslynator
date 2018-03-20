@@ -15,9 +15,9 @@ namespace Roslynator.CSharp.Analysis
     {
         public static void Analyze(
             SyntaxNodeAnalysisContext context,
-            MemberInvocationExpressionInfo invocationInfo)
+            SimpleMemberInvocationExpressionInfo invocationInfo)
         {
-            MemberInvocationExpressionInfo invocationInfo2 = SyntaxInfo.MemberInvocationExpressionInfo(invocationInfo.Expression);
+            SimpleMemberInvocationExpressionInfo invocationInfo2 = SyntaxInfo.SimpleMemberInvocationExpressionInfo(invocationInfo.Expression);
 
             if (!invocationInfo2.Success)
                 return;
@@ -70,8 +70,8 @@ namespace Roslynator.CSharp.Analysis
 
         private static void Analyze(
             SyntaxNodeAnalysisContext context,
-            MemberInvocationExpressionInfo invocationInfo,
-            MemberInvocationExpressionInfo invocationInfo2)
+            SimpleMemberInvocationExpressionInfo invocationInfo,
+            SimpleMemberInvocationExpressionInfo invocationInfo2)
         {
             ExpressionSyntax expression = invocationInfo.Arguments.First().Expression;
 

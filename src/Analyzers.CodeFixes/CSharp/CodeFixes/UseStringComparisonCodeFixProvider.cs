@@ -45,10 +45,10 @@ namespace Roslynator.CSharp.CodeFixes
                     {
                         var binaryExpression = (BinaryExpressionSyntax)node;
 
-                        MemberInvocationExpressionInfo invocationInfo = SyntaxInfo.MemberInvocationExpressionInfo(binaryExpression.Left.WalkDownParentheses());
+                        SimpleMemberInvocationExpressionInfo invocationInfo = SyntaxInfo.SimpleMemberInvocationExpressionInfo(binaryExpression.Left.WalkDownParentheses());
 
                         if (!invocationInfo.Success)
-                            invocationInfo = SyntaxInfo.MemberInvocationExpressionInfo((InvocationExpressionSyntax)binaryExpression.Right.WalkDownParentheses());
+                            invocationInfo = SyntaxInfo.SimpleMemberInvocationExpressionInfo((InvocationExpressionSyntax)binaryExpression.Right.WalkDownParentheses());
 
                         SemanticModel semanticModel = await context.GetSemanticModelAsync().ConfigureAwait(false);
 
@@ -67,7 +67,7 @@ namespace Roslynator.CSharp.CodeFixes
                     {
                         var invocationExpression = (InvocationExpressionSyntax)node;
 
-                        MemberInvocationExpressionInfo invocationInfo = SyntaxInfo.MemberInvocationExpressionInfo(invocationExpression);
+                        SimpleMemberInvocationExpressionInfo invocationInfo = SyntaxInfo.SimpleMemberInvocationExpressionInfo(invocationExpression);
 
                         SeparatedSyntaxList<ArgumentSyntax> arguments = invocationInfo.Arguments;
 
@@ -83,7 +83,7 @@ namespace Roslynator.CSharp.CodeFixes
                                 ?? (InvocationExpressionSyntax)arguments[1].Expression.WalkDownParentheses();
                         }
 
-                        MemberInvocationExpressionInfo invocationInfo2 = SyntaxInfo.MemberInvocationExpressionInfo(invocationExpression2);
+                        SimpleMemberInvocationExpressionInfo invocationInfo2 = SyntaxInfo.SimpleMemberInvocationExpressionInfo(invocationExpression2);
 
                         SemanticModel semanticModel = await context.GetSemanticModelAsync().ConfigureAwait(false);
 
@@ -123,7 +123,7 @@ namespace Roslynator.CSharp.CodeFixes
         private bool RegisterCodeFix(
             CodeFixContext context,
             Diagnostic diagnostic,
-            MemberInvocationExpressionInfo invocationInfo,
+            SimpleMemberInvocationExpressionInfo invocationInfo,
             INamedTypeSymbol comparisonSymbol,
             string comparisonName)
         {

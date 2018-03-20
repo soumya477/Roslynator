@@ -184,7 +184,7 @@ namespace Roslynator.CSharp.Refactorings
             ExpressionSyntax right = analysis.Right.WithoutTrivia();
 
             if (analysis.Negate)
-                right = Negation.LogicallyNegate(right, analysis.SemanticModel, cancellationToken);
+                right = Negator.LogicallyNegate(right, analysis.SemanticModel, cancellationToken);
 
             ExpressionStatementSyntax newNode = SimpleAssignmentStatement(analysis.Left.WithoutTrivia(), right)
                 .WithTriviaFrom(analysis.IfStatement)
@@ -327,7 +327,7 @@ namespace Roslynator.CSharp.Refactorings
             ExpressionSyntax expression = analysis.Expression;
 
             if (analysis.Negate)
-                expression = Negation.LogicallyNegate(expression, analysis.SemanticModel, cancellationToken);
+                expression = Negator.LogicallyNegate(expression, analysis.SemanticModel, cancellationToken);
 
             StatementSyntax statement;
             if (analysis.IsYield)
@@ -495,11 +495,11 @@ namespace Roslynator.CSharp.Refactorings
                         switch (expression2.Kind())
                         {
                             case SyntaxKind.TrueLiteralExpression:
-                                return Negation.LogicallyNegate(condition, semanticModel, cancellationToken);
+                                return Negator.LogicallyNegate(condition, semanticModel, cancellationToken);
                             case SyntaxKind.FalseLiteralExpression:
                                 return expression2;
                             default:
-                                return LogicalAndExpression(Negation.LogicallyNegate(condition, semanticModel, cancellationToken), expression2);
+                                return LogicalAndExpression(Negator.LogicallyNegate(condition, semanticModel, cancellationToken), expression2);
                         }
                     }
                 default:
@@ -507,7 +507,7 @@ namespace Roslynator.CSharp.Refactorings
                         switch (expression2.Kind())
                         {
                             case SyntaxKind.TrueLiteralExpression:
-                                return LogicalOrExpression(Negation.LogicallyNegate(condition, semanticModel, cancellationToken), expression1);
+                                return LogicalOrExpression(Negator.LogicallyNegate(condition, semanticModel, cancellationToken), expression1);
                             case SyntaxKind.FalseLiteralExpression:
                                 return LogicalAndExpression(condition, expression1);
                             default:

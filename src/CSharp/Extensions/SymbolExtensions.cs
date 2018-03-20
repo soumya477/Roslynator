@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -1457,32 +1458,38 @@ namespace Roslynator
         }
 
         /// <summary>
-        /// Returns true if the type inherits from a specified base class.
+        /// Returns true if the type inherits from a specified base type.
         /// </summary>
         /// <param name="type"></param>
-        /// <param name="baseClass"></param>
+        /// <param name="baseType"></param>
         /// <param name="includeInterfaces"></param>
         /// <returns></returns>
-        public static bool InheritsFrom(this ITypeSymbol type, ITypeSymbol baseClass, bool includeInterfaces = false)
+        public static bool InheritsFrom(this ITypeSymbol type, ITypeSymbol baseType, bool includeInterfaces = false)
         {
             if (type == null)
                 throw new ArgumentNullException(nameof(type));
 
-            INamedTypeSymbol baseType = type.BaseType;
+            if (baseType == null)
+                return false;
 
-            while (baseType != null)
+            INamedTypeSymbol t = type.BaseType;
+
+            while (t != null)
             {
-                if (baseType.Equals(baseClass))
+                Debug.Assert(t.TypeKind == TypeKind.Class, t.TypeKind.ToString());
+
+                if (t.Equals(baseType))
                     return true;
 
-                baseType = baseType.BaseType;
+                t = t.BaseType;
             }
 
-            if (includeInterfaces)
+            if (includeInterfaces
+                && baseType.TypeKind == TypeKind.Interface)
             {
                 foreach (INamedTypeSymbol interfaceType in type.AllInterfaces)
                 {
-                    if (interfaceType.Equals(baseClass))
+                    if (interfaceType.Equals(baseType))
                         return true;
                 }
             }
@@ -1491,7 +1498,7 @@ namespace Roslynator
         }
 
         /// <summary>
-        /// Returns true if the type is equal or inherits from a specified base class.
+        /// Returns true if the type is equal or inherits from a specified base type.
         /// </summary>
         /// <param name="type"></param>
         /// <param name="baseType"></param>

@@ -530,7 +530,7 @@ namespace Roslynator.CSharp.Analysis
             INamedTypeSymbol expressionTypeSymbol,
             SemanticModel semanticModel)
         {
-            MemberInvocationExpressionInfo invocationInfo = SyntaxInfo.MemberInvocationExpressionInfo(expression);
+            SimpleMemberInvocationExpressionInfo invocationInfo = SyntaxInfo.SimpleMemberInvocationExpressionInfo(expression);
 
             if (!invocationInfo.Success)
                 return false;

@@ -39,8 +39,8 @@ namespace Roslynator.CSharp.Refactorings
         public const string DuplicateMember = Prefix + "0031";
         public const string DuplicateParameter = Prefix + "0032";
         public const string DuplicateStatement = Prefix + "0033";
-        public const string ExpandAssignmentExpression = Prefix + "0034";
         public const string ExpandCoalesceExpression = Prefix + "0035";
+        public const string ExpandCompoundAssignmentOperator = Prefix + "0034";
         public const string ExpandEvent = Prefix + "0036";
         public const string ExpandExpressionBody = Prefix + "0037";
         public const string ExpandInitializer = Prefix + "0038";

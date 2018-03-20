@@ -77,7 +77,7 @@ namespace Roslynator.CSharp.Refactorings
         {
             SemanticModel semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
 
-            ExpressionSyntax newNode = Negation.LogicallyNegate(binaryExpression, semanticModel, cancellationToken);
+            ExpressionSyntax newNode = Negator.LogicallyNegate(binaryExpression, semanticModel, cancellationToken);
 
             newNode = newNode.WithFormatterAnnotation();
 

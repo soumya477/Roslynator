@@ -11,7 +11,7 @@ using static Roslynator.CSharp.CSharpFactory;
 
 namespace Roslynator.CSharp.Refactorings
 {
-    internal static class ExpandAssignmentExpressionRefactoring
+    internal static class ExpandCompoundAssignmentOperatorRefactoring
     {
         public static Task<Document> RefactorAsync(
             Document document,

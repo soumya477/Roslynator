@@ -92,7 +92,7 @@ namespace Roslynator.CSharp.Analysis
             if (nextStatement.ContainsDiagnostics)
                 return;
 
-            MemberInvocationStatementInfo invocationInfo = SyntaxInfo.MemberInvocationStatementInfo(nextStatement);
+            SimpleMemberInvocationStatementInfo invocationInfo = SyntaxInfo.SimpleMemberInvocationStatementInfo(nextStatement);
 
             if (!invocationInfo.Success)
                 return;

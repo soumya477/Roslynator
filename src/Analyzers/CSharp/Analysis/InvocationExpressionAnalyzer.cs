@@ -87,7 +87,7 @@ namespace Roslynator.CSharp.Analysis
                     }
                 }
 
-                MemberInvocationExpressionInfo invocationInfo = SyntaxInfo.MemberInvocationExpressionInfo(invocation);
+                SimpleMemberInvocationExpressionInfo invocationInfo = SyntaxInfo.SimpleMemberInvocationExpressionInfo(invocation);
 
                 if (invocationInfo.Success)
                 {

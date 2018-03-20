@@ -22,7 +22,7 @@ namespace Roslynator.CSharp.Refactorings
             SemanticModel semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
 
             ConditionalExpressionSyntax newNode = conditionalExpression.Update(
-                condition: Negation.LogicallyNegate(conditionalExpression.Condition, semanticModel, cancellationToken),
+                condition: Negator.LogicallyNegate(conditionalExpression.Condition, semanticModel, cancellationToken),
                 questionToken: conditionalExpression.QuestionToken,
                 whenTrue: conditionalExpression.WhenFalse.WithTriviaFrom(conditionalExpression.WhenTrue),
                 colonToken: conditionalExpression.ColonToken,

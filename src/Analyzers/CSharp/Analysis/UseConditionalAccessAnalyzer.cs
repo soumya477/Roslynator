@@ -55,7 +55,7 @@ namespace Roslynator.CSharp.Analysis
             if (!nullCheck.Success)
                 return;
 
-            MemberInvocationStatementInfo invocationInfo = SyntaxInfo.MemberInvocationStatementInfo(ifStatement.SingleNonBlockStatementOrDefault());
+            SimpleMemberInvocationStatementInfo invocationInfo = SyntaxInfo.SimpleMemberInvocationStatementInfo(ifStatement.SingleNonBlockStatementOrDefault());
 
             if (!invocationInfo.Success)
                 return;

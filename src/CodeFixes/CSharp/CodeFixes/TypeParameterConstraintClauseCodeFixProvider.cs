@@ -60,7 +60,7 @@ namespace Roslynator.CSharp.CodeFixes
                                 {
                                     GenericInfo newGenericInfo = genericInfo.RemoveAllConstraintClauses();
 
-                                    return context.Document.ReplaceNodeAsync(genericInfo.Declaration, newGenericInfo.Declaration, cancellationToken);
+                                    return context.Document.ReplaceNodeAsync(genericInfo.Node, newGenericInfo.Node, cancellationToken);
                                 },
                                 GetEquivalenceKey(diagnostic));
 
@@ -95,7 +95,7 @@ namespace Roslynator.CSharp.CodeFixes
 
                                     GenericInfo newGenericInfo = genericInfo.WithConstraintClauses(newConstraintClauses);
 
-                                    return context.Document.ReplaceNodeAsync(genericInfo.Declaration, newGenericInfo.Declaration, cancellationToken);
+                                    return context.Document.ReplaceNodeAsync(genericInfo.Node, newGenericInfo.Node, cancellationToken);
                                 },
                                 GetEquivalenceKey(diagnostic));
 

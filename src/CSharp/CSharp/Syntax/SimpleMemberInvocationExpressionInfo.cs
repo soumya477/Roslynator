@@ -9,13 +9,12 @@ using static Roslynator.CSharp.Syntax.SyntaxInfoHelpers;
 
 namespace Roslynator.CSharp.Syntax
 {
-    //TODO: MemberAccessInvocationExpressionInfo
     /// <summary>
     /// Provides information about invocation expression.
     /// </summary>
-    public readonly struct MemberInvocationExpressionInfo : IEquatable<MemberInvocationExpressionInfo>
+    public readonly struct SimpleMemberInvocationExpressionInfo : IEquatable<SimpleMemberInvocationExpressionInfo>
     {
-        private MemberInvocationExpressionInfo(
+        private SimpleMemberInvocationExpressionInfo(
             InvocationExpressionSyntax invocationExpression,
             MemberAccessExpressionSyntax memberAccessExpression)
         {
@@ -23,7 +22,7 @@ namespace Roslynator.CSharp.Syntax
             MemberAccessExpression = memberAccessExpression;
         }
 
-        private static MemberInvocationExpressionInfo Default { get; } = new MemberInvocationExpressionInfo();
+        private static SimpleMemberInvocationExpressionInfo Default { get; } = new SimpleMemberInvocationExpressionInfo();
 
         /// <summary>
         /// The invocation expression.
@@ -91,7 +90,7 @@ namespace Roslynator.CSharp.Syntax
             get { return InvocationExpression != null; }
         }
 
-        internal static MemberInvocationExpressionInfo Create(
+        internal static SimpleMemberInvocationExpressionInfo Create(
             SyntaxNode node,
             bool walkDownParentheses = true,
             bool allowMissing = false)
@@ -101,14 +100,14 @@ namespace Roslynator.CSharp.Syntax
                 allowMissing);
         }
 
-        internal static MemberInvocationExpressionInfo Create(
+        internal static SimpleMemberInvocationExpressionInfo Create(
             InvocationExpressionSyntax invocationExpression,
             bool allowMissing = false)
         {
             return CreateImpl(invocationExpression, allowMissing);
         }
 
-        private static MemberInvocationExpressionInfo CreateImpl(
+        private static SimpleMemberInvocationExpressionInfo CreateImpl(
             InvocationExpressionSyntax invocationExpression,
             bool allowMissing = false)
         {
@@ -133,16 +132,16 @@ namespace Roslynator.CSharp.Syntax
             if (argumentList == null)
                 return Default;
 
-            return new MemberInvocationExpressionInfo(invocationExpression, memberAccessExpression);
+            return new SimpleMemberInvocationExpressionInfo(invocationExpression, memberAccessExpression);
         }
 
-        internal MemberInvocationExpressionInfo WithName(string name)
+        internal SimpleMemberInvocationExpressionInfo WithName(string name)
         {
             MemberAccessExpressionSyntax newMemberAccess = MemberAccessExpression.WithName(SyntaxFactory.IdentifierName(name).WithTriviaFrom(Name));
 
             InvocationExpressionSyntax newInvocation = InvocationExpression.WithExpression(newMemberAccess);
 
-            return new MemberInvocationExpressionInfo(newInvocation, newMemberAccess);
+            return new SimpleMemberInvocationExpressionInfo(newInvocation, newMemberAccess);
         }
 
         /// <summary>
@@ -161,7 +160,7 @@ namespace Roslynator.CSharp.Syntax
         /// <returns>true if <paramref name="obj" /> and this instance are the same type and represent the same value; otherwise, false. </returns>
         public override bool Equals(object obj)
         {
-            return obj is MemberInvocationExpressionInfo other && Equals(other);
+            return obj is SimpleMemberInvocationExpressionInfo other && Equals(other);
         }
 
         /// <summary>
@@ -169,7 +168,7 @@ namespace Roslynator.CSharp.Syntax
         /// </summary>
         /// <param name="other">An object to compare with this object.</param>
         /// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
-        public bool Equals(MemberInvocationExpressionInfo other)
+        public bool Equals(SimpleMemberInvocationExpressionInfo other)
         {
             return EqualityComparer<InvocationExpressionSyntax>.Default.Equals(InvocationExpression, other.InvocationExpression);
         }
@@ -183,12 +182,12 @@ namespace Roslynator.CSharp.Syntax
             return EqualityComparer<InvocationExpressionSyntax>.Default.GetHashCode(InvocationExpression);
         }
 
-        public static bool operator ==(MemberInvocationExpressionInfo info1, MemberInvocationExpressionInfo info2)
+        public static bool operator ==(SimpleMemberInvocationExpressionInfo info1, SimpleMemberInvocationExpressionInfo info2)
         {
             return info1.Equals(info2);
         }
 
-        public static bool operator !=(MemberInvocationExpressionInfo info1, MemberInvocationExpressionInfo info2)
+        public static bool operator !=(SimpleMemberInvocationExpressionInfo info1, SimpleMemberInvocationExpressionInfo info2)
         {
             return !(info1 == info2);
         }
