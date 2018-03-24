@@ -179,11 +179,12 @@ namespace Roslynator.CSharp
         /// </summary>
         /// <param name="kind"></param>
         /// <returns></returns>
-        public static bool IsLoopStatement(SyntaxKind kind)
+        public static bool IsIterationStatement(SyntaxKind kind)
         {
             return kind.Is(
                 SyntaxKind.ForStatement,
                 SyntaxKind.ForEachStatement,
+                SyntaxKind.ForEachVariableStatement,
                 SyntaxKind.WhileStatement,
                 SyntaxKind.DoStatement);
         }
@@ -232,13 +233,19 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         public static bool IsJumpStatement(SyntaxKind kind)
         {
-            return kind.Is(
-                SyntaxKind.BreakStatement,
-                SyntaxKind.ContinueStatement,
-                SyntaxKind.GotoCaseStatement,
-                SyntaxKind.GotoDefaultStatement,
-                SyntaxKind.ReturnStatement,
-                SyntaxKind.ThrowStatement);
+            switch (kind)
+            {
+                case SyntaxKind.BreakStatement:
+                case SyntaxKind.ContinueStatement:
+                case SyntaxKind.GotoStatement:
+                case SyntaxKind.GotoCaseStatement:
+                case SyntaxKind.GotoDefaultStatement:
+                case SyntaxKind.ReturnStatement:
+                case SyntaxKind.ThrowStatement:
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         internal static bool IsJumpStatementOrYieldBreakStatement(SyntaxKind kind)
@@ -434,6 +441,55 @@ namespace Roslynator.CSharp
                 default:
                     return false;
             }
+        }
+
+        //TODO: CanBeEmbeddedStatement
+        /// <summary>
+        /// Returns true if a syntax of the specified kind can be an embedded statement.
+        /// </summary>
+        /// <param name="kind"></param>
+        /// <returns></returns>
+        public static bool CanBeEmbeddedStatement(SyntaxKind kind)
+        {
+            switch (kind)
+            {
+                case SyntaxKind.Block:
+                case SyntaxKind.ExpressionStatement:
+                case SyntaxKind.EmptyStatement:
+                case SyntaxKind.GotoStatement:
+                case SyntaxKind.GotoCaseStatement:
+                case SyntaxKind.GotoDefaultStatement:
+                case SyntaxKind.BreakStatement:
+                case SyntaxKind.ContinueStatement:
+                case SyntaxKind.ReturnStatement:
+                case SyntaxKind.YieldReturnStatement:
+                case SyntaxKind.YieldBreakStatement:
+                case SyntaxKind.ThrowStatement:
+                case SyntaxKind.WhileStatement:
+                case SyntaxKind.DoStatement:
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.ForEachStatement:
+                case SyntaxKind.UsingStatement:
+                case SyntaxKind.FixedStatement:
+                case SyntaxKind.CheckedStatement:
+                case SyntaxKind.UncheckedStatement:
+                case SyntaxKind.UnsafeStatement:
+                case SyntaxKind.LockStatement:
+                case SyntaxKind.IfStatement:
+                case SyntaxKind.SwitchStatement:
+                case SyntaxKind.TryStatement:
+                case SyntaxKind.ForEachVariableStatement:
+                    return true;
+                case SyntaxKind.LocalDeclarationStatement:
+                case SyntaxKind.LabeledStatement:
+                case SyntaxKind.LocalFunctionStatement:
+                case SyntaxKind.GlobalStatement:
+                    return false;
+            }
+
+            Debug.Assert(!kind.ToString().EndsWith("Statement", StringComparison.Ordinal), kind.ToString());
+
+            return false;
         }
 
         internal static bool CanContainContinueStatement(SyntaxKind kind)
@@ -729,6 +785,15 @@ namespace Roslynator.CSharp
                 default:
                     return false;
             }
+        }
+
+        public static bool IsConstraint(SyntaxKind kind)
+        {
+            return kind.Is(
+                SyntaxKind.ClassConstraint,
+                SyntaxKind.ConstructorConstraint,
+                SyntaxKind.StructConstraint,
+                SyntaxKind.TypeConstraint);
         }
 
         internal static SyntaxKind GetCompoundAssignmentKind(SyntaxKind binaryExpressionKind)

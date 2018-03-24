@@ -16,7 +16,9 @@ namespace Roslynator.CSharp.Refactorings
             RefactoringContext context,
             LocalDeclarationStatementSyntax localDeclaration)
         {
-            if (localDeclaration.IsEmbedded())
+            StatementListInfo statementsInfo = SyntaxInfo.StatementListInfo(localDeclaration);
+
+            if (!statementsInfo.Success)
                 return;
 
             SingleLocalDeclarationStatementInfo localInfo = SyntaxInfo.SingleLocalDeclarationStatementInfo(localDeclaration);
@@ -55,18 +57,17 @@ namespace Roslynator.CSharp.Refactorings
 
             context.RegisterRefactoring(
                 "Split declaration and initialization",
-                ct => RefactorAsync(context.Document, localInfo, type, ct));
+                ct => RefactorAsync(context.Document, localInfo, type, statementsInfo, ct));
         }
 
         private static Task<Document> RefactorAsync(
             Document document,
             SingleLocalDeclarationStatementInfo localInfo,
             TypeSyntax type,
+            StatementListInfo statementsInfo,
             CancellationToken cancellationToken)
         {
             LocalDeclarationStatementSyntax localStatement = localInfo.Statement;
-
-            StatementListInfo statementsInfo = SyntaxInfo.StatementListInfo(localStatement);
 
             int index = statementsInfo.IndexOf(localStatement);
 
