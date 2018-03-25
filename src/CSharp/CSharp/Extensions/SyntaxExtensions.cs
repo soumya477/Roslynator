@@ -1764,20 +1764,28 @@ namespace Roslynator.CSharp
         /// Returns true if the specified statement is an embedded statement.
         /// </summary>
         /// <param name="statement"></param>
-        /// <param name="ifInsideElse">If statement that is a child of an else statement should be considered as an embedded statement.</param>
-        /// <param name="usingInsideUsing">Using statement that is a child of an using statement should be considered as en embedded statement.</param>
+        /// <param name="canBeBlock">Block can be considered as embedded statement</param>
+        /// <param name="canBeIfInsideElse">If statement that is a child of an else statement can be considered as an embedded statement.</param>
+        /// <param name="canBeUsingInsideUsing">Using statement that is a child of an using statement can be considered as en embedded statement.</param>
         /// <returns></returns>
         public static bool IsEmbedded(
             this StatementSyntax statement,
-            bool ifInsideElse = true,
-            bool usingInsideUsing = true)
+            bool canBeBlock = false,
+            bool canBeIfInsideElse = true,
+            bool canBeUsingInsideUsing = true)
         {
             if (statement == null)
                 throw new ArgumentNullException(nameof(statement));
 
             SyntaxKind kind = statement.Kind();
 
-            if (kind == SyntaxKind.Block)
+            if (!canBeBlock
+                && kind == SyntaxKind.Block)
+            {
+                return false;
+            }
+
+            if (!CSharpFacts.CanBeEmbeddedStatement(kind))
                 return false;
 
             SyntaxNode parent = statement.Parent;
@@ -1788,10 +1796,10 @@ namespace Roslynator.CSharp
             SyntaxKind parentKind = parent.Kind();
 
             return CSharpFacts.CanHaveEmbeddedStatement(parentKind)
-                && (ifInsideElse
+                && (canBeIfInsideElse
                     || kind != SyntaxKind.IfStatement
                     || parentKind != SyntaxKind.ElseClause)
-                && (usingInsideUsing
+                && (canBeUsingInsideUsing
                     || kind != SyntaxKind.UsingStatement
                     || parentKind != SyntaxKind.UsingStatement);
         }

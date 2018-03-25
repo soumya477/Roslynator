@@ -60,7 +60,7 @@ namespace Roslynator.CSharp.Refactorings
         private static bool CanRefactor(RefactoringContext context, StatementSyntax statement)
         {
             return context.Span.IsEmptyAndContainedInSpanOrBetweenSpans(statement)
-                && statement.IsEmbedded(ifInsideElse: false);
+                && statement.IsEmbedded(canBeIfInsideElse: false);
         }
 
         private static IfStatementSyntax GetTopmostIf(StatementSyntax statement)
