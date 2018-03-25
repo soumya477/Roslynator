@@ -20,18 +20,17 @@ namespace Roslynator.CSharp.Syntax
             ExpressionSyntax expression,
             NullCheckStyles style)
         {
-            ContainingExpression = containingExpression;
+            NullCheckExpression = containingExpression;
             Expression = expression;
             Style = style;
         }
 
         private static NullCheckExpressionInfo Default { get; } = new NullCheckExpressionInfo();
 
-        //TODO: NullCheckExpression
         /// <summary>
         /// The null check expression, e.g. "x == null".
         /// </summary>
-        public ExpressionSyntax ContainingExpression { get; }
+        public ExpressionSyntax NullCheckExpression { get; }
 
         /// <summary>
         /// The expression that is evaluated whether is (not) null. for example "x" in "x == null".
@@ -321,7 +320,7 @@ namespace Roslynator.CSharp.Syntax
         /// <returns></returns>
         public override string ToString()
         {
-            return ContainingExpression?.ToString() ?? "";
+            return NullCheckExpression?.ToString() ?? "";
         }
 
         /// <summary>
@@ -341,7 +340,7 @@ namespace Roslynator.CSharp.Syntax
         /// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
         public bool Equals(NullCheckExpressionInfo other)
         {
-            return EqualityComparer<ExpressionSyntax>.Default.Equals(ContainingExpression, other.ContainingExpression);
+            return EqualityComparer<ExpressionSyntax>.Default.Equals(NullCheckExpression, other.NullCheckExpression);
         }
 
         /// <summary>
@@ -350,7 +349,7 @@ namespace Roslynator.CSharp.Syntax
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            return EqualityComparer<ExpressionSyntax>.Default.GetHashCode(ContainingExpression);
+            return EqualityComparer<ExpressionSyntax>.Default.GetHashCode(NullCheckExpression);
         }
 
         public static bool operator ==(NullCheckExpressionInfo info1, NullCheckExpressionInfo info2)
