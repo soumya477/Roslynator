@@ -22,8 +22,8 @@ Roslynator for VS Code|VS Code Extension|-|**&#x2713;**|**&#x2713;**|[How to Ena
 
 |Library|Link|Comment|
 |---|---|---|
-[Roslynator.CSharp](src/CSharp)|[NuGet](http://www.nuget.org/packages/Roslynator.CSharp/)|extends Microsoft.CodeAnalysis.CSharp|
-[Roslynator.CSharp.Workspaces](src/CSharp.Workspaces)|[NuGet](http://www.nuget.org/packages/Roslynator.CSharp.Workspaces/)|extends Microsoft.CodeAnalysis.CSharp.Workspaces|
+[Roslynator.CSharp](src/CSharp)|[NuGet](http://www.nuget.org/packages/Roslynator.CSharp/)|extends [Microsoft.CodeAnalysis.CSharp](http://www.nuget.org/packages/Microsoft.CodeAnalysis.CSharp/)|
+[Roslynator.CSharp.Workspaces](src/CSharp.Workspaces)|[NuGet](http://www.nuget.org/packages/Roslynator.CSharp.Workspaces/)|extends [Microsoft.CodeAnalysis.CSharp.Workspaces](http://www.nuget.org/packages/Microsoft.CodeAnalysis.CSharp.Workspaces/)|
 
 ## Documentation
 
