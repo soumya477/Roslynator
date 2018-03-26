@@ -1,10 +1,10 @@
 # Roslynator
 
 * A collection of 190+ analyzers and 190+ refactorings for C#, powered by Roslyn.
-* [List of Analyzers](http://github.com/JosefPihrt/Roslynator/blob/master/src/Analyzers/README.md)
-* [List of Refactorings](http://github.com/JosefPihrt/Roslynator/blob/master/src/Refactorings/README.md)
-* [List of Code Fixes for CS.... Diagnostics](http://github.com/JosefPihrt/Roslynator/blob/master/src/CodeFixes/README.md)
-* [Release Notes](http://github.com/JosefPihrt/Roslynator/blob/master/ChangeLog.md)
+* [List of Analyzers](src/Analyzers/README.md)
+* [List of Refactorings](src/Refactorings/README.md)
+* [List of Code Fixes for CS.... Diagnostics](src/CodeFixes/README.md)
+* [Release Notes](ChangeLog.md)
 
 ## Products
 
@@ -27,9 +27,9 @@ Roslynator for VS Code|VS Code Extension|-|**&#x2713;**|**&#x2713;**|[How to Ena
 
 ## Documentation
 
-* [Analyzers vs. Refactorings](http://github.com/JosefPihrt/Roslynator/blob/master/docs/AnalyzersVsRefactorings.md)
-* [How to Configure Analyzers](http://github.com/JosefPihrt/Roslynator/blob/master/docs/HowToConfigureAnalyzers.md)
-* [How to Configure Refactorings](http://github.com/JosefPihrt/Roslynator/blob/master/docs/HowToConfigureRefactorings.md)
+* [Analyzers vs. Refactorings](docs/AnalyzersVsRefactorings.md)
+* [How to Configure Analyzers](docs/HowToConfigureAnalyzers.md)
+* [How to Configure Refactorings](docs/HowToConfigureRefactorings.md)
 
 ## Donation
 
