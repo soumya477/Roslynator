@@ -18,6 +18,14 @@
 [Roslynator Refactorings](http://marketplace.visualstudio.com/items?itemName=josefpihrt.RoslynatorRefactorings)|VS 2015 Extension|-|**&#x2713;**|**&#x2713;**||
 Roslynator for VS Code|VS Code Extension|-|**&#x2713;**|**&#x2713;**|[How to Enable Roslynator for Visual Studio Code](docs/RoslynatorForVisualStudioCode.md)|
 
+## Libraries
+
+|Library|Link|Comment|
+|---|---|---|
+
+[Roslynator.CSharp](src/CSharp)|[NuGet](http://www.nuget.org/packages/Roslynator.CSharp/)|extends Microsoft.CodeAnalysis.CSharp|
+[Roslynator.CSharp.Workspaces](src/CSharp.Workspaces)|[NuGet](http://www.nuget.org/packages/Roslynator.CSharp.Workspaces/)|extends Microsoft.CodeAnalysis.CSharp.Workspaces|
+
 ## Documentation
 
 * [Analyzers vs. Refactorings](http://github.com/JosefPihrt/Roslynator/blob/master/docs/AnalyzersVsRefactorings.md)
