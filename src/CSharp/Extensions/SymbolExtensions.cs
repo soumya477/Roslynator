@@ -1476,7 +1476,7 @@ namespace Roslynator
 
             while (t != null)
             {
-                Debug.Assert(t.TypeKind == TypeKind.Class, t.TypeKind.ToString());
+                Debug.Assert(t.TypeKind.Is(TypeKind.Class, TypeKind.Error), t.TypeKind.ToString());
 
                 if (t.Equals(baseType))
                     return true;
