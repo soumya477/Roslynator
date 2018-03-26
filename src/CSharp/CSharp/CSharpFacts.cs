@@ -443,7 +443,6 @@ namespace Roslynator.CSharp
             }
         }
 
-        //TODO: CanBeEmbeddedStatement
         /// <summary>
         /// Returns true if a syntax of the specified kind can be an embedded statement.
         /// </summary>

@@ -11,7 +11,7 @@ namespace Roslynator.CodeGeneration.Html
 {
     internal static class HtmlGenerator
     {
-        private static StringComparer StringComparer { get; } = StringComparer.InvariantCulture;
+        private static StringComparer StringComparer { get; } = StringComparer.CurrentCulture;
 
         public static string CreateRoslynatorRefactoringsDescription(IEnumerable<RefactoringDescriptor> refactorings)
         {

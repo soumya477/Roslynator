@@ -43,8 +43,8 @@ namespace Roslynator.CSharp.Refactorings.ReplaceEqualsExpression
         private void RegisterRefactoring(RefactoringContext context, NullCheckExpressionInfo nullCheck)
         {
             string title = (nullCheck.Style == NullCheckStyles.EqualsToNull)
-                ? $"Replace '{nullCheck.ContainingExpression}' with 'string.{MethodName}({nullCheck.Expression})'"
-                : $"Replace '{nullCheck.ContainingExpression}' with '!string.{MethodName}({nullCheck.Expression})'";
+                ? $"Replace '{nullCheck.NullCheckExpression}' with 'string.{MethodName}({nullCheck.Expression})'"
+                : $"Replace '{nullCheck.NullCheckExpression}' with '!string.{MethodName}({nullCheck.Expression})'";
 
             context.RegisterRefactoring(
                 title,
@@ -65,10 +65,10 @@ namespace Roslynator.CSharp.Refactorings.ReplaceEqualsExpression
                 newNode = LogicalNotExpression(newNode);
 
             newNode = newNode
-                .WithTriviaFrom(nullCheck.ContainingExpression)
+                .WithTriviaFrom(nullCheck.NullCheckExpression)
                 .WithFormatterAnnotation();
 
-            return document.ReplaceNodeAsync(nullCheck.ContainingExpression, newNode, cancellationToken);
+            return document.ReplaceNodeAsync(nullCheck.NullCheckExpression, newNode, cancellationToken);
         }
     }
 }

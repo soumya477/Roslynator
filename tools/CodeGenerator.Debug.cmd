@@ -1,4 +1,4 @@
 @echo off
-"..\src\Tools\CodeGenerator\bin\Debug\CodeGenerator" "..\src"
+dotnet "..\src\Tools\CodeGenerator\bin\Debug\netcoreapp2.0\CodeGenerator.dll" "..\src"
 echo CodeGenerator DONE
 PAUSE
