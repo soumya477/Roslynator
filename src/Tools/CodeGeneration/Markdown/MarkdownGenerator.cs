@@ -1,9 +1,7 @@
 ﻿// Copyright (c) Josef Pihrt. All rights reserved. Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -23,11 +21,11 @@ namespace Roslynator.CodeGeneration.Markdown
             document.Add(NewLine, Italic("(Generated with ", Link("DotMarkdown", "http://github.com/JosefPihrt/DotMarkdown"), ")"));
         }
 
-        public static string GenerateAssemblyReadme(string filePath)
+        public static string GenerateAssemblyReadme(string assemblyName)
         {
-            Assembly assembly = Assembly.LoadFrom(filePath);
+            Assembly assembly = Assembly.Load(new AssemblyName(assemblyName));
 
-            var doc = new MDocument(Heading1(Path.GetFileNameWithoutExtension(filePath) + " API"));
+            var doc = new MDocument(Heading1(assemblyName + " API"));
 
             foreach (IGrouping<string, TypeInfo> grouping in assembly
                 .DefinedTypes

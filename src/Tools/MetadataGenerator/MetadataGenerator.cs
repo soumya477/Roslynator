@@ -24,11 +24,11 @@ namespace Roslynator.CodeGeneration
         {
             WriteAllText(
                 @"CSharp\README.md",
-                MarkdownGenerator.GenerateAssemblyReadme(GetPath(@"CSharp\bin\Release\netstandard1.3\Roslynator.CSharp.dll")));
+                MarkdownGenerator.GenerateAssemblyReadme("Roslynator.CSharp"));
 
             WriteAllText(
                 @"CSharp.Workspaces\README.md",
-                MarkdownGenerator.GenerateAssemblyReadme(GetPath(@"CSharp.Workspaces\bin\Release\netstandard1.3\Roslynator.CSharp.Workspaces.dll")));
+                MarkdownGenerator.GenerateAssemblyReadme("Roslynator.CSharp.Workspaces"));
 
             WriteAllText(
                 @"Analyzers\README.md",
