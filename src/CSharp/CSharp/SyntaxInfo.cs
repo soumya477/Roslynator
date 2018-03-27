@@ -1199,6 +1199,14 @@ namespace Roslynator.CSharp
             return Syntax.StatementListInfo.Create(selectedStatements);
         }
 
+        /// <summary>
+        /// Creates a new <see cref="Syntax.StringConcatenationExpressionInfo"/> from the specified node.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="semanticModel"></param>
+        /// <param name="walkDownParentheses"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public static StringConcatenationExpressionInfo StringConcatenationExpressionInfo(
             SyntaxNode node,
             SemanticModel semanticModel,
@@ -1208,6 +1216,13 @@ namespace Roslynator.CSharp
             return Syntax.StringConcatenationExpressionInfo.Create(node, semanticModel, walkDownParentheses, cancellationToken);
         }
 
+        /// <summary>
+        /// Creates a new <see cref="Syntax.StringConcatenationExpressionInfo"/> from the specified node.
+        /// </summary>
+        /// <param name="binaryExpression"></param>
+        /// <param name="semanticModel"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public static StringConcatenationExpressionInfo StringConcatenationExpressionInfo(
             BinaryExpressionSyntax binaryExpression,
             SemanticModel semanticModel,
@@ -1224,6 +1239,12 @@ namespace Roslynator.CSharp
             return Syntax.StringConcatenationExpressionInfo.Create(binaryExpressionSelection, semanticModel, cancellationToken);
         }
 
+        /// <summary>
+        /// Creates a new <see cref="Syntax.StringLiteralExpressionInfo"/> from the specified node.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="walkDownParentheses"></param>
+        /// <returns></returns>
         public static StringLiteralExpressionInfo StringLiteralExpressionInfo(
             SyntaxNode node,
             bool walkDownParentheses = true)
@@ -1231,6 +1252,11 @@ namespace Roslynator.CSharp
             return Syntax.StringLiteralExpressionInfo.Create(node, walkDownParentheses);
         }
 
+        /// <summary>
+        /// Creates a new <see cref="Syntax.StringLiteralExpressionInfo"/> from the specified literal expression.
+        /// </summary>
+        /// <param name="literalExpression"></param>
+        /// <returns></returns>
         public static StringLiteralExpressionInfo StringLiteralExpressionInfo(LiteralExpressionSyntax literalExpression)
         {
             return Syntax.StringLiteralExpressionInfo.Create(literalExpression);

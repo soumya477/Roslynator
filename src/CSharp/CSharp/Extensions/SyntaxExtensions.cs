@@ -836,6 +836,11 @@ namespace Roslynator.CSharp
             return (statement?.Kind() == SyntaxKind.Block) ? null : statement;
         }
 
+        /// <summary>
+        /// Returns <see cref="IfStatementCascade"/> that enables to enumerate if-else cascade.
+        /// </summary>
+        /// <param name="ifStatement"></param>
+        /// <returns></returns>
         public static IfStatementCascade AsCascade(this IfStatementSyntax ifStatement)
         {
             if (ifStatement == null)
@@ -1896,6 +1901,11 @@ namespace Roslynator.CSharp
         #endregion SwitchSectionSyntax
 
         #region SwitchStatementSyntax
+        /// <summary>
+        /// Returns a section that contains default label, or null if the specified swtich statement does not contains section with default label.
+        /// </summary>
+        /// <param name="switchStatement"></param>
+        /// <returns></returns>
         public static SwitchSectionSyntax DefaultSection(this SwitchStatementSyntax switchStatement)
         {
             if (switchStatement == null)

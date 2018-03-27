@@ -8,15 +8,25 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Roslynator.CSharp
 {
+    /// <summary>
+    /// Represents a comparer for member declarations.
+    /// </summary>
     public class MemberDeclarationComparer : IMemberDeclarationComparer
     {
-        internal const int MaxOrderIndex = 18;
+        internal const int MaxRank = 18;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MemberDeclarationComparer"/> class.
+        /// </summary>
+        /// <param name="sortMode"></param>
         public MemberDeclarationComparer(MemberDeclarationSortMode sortMode)
         {
             SortMode = sortMode;
         }
 
+        /// <summary>
+        /// The sort mode used by this instance.
+        /// </summary>
         public MemberDeclarationSortMode SortMode { get; }
 
         internal static MemberDeclarationComparer ByKind { get; } = new MemberDeclarationComparer(MemberDeclarationSortMode.ByKind);
@@ -36,6 +46,13 @@ namespace Roslynator.CSharp
             }
         }
 
+        /// <summary>
+        /// Compares two member declarations and returns a value indicating whether one should be before,
+        /// at the same position, or after the other.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public int Compare(MemberDeclarationSyntax x, MemberDeclarationSyntax y)
         {
             if (object.ReferenceEquals(x, y))
@@ -47,7 +64,7 @@ namespace Roslynator.CSharp
             if (y == null)
                 return 1;
 
-            int result = GetOrderIndex(x).CompareTo(GetOrderIndex(y));
+            int result = GetRank(x).CompareTo(GetRank(y));
 
             if (SortMode == MemberDeclarationSortMode.ByKindThenByName
                 && result == 0)
@@ -60,29 +77,47 @@ namespace Roslynator.CSharp
             }
         }
 
+        /// <summary>
+        /// Returns an index the specified member should be inserted at.
+        /// </summary>
+        /// <param name="members"></param>
+        /// <param name="member"></param>
+        /// <returns></returns>
         public int GetInsertIndex(SyntaxList<MemberDeclarationSyntax> members, MemberDeclarationSyntax member)
         {
             if (member == null)
                 throw new ArgumentNullException(nameof(member));
 
-            return GetInsertIndex(members, GetOrderIndex(member));
+            return GetInsertIndex(members, GetRank(member));
         }
 
+        /// <summary>
+        /// Returns an index the member of the specified kind should be inserted at.
+        /// </summary>
+        /// <param name="members"></param>
+        /// <param name="memberKind"></param>
+        /// <returns></returns>
         public int GetInsertIndex(SyntaxList<MemberDeclarationSyntax> members, SyntaxKind memberKind)
         {
-            return GetInsertIndex(members, GetOrderIndex(memberKind));
+            return GetInsertIndex(members, GetRank(memberKind));
         }
 
+        /// <summary>
+        /// Returns an index the field or const declaration should be inserted at.
+        /// </summary>
+        /// <param name="members"></param>
+        /// <param name="isConst"></param>
+        /// <returns></returns>
         public int GetFieldInsertIndex(SyntaxList<MemberDeclarationSyntax> members, bool isConst)
         {
             return GetInsertIndex(members, (isConst) ? 0 : 1);
         }
 
-        private int GetInsertIndex(SyntaxList<MemberDeclarationSyntax> members, int orderIndex)
+        private int GetInsertIndex(SyntaxList<MemberDeclarationSyntax> members, int rank)
         {
             if (members.Any())
             {
-                for (int i = orderIndex; i >= 0; i--)
+                for (int i = rank; i >= 0; i--)
                 {
                     SyntaxKind kind = GetKind(i);
 
@@ -118,7 +153,12 @@ namespace Roslynator.CSharp
             }
         }
 
-        protected virtual int GetOrderIndex(MemberDeclarationSyntax member)
+        /// <summary>
+        /// Returns a rank of the specified member.
+        /// </summary>
+        /// <param name="member"></param>
+        /// <returns></returns>
+        protected virtual int GetRank(MemberDeclarationSyntax member)
         {
             switch (member.Kind())
             {
@@ -163,12 +203,17 @@ namespace Roslynator.CSharp
                 default:
                     {
                         Debug.Fail($"unknown member '{member.Kind()}'");
-                        return MaxOrderIndex;
+                        return MaxRank;
                     }
             }
         }
 
-        protected virtual int GetOrderIndex(SyntaxKind memberKind)
+        /// <summary>
+        /// Returns a rank of a member of the specified kind.
+        /// </summary>
+        /// <param name="memberKind"></param>
+        /// <returns></returns>
+        protected virtual int GetRank(SyntaxKind memberKind)
         {
             switch (memberKind)
             {
@@ -209,14 +254,19 @@ namespace Roslynator.CSharp
                 default:
                     {
                         Debug.Fail($"unknown member '{memberKind}'");
-                        return MaxOrderIndex;
+                        return MaxRank;
                     }
             }
         }
 
-        protected virtual SyntaxKind GetKind(int orderIndex)
+        /// <summary>
+        /// Returns a <see cref="SyntaxKind"/> the corresponds to the specified rank.
+        /// </summary>
+        /// <param name="rank"></param>
+        /// <returns></returns>
+        protected virtual SyntaxKind GetKind(int rank)
         {
-            switch (orderIndex)
+            switch (rank)
             {
                 case 1:
                     return SyntaxKind.FieldDeclaration;

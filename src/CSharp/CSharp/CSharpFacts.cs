@@ -756,6 +756,11 @@ namespace Roslynator.CSharp
             return false;
         }
 
+        /// <summary>
+        /// Returns true if a syntax of the specified kind is a switch label.
+        /// </summary>
+        /// <param name="kind"></param>
+        /// <returns></returns>
         public static bool IsSwitchLabel(SyntaxKind kind)
         {
             return kind.Is(
@@ -764,6 +769,11 @@ namespace Roslynator.CSharp
                 SyntaxKind.DefaultSwitchLabel);
         }
 
+        /// <summary>
+        /// Returns true if a syntax of the specified kind is a boolean expression.
+        /// </summary>
+        /// <param name="kind"></param>
+        /// <returns></returns>
         public static bool IsBooleanExpression(SyntaxKind kind)
         {
             switch (kind)
@@ -786,6 +796,11 @@ namespace Roslynator.CSharp
             }
         }
 
+        /// <summary>
+        /// Returns true if a syntax of the specified kind is a constraint.
+        /// </summary>
+        /// <param name="kind"></param>
+        /// <returns></returns>
         public static bool IsConstraint(SyntaxKind kind)
         {
             return kind.Is(

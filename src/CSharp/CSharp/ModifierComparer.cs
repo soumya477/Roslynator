@@ -6,38 +6,60 @@ using Microsoft.CodeAnalysis.CSharp;
 
 namespace Roslynator.CSharp
 {
+    /// <summary>
+    /// Represents a comparer for modifiers.
+    /// </summary>
     public class ModifierComparer : IModifierComparer
     {
         internal static readonly ModifierComparer Instance = new ModifierComparer();
 
-        internal const int MaxOrderIndex = 16;
+        internal const int MaxRank = 16;
 
         private ModifierComparer()
         {
         }
 
+        /// <summary>
+        /// Compares two modifiers and returns a value indicating whether one should be before,
+        /// at the same position, or after the other.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public int Compare(SyntaxToken x, SyntaxToken y)
         {
-            return GetOrderIndex(x).CompareTo(GetOrderIndex(y));
+            return GetRank(x).CompareTo(GetRank(y));
         }
 
+        /// <summary>
+        /// Returns an index the specified modifier should be inserted at.
+        /// </summary>
+        /// <param name="modifiers"></param>
+        /// <param name="modifier"></param>
+        /// <returns></returns>
         public int GetInsertIndex(SyntaxTokenList modifiers, SyntaxToken modifier)
         {
-            return GetInsertIndex(modifiers, GetOrderIndex(modifier));
+            return GetInsertIndex(modifiers, GetRank(modifier));
         }
 
+        /// <summary>
+        /// Returns an index the modifier of the specified kind should be inserted at.
+        /// </summary>
+        /// <param name="modifiers"></param>
+        /// <param name="modifierKind"></param>
+        /// <returns></returns>
         public int GetInsertIndex(SyntaxTokenList modifiers, SyntaxKind modifierKind)
         {
-            return GetInsertIndex(modifiers, GetOrderIndex(modifierKind));
+            return GetInsertIndex(modifiers, GetRank(modifierKind));
         }
 
-        private int GetInsertIndex(SyntaxTokenList modifiers, int orderIndex)
+        private int GetInsertIndex(SyntaxTokenList modifiers, int rank)
         {
             int count = modifiers.Count;
 
             if (modifiers.Count > 0)
             {
-                for (int i = orderIndex; i >= 0; i--)
+                for (int i = rank; i >= 0; i--)
                 {
                     SyntaxKind kind = GetKind(i);
 
@@ -52,12 +74,22 @@ namespace Roslynator.CSharp
             return 0;
         }
 
-        protected virtual int GetOrderIndex(SyntaxToken token)
+        /// <summary>
+        /// Returns a rank of the specified token.
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        protected virtual int GetRank(SyntaxToken token)
         {
-            return GetOrderIndex(token.Kind());
+            return GetRank(token.Kind());
         }
 
-        protected virtual int GetOrderIndex(SyntaxKind modifierKind)
+        /// <summary>
+        /// Returns a rank of a token with the specified kind.
+        /// </summary>
+        /// <param name="modifierKind"></param>
+        /// <returns></returns>
+        protected virtual int GetRank(SyntaxKind modifierKind)
         {
             switch (modifierKind)
             {
@@ -98,14 +130,19 @@ namespace Roslynator.CSharp
                 default:
                     {
                         Debug.Fail($"unknown modifier '{modifierKind}'");
-                        return MaxOrderIndex;
+                        return MaxRank;
                     }
             }
         }
 
-        protected virtual SyntaxKind GetKind(int orderIndex)
+        /// <summary>
+        /// Returns <see cref="SyntaxKind"/> the corresponds to the specified rank.
+        /// </summary>
+        /// <param name="rank"></param>
+        /// <returns></returns>
+        protected virtual SyntaxKind GetKind(int rank)
         {
-            switch (orderIndex)
+            switch (rank)
             {
                 case 0:
                     return SyntaxKind.NewKeyword;
