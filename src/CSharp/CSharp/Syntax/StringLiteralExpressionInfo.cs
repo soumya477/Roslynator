@@ -9,6 +9,9 @@ using static Roslynator.CSharp.Syntax.SyntaxInfoHelpers;
 
 namespace Roslynator.CSharp.Syntax
 {
+    /// <summary>
+    /// Provides information about string literal expression.
+    /// </summary>
     public readonly struct StringLiteralExpressionInfo : IEquatable<StringLiteralExpressionInfo>
     {
         private StringLiteralExpressionInfo(LiteralExpressionSyntax expression)
@@ -18,18 +21,30 @@ namespace Roslynator.CSharp.Syntax
 
         private static StringLiteralExpressionInfo Default { get; } = new StringLiteralExpressionInfo();
 
+        /// <summary>
+        /// The string literal expression.
+        /// </summary>
         public LiteralExpressionSyntax Expression { get; }
 
+        /// <summary>
+        /// The token representing the string literal expression.
+        /// </summary>
         public SyntaxToken Token
         {
             get { return Expression?.Token ?? default(SyntaxToken); }
         }
 
+        /// <summary>
+        /// The token text.
+        /// </summary>
         public string Text
         {
             get { return Token.Text; }
         }
 
+        /// <summary>
+        /// The token text, not including leading ampersand, if any, and enclosing quotation marks.
+        /// </summary>
         public string InnerText
         {
             get
@@ -48,21 +63,33 @@ namespace Roslynator.CSharp.Syntax
             }
         }
 
+        /// <summary>
+        /// The token value text.
+        /// </summary>
         public string ValueText
         {
             get { return Token.ValueText; }
         }
 
+        /// <summary>
+        /// True if this instance is regular string literal expression.
+        /// </summary>
         public bool IsRegular
         {
             get { return Text.StartsWith("\"", StringComparison.Ordinal); }
         }
 
+        /// <summary>
+        /// True if this instance is verbatim string literal expression.
+        /// </summary>
         public bool IsVerbatim
         {
             get { return Text.StartsWith("@", StringComparison.Ordinal); }
         }
 
+        /// <summary>
+        /// True if the string literal contains linefeed.
+        /// </summary>
         public bool ContainsLinefeed
         {
             get
@@ -77,6 +104,9 @@ namespace Roslynator.CSharp.Syntax
             }
         }
 
+        /// <summary>
+        /// True if the string literal expression contains escape sequence.
+        /// </summary>
         public bool ContainsEscapeSequence
         {
             get
@@ -91,6 +121,9 @@ namespace Roslynator.CSharp.Syntax
             }
         }
 
+        /// <summary>
+        /// Determines whether this struct was initialized with an actual syntax.
+        /// </summary>
         public bool Success
         {
             get { return Expression != null; }
@@ -111,21 +144,39 @@ namespace Roslynator.CSharp.Syntax
             return new StringLiteralExpressionInfo(literalExpression);
         }
 
+        /// <summary>
+        /// Returns the string representation of the underlying syntax, not including its leading and trailing trivia.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return Expression?.ToString() ?? "";
         }
 
+        /// <summary>
+        /// Determines whether this instance and a specified object are equal.
+        /// </summary>
+        /// <param name="obj">The object to compare with the current instance. </param>
+        /// <returns>true if <paramref name="obj" /> and this instance are the same type and represent the same value; otherwise, false. </returns>
         public override bool Equals(object obj)
         {
             return obj is StringLiteralExpressionInfo other && Equals(other);
         }
 
+        /// <summary>
+        /// Determines whether this instance is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
         public bool Equals(StringLiteralExpressionInfo other)
         {
             return EqualityComparer<LiteralExpressionSyntax>.Default.Equals(Expression, other.Expression);
         }
 
+        /// <summary>
+        /// Returns the hash code for this instance.
+        /// </summary>
+        /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
             return Expression?.GetHashCode() ?? 0;

@@ -50,6 +50,9 @@ namespace Roslynator.CSharp.Syntax
             get { return Declarator?.Initializer; }
         }
 
+        /// <summary>
+        /// The initialized value, if any.
+        /// </summary>
         public ExpressionSyntax Value
         {
             get { return Initializer?.Value; }

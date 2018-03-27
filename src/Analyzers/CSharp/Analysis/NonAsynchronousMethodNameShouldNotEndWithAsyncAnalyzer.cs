@@ -75,16 +75,6 @@ namespace Roslynator.CSharp.Analysis
 
             ITypeSymbol typeSymbol = methodSymbol.ReturnType;
 
-            if (typeSymbol.Kind == SymbolKind.TypeParameter)
-            {
-                var typeParameterSymbol = (ITypeParameterSymbol)typeSymbol;
-
-                typeSymbol = typeParameterSymbol.ConstraintTypes.SingleOrDefault(f => f.TypeKind == TypeKind.Class, shouldThrow: false);
-
-                if (typeSymbol == null)
-                    return;
-            }
-
             if (CanHaveAsyncSuffix())
                 return;
 
@@ -100,6 +90,16 @@ namespace Roslynator.CSharp.Analysis
 
             bool CanHaveAsyncSuffix()
             {
+                if (typeSymbol.Kind == SymbolKind.TypeParameter)
+                {
+                    var typeParameterSymbol = (ITypeParameterSymbol)typeSymbol;
+
+                    typeSymbol = typeParameterSymbol.ConstraintTypes.SingleOrDefault(f => f.TypeKind == TypeKind.Class, shouldThrow: false);
+
+                    if (typeSymbol == null)
+                        return false;
+                }
+
                 if (typeSymbol.IsTupleType)
                     return false;
 

@@ -16,6 +16,9 @@ using static Roslynator.CSharp.Syntax.SyntaxInfoHelpers;
 
 namespace Roslynator.CSharp.Syntax
 {
+    /// <summary>
+    /// Provides information about string concatenation, i.e. a binary expression that binds to string '+' operator.
+    /// </summary>
     public readonly struct StringConcatenationExpressionInfo : IEquatable<StringConcatenationExpressionInfo>
     {
         private StringConcatenationExpressionInfo(
@@ -28,10 +31,16 @@ namespace Roslynator.CSharp.Syntax
 
         private static StringConcatenationExpressionInfo Default { get; } = new StringConcatenationExpressionInfo();
 
+        /// <summary>
+        /// The binary expression that represents the string concatenation.
+        /// </summary>
         public BinaryExpressionSyntax BinaryExpression { get; }
 
         internal TextSpan? Span { get; }
 
+        /// <summary>
+        /// Determines whether this struct was initialized with an actual syntax.
+        /// </summary>
         public bool Success
         {
             get { return BinaryExpression != null; }
@@ -124,6 +133,11 @@ namespace Roslynator.CSharp.Syntax
             }
         }
 
+        /// <summary>
+        /// Returns expressions of this binary expression, including expressions of nested binary expressions of the same kind.
+        /// </summary>
+        /// <param name="leftToRight">If true expressions are enumerated as they are displayed in the source code.</param>
+        /// <returns></returns>
         public IEnumerable<ExpressionSyntax> Expressions(bool leftToRight = false)
         {
             return BinaryExpressionInfo.Create(BinaryExpression).Expressions(leftToRight);
@@ -332,6 +346,10 @@ namespace Roslynator.CSharp.Syntax
             return (LiteralExpressionSyntax)ParseExpression(StringBuilderCache.GetStringAndFree(sb));
         }
 
+        /// <summary>
+        /// Returns the string representation of the underlying syntax, not including its leading and trailing trivia.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return (Span != null)
@@ -351,17 +369,31 @@ namespace Roslynator.CSharp.Syntax
                 throw new InvalidOperationException("String concatenation contains an expression that is not a string literal.");
         }
 
+        /// <summary>
+        /// Determines whether this instance and a specified object are equal.
+        /// </summary>
+        /// <param name="obj">The object to compare with the current instance. </param>
+        /// <returns>true if <paramref name="obj" /> and this instance are the same type and represent the same value; otherwise, false. </returns>
         public override bool Equals(object obj)
         {
             return obj is StringConcatenationExpressionInfo other && Equals(other);
         }
 
+        /// <summary>
+        /// Determines whether this instance is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
         public bool Equals(StringConcatenationExpressionInfo other)
         {
             return EqualityComparer<BinaryExpressionSyntax>.Default.Equals(BinaryExpression, other.BinaryExpression)
                 && EqualityComparer<TextSpan?>.Default.Equals(Span, other.Span);
         }
 
+        /// <summary>
+        /// Returns the hash code for this instance.
+        /// </summary>
+        /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
             return Hash.Combine(Span.GetHashCode(), Hash.Create(BinaryExpression));
