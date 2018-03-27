@@ -1,5 +1,5 @@
 @echo off
-"..\src\Tools\AddCodeFileHeader\bin\Release\AddCodeFileHeader" "..\src"
+dotnet "..\src\Tools\AddCodeFileHeader\bin\Release\netcoreapp2.0\AddCodeFileHeader.dll" "..\src"
 echo AddCodeFileHeader DONE
 dotnet "..\src\Tools\MetadataGenerator\bin\Release\netcoreapp2.0\MetadataGenerator.dll" "..\src"
 echo MetadataGenerator DONE
