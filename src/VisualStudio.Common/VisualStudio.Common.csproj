@@ -148,7 +148,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="VisualStudio.Core.snk" />
+    <None Include="VisualStudio.Common.snk" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CodeFixes\CodeFixes.csproj">
