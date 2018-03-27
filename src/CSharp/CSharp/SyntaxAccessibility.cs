@@ -1434,12 +1434,12 @@ namespace Roslynator.CSharp
         /// <typeparam name="TNode"></typeparam>
         /// <param name="node"></param>
         /// <param name="newAccessibility"></param>
-        /// <param name="comparer"></param>
+        /// <param name="inserter"></param>
         /// <returns></returns>
         public static TNode WithExplicitAccessibility<TNode>(
             TNode node,
             Accessibility newAccessibility,
-            IModifierComparer comparer = null) where TNode : SyntaxNode
+            ISyntaxTokenListInserter inserter = null) where TNode : SyntaxNode
         {
             if (node == null)
                 throw new ArgumentNullException(nameof(node));
@@ -1449,7 +1449,7 @@ namespace Roslynator.CSharp
             if (!info.Success)
                 throw new ArgumentException($"'{node.Kind()}' cannot have modifiers.", nameof(node));
 
-            AccessibilityInfo newInfo = info.WithExplicitAccessibility(newAccessibility, comparer);
+            AccessibilityInfo newInfo = info.WithExplicitAccessibility(newAccessibility, inserter);
 
             return (TNode)newInfo.Node;
         }

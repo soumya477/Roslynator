@@ -16,7 +16,7 @@ namespace Roslynator.CSharp.Refactorings
             CancellationToken cancellationToken)
         {
             FieldDeclarationSyntax newNode = fieldDeclaration
-                .InsertModifier(SyntaxKind.ConstKeyword, ModifierComparer.Instance)
+                .InsertModifier(SyntaxKind.ConstKeyword, ModifierInserter.Default)
                 .RemoveModifiers(SyntaxKind.StaticKeyword, SyntaxKind.ReadOnlyKeyword);
 
             return document.ReplaceNodeAsync(fieldDeclaration, newNode, cancellationToken);

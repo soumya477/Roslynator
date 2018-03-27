@@ -375,9 +375,9 @@ namespace Roslynator.CSharp.Syntax
         /// Creates a new <see cref="AccessibilityInfo"/> with accessibility modifiers updated.
         /// </summary>
         /// <param name="newAccessibility"></param>
-        /// <param name="comparer"></param>
+        /// <param name="inserter"></param>
         /// <returns></returns>
-        public AccessibilityInfo WithExplicitAccessibility(Accessibility newAccessibility, IModifierComparer comparer = null)
+        public AccessibilityInfo WithExplicitAccessibility(Accessibility newAccessibility, ISyntaxTokenListInserter inserter = null)
         {
             ThrowInvalidOperationIfNotInitialized();
 
@@ -386,14 +386,14 @@ namespace Roslynator.CSharp.Syntax
             if (accessibility == newAccessibility)
                 return this;
 
-            comparer = comparer ?? ModifierComparer.Instance;
+            inserter = inserter ?? ModifierInserter.Default;
 
             SyntaxNode declaration = Node;
 
             if (accessibility.IsSingleTokenAccessibility()
                 && newAccessibility.IsSingleTokenAccessibility())
             {
-                int insertIndex = comparer.GetInsertIndex(Modifiers, GetTokenKind());
+                int insertIndex = inserter.GetInsertIndex(Modifiers, GetTokenKind());
 
                 if (TokenIndex == insertIndex
                     || TokenIndex == insertIndex - 1)
@@ -415,7 +415,7 @@ namespace Roslynator.CSharp.Syntax
             }
 
             if (newAccessibility != Accessibility.NotApplicable)
-                declaration = Modifier.Insert(declaration, newAccessibility, comparer);
+                declaration = Modifier.Insert(declaration, newAccessibility, inserter);
 
             return SyntaxInfo.AccessibilityInfo(declaration);
 

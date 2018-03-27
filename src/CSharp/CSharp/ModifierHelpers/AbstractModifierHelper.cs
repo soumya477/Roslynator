@@ -15,19 +15,19 @@ namespace Roslynator.CSharp.ModifierHelpers
 
         public abstract SyntaxNodeOrToken FindNodeOrTokenAfterModifiers(TNode node);
 
-        public TNode InsertModifier(TNode node, SyntaxKind modifierKind, IModifierComparer comparer = null)
+        public TNode InsertModifier(TNode node, SyntaxKind modifierKind, ISyntaxTokenListInserter inserter = null)
         {
-            return InsertModifier(node, Token(modifierKind), comparer);
+            return InsertModifier(node, Token(modifierKind), inserter);
         }
 
-        public TNode InsertModifier(TNode node, SyntaxToken modifier, IModifierComparer comparer = null)
+        public TNode InsertModifier(TNode node, SyntaxToken modifier, ISyntaxTokenListInserter inserter = null)
         {
             if (node == null)
                 throw new ArgumentNullException(nameof(node));
 
             SyntaxTokenList modifiers = GetModifiers(node);
 
-            int insertIndex = (comparer ?? ModifierComparer.Instance).GetInsertIndex(modifiers, modifier);
+            int insertIndex = (inserter ?? ModifierInserter.Default).GetInsertIndex(modifiers, modifier);
 
             var token = default(SyntaxToken);
 
