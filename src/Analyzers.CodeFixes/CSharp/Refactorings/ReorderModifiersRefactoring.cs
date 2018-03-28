@@ -20,7 +20,7 @@ namespace Roslynator.CSharp.Refactorings
 
             SyntaxTokenList modifiers = info.Modifiers;
 
-            SyntaxToken[] newModifiers = modifiers.OrderBy(f => f, ModifierComparer.Instance).ToArray();
+            SyntaxToken[] newModifiers = modifiers.OrderBy(f => f, ModifierComparer.Default).ToArray();
 
             for (int i = 0; i < modifiers.Count; i++)
                 newModifiers[i] = newModifiers[i].WithTriviaFrom(modifiers[i]);

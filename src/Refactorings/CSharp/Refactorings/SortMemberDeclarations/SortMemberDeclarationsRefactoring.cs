@@ -51,7 +51,7 @@ namespace Roslynator.CSharp.Refactorings.SortMemberDeclarations
                 {
                     ComputeRefactoring(
                         context,
-                        MemberDeclarationSortMode.ByKindThenByName,
+                        MemberDeclarationComparer.ByKindThenByName,
                         "Sort members by name",
                         selectedMembers);
                 }
@@ -60,13 +60,13 @@ namespace Roslynator.CSharp.Refactorings.SortMemberDeclarations
             {
                 ComputeRefactoring(
                     context,
-                    MemberDeclarationSortMode.ByKind,
+                    MemberDeclarationComparer.ByKind,
                     "Sort members by kind",
                     selectedMembers);
 
                 ComputeRefactoring(
                     context,
-                    MemberDeclarationSortMode.ByKindThenByName,
+                    MemberDeclarationComparer.ByKindThenByName,
                     "Sort members by kind then by name",
                     selectedMembers);
             }
@@ -74,25 +74,25 @@ namespace Roslynator.CSharp.Refactorings.SortMemberDeclarations
 
         private static void ComputeRefactoring(
             RefactoringContext context,
-            MemberDeclarationSortMode sortMode,
+            MemberDeclarationComparer comparer,
             string title,
             MemberDeclarationListSelection selectedMembers)
         {
-            if (selectedMembers.IsSorted(MemberDeclarationComparer.GetInstance(sortMode)))
+            if (selectedMembers.IsSorted(comparer))
                 return;
 
             context.RegisterRefactoring(
                 title,
-                cancellationToken => RefactorAsync(context.Document, selectedMembers, sortMode, cancellationToken));
+                cancellationToken => RefactorAsync(context.Document, selectedMembers, comparer, cancellationToken));
         }
 
         private static Task<Document> RefactorAsync(
             Document document,
             MemberDeclarationListSelection selectedMembers,
-            MemberDeclarationSortMode sortMode,
+            MemberDeclarationComparer comparer,
             CancellationToken cancellationToken)
         {
-            IEnumerable<MemberDeclarationSyntax> sorted = selectedMembers.OrderBy(f => f, MemberDeclarationComparer.GetInstance(sortMode));
+            IEnumerable<MemberDeclarationSyntax> sorted = selectedMembers.OrderBy(f => f, comparer);
 
             MemberDeclarationListInfo info = SyntaxInfo.MemberDeclarationListInfo(selectedMembers);
 
