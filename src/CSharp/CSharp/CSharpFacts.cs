@@ -357,6 +357,20 @@ namespace Roslynator.CSharp
             }
         }
 
+        //TODO: pub
+        internal static bool CanHaveUnsafeModifier(SyntaxKind kind)
+        {
+            switch (kind)
+            {
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.LocalDeclarationStatement:
+                case SyntaxKind.Parameter:
+                    return false;
+                default:
+                    return CanHaveModifiers(kind);
+            }
+        }
+
         /// <summary>
         /// Returns true if a syntax of the specified kind can have expression body.
         /// </summary>

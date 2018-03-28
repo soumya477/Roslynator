@@ -10,7 +10,6 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Roslynator.CodeFixes;
-using Roslynator.CSharp.Refactorings;
 
 namespace Roslynator.CSharp.CodeFixes
 {
@@ -43,7 +42,7 @@ namespace Roslynator.CSharp.CodeFixes
             {
                 CodeAction codeAction = CodeAction.Create(
                     "Remove unsafe context",
-                    cancellationToken => UnnecessaryUnsafeContextRefactoring.RefactorAsync(context.Document, unsafeStatement, cancellationToken),
+                    ct => context.Document.ReplaceNodeAsync(unsafeStatement, RefactoringUtility.RemoveUnsafeContext(unsafeStatement), ct),
                     GetEquivalenceKey(diagnostic));
 
                 context.RegisterCodeFix(codeAction, diagnostic);
