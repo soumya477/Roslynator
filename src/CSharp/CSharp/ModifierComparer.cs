@@ -1,45 +1,57 @@
 ﻿// Copyright (c) Josef Pihrt. All rights reserved. Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace Roslynator.CSharp
 {
-    //TODO: cmt
-    internal abstract class ModifierComparer : SyntaxTokenComparer
+    internal abstract class ModifierComparer : IComparer<SyntaxToken>
     {
+        internal const int MaxRank = 17;
+
         protected ModifierComparer()
         {
         }
 
-        public static ModifierComparer Default { get; } = new ModifierKindComparer();
+        public static ModifierComparer Default { get; } = new ByKindModifierComparer();
 
-        private sealed class ModifierKindComparer : ModifierComparer
+        public abstract int Compare(SyntaxToken x, SyntaxToken y);
+
+        public virtual int GetRank(SyntaxToken token)
         {
-            /// <summary>
-            /// Compares two modifiers and returns a value indicating whether one should be before,
-            /// at the same position, or after the other.
-            /// </summary>
-            /// <param name="x"></param>
-            /// <param name="y"></param>
-            /// <returns></returns>
+            return ModifierKindComparer.Default.GetRank(token.Kind());
+        }
+
+        public static int GetInsertIndex(SyntaxTokenList tokens, SyntaxToken token, IComparer<SyntaxToken> comparer)
+        {
+            if (comparer == null)
+                comparer = Default;
+
+            int index = tokens.Count;
+
+            for (int i = index - 1; i >= 0; i--)
+            {
+                int result = comparer.Compare(tokens[i], token);
+
+                if (result == 0)
+                {
+                    return i + 1;
+                }
+                else if (result > 0)
+                {
+                    index = i;
+                }
+            }
+
+            return index;
+        }
+
+        private sealed class ByKindModifierComparer : ModifierComparer
+        {
             public override int Compare(SyntaxToken x, SyntaxToken y)
             {
                 return GetRank(x).CompareTo(GetRank(y));
-            }
-
-            public override bool Equals(SyntaxToken x, SyntaxToken y)
-            {
-                return GetRank(x) == GetRank(y);
-            }
-
-            public override int GetHashCode(SyntaxToken obj)
-            {
-                return GetRank(obj);
-            }
-
-            private static int GetRank(SyntaxToken x)
-            {
-                return ModifierInserter.Default.GetRank(x);
             }
         }
     }

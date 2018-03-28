@@ -221,7 +221,7 @@ namespace Roslynator.CSharp.Refactorings
             if (info.ExplicitAccessibility == Accessibility.NotApplicable)
                 return node;
 
-            AccessibilityInfo newInfo = info.WithExplicitAccessibility(newAccessibility, ModifierInserter.Default);
+            AccessibilityInfo newInfo = info.WithExplicitAccessibility(newAccessibility, ModifierKindComparer.Default);
 
             return newInfo.Node;
         }

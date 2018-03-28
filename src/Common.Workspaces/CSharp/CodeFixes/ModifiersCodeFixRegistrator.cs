@@ -23,9 +23,9 @@ namespace Roslynator.CSharp.CodeFixes
             SyntaxKind modifierKind,
             string title = null,
             string additionalKey = null,
-            ISyntaxTokenListInserter inserter = null)
+            IComparer<SyntaxKind> comparer = null)
         {
-            AddModifier(context, context.Document, diagnostic, node, modifierKind, title, additionalKey, inserter);
+            AddModifier(context, context.Document, diagnostic, node, modifierKind, title, additionalKey, comparer);
         }
 
         public static void AddModifier(
@@ -36,11 +36,11 @@ namespace Roslynator.CSharp.CodeFixes
             SyntaxKind modifierKind,
             string title = null,
             string additionalKey = null,
-            ISyntaxTokenListInserter inserter = null)
+            IComparer<SyntaxKind> comparer = null)
         {
             CodeAction codeAction = CodeAction.Create(
                 title ?? GetAddModifierTitle(modifierKind, node),
-                cancellationToken => AddModifierAsync(document, node, modifierKind, inserter, cancellationToken),
+                cancellationToken => AddModifierAsync(document, node, modifierKind, comparer, cancellationToken),
                 GetEquivalenceKey(diagnostic, additionalKey));
 
             context.RegisterCodeFix(codeAction, diagnostic);
@@ -50,10 +50,10 @@ namespace Roslynator.CSharp.CodeFixes
             Document document,
             TNode node,
             SyntaxKind modifierKind,
-            ISyntaxTokenListInserter inserter = null,
+            IComparer<SyntaxKind> comparer = null,
             CancellationToken cancellationToken = default(CancellationToken)) where TNode : SyntaxNode
         {
-            TNode newNode = AddModifier(node, modifierKind, inserter);
+            TNode newNode = AddModifier(node, modifierKind, comparer);
 
             return document.ReplaceNodeAsync(node, newNode, cancellationToken);
         }
@@ -61,7 +61,7 @@ namespace Roslynator.CSharp.CodeFixes
         private static TNode AddModifier<TNode>(
             TNode node,
             SyntaxKind modifierKind,
-            ISyntaxTokenListInserter inserter = null) where TNode : SyntaxNode
+            IComparer<SyntaxKind> comparer = null) where TNode : SyntaxNode
         {
             switch (modifierKind)
             {
@@ -91,7 +91,7 @@ namespace Roslynator.CSharp.CodeFixes
                     }
             }
 
-            return node.InsertModifier(modifierKind, inserter);
+            return node.InsertModifier(modifierKind, comparer);
         }
 
         public static void AddModifier<TNode>(
@@ -101,7 +101,7 @@ namespace Roslynator.CSharp.CodeFixes
             SyntaxKind modifierKind,
             string title = null,
             string additionalKey = null,
-            ISyntaxTokenListInserter inserter = null) where TNode : SyntaxNode
+            IComparer<SyntaxKind> comparer = null) where TNode : SyntaxNode
         {
             if (nodes is IList<TNode> list)
             {
@@ -110,7 +110,7 @@ namespace Roslynator.CSharp.CodeFixes
 
                 if (list.Count == 1)
                 {
-                    AddModifier(context, diagnostic, list[0], modifierKind, title, additionalKey, inserter);
+                    AddModifier(context, diagnostic, list[0], modifierKind, title, additionalKey, comparer);
                     return;
                 }
             }
@@ -121,7 +121,7 @@ namespace Roslynator.CSharp.CodeFixes
                 {
                     return context.Solution().ReplaceNodesAsync(
                         nodes,
-                        (f, _) => AddModifier(f, modifierKind, inserter),
+                        (f, _) => AddModifier(f, modifierKind, comparer),
                         cancellationToken);
                 },
                 GetEquivalenceKey(diagnostic, additionalKey));
@@ -356,7 +356,7 @@ namespace Roslynator.CSharp.CodeFixes
             SyntaxToken modifier,
             string title = null,
             string additionalKey = null,
-            ISyntaxTokenListInserter inserter = null)
+            IComparer<SyntaxKind> comparer = null)
         {
             Document document = context.Document;
 
@@ -368,7 +368,7 @@ namespace Roslynator.CSharp.CodeFixes
                 {
                     SyntaxNode newNode = node
                         .RemoveModifier(modifier)
-                        .InsertModifier(kind, inserter);
+                        .InsertModifier(kind, comparer);
 
                     return document.ReplaceNodeAsync(node, newNode, cancellationToken);
                 },

@@ -68,7 +68,7 @@ namespace Roslynator.CSharp.Refactorings.MakeMemberAbstract
                 .WithExpressionBody(null)
                 .WithSemicolonToken(default(SyntaxToken))
                 .WithAccessorList(accessorList)
-                .InsertModifier(SyntaxKind.AbstractKeyword, ModifierInserter.Default)
+                .InsertModifier(SyntaxKind.AbstractKeyword)
                 .RemoveModifier(SyntaxKind.VirtualKeyword)
                 .WithTriviaFrom(propertyDeclaration)
                 .WithFormatterAnnotation();

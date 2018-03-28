@@ -37,7 +37,7 @@ namespace Roslynator.CSharp.Refactorings
 
             if (newNode.Modifiers.Any())
             {
-                newNode = newNode.InsertModifier(SyntaxKind.ConstKeyword, ModifierInserter.Default);
+                newNode = newNode.InsertModifier(SyntaxKind.ConstKeyword);
             }
             else
             {

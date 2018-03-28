@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Josef Pihrt. All rights reserved. Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
+using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
@@ -15,24 +16,36 @@ namespace Roslynator.CSharp.ModifierHelpers
 
         public abstract SyntaxNodeOrToken FindNodeOrTokenAfterModifiers(TNode node);
 
-        public TNode InsertModifier(TNode node, SyntaxKind modifierKind, ISyntaxTokenListInserter inserter = null)
-        {
-            return InsertModifier(node, Token(modifierKind), inserter);
-        }
-
-        public TNode InsertModifier(TNode node, SyntaxToken modifier, ISyntaxTokenListInserter inserter = null)
+        public TNode InsertModifier(TNode node, SyntaxKind kind, IComparer<SyntaxKind> comparer = null)
         {
             if (node == null)
                 throw new ArgumentNullException(nameof(node));
 
             SyntaxTokenList modifiers = GetModifiers(node);
 
-            int insertIndex = (inserter ?? ModifierInserter.Default).GetInsertIndex(modifiers, modifier);
+            int index = ModifierKindComparer.GetInsertIndex(modifiers, kind, comparer);
 
+            return InsertModifier(node, modifiers, Token(kind), index);
+        }
+
+        public TNode InsertModifier(TNode node, SyntaxToken modifier, IComparer<SyntaxToken> comparer = null)
+        {
+            if (node == null)
+                throw new ArgumentNullException(nameof(node));
+
+            SyntaxTokenList modifiers = GetModifiers(node);
+
+            int index = ModifierComparer.GetInsertIndex(modifiers, modifier, comparer);
+
+            return InsertModifier(node, modifiers, modifier, index);
+        }
+
+        private TNode InsertModifier(TNode node, SyntaxTokenList modifiers, SyntaxToken modifier, int index)
+        {
             var token = default(SyntaxToken);
 
             if (!modifiers.Any()
-                || insertIndex == modifiers.Count)
+                || index == modifiers.Count)
             {
                 SyntaxNodeOrToken nodeOrToken = FindNodeOrTokenAfterModifiers(node);
 
@@ -47,7 +60,7 @@ namespace Roslynator.CSharp.ModifierHelpers
             }
             else
             {
-                token = modifiers[insertIndex];
+                token = modifiers[index];
             }
 
             if (token != default(SyntaxToken))
@@ -66,13 +79,13 @@ namespace Roslynator.CSharp.ModifierHelpers
                     SyntaxToken newToken = token.WithoutLeadingTrivia();
 
                     if (!modifiers.Any()
-                        || insertIndex == modifiers.Count)
+                        || index == modifiers.Count)
                     {
                         node = node.ReplaceToken(token, newToken);
                     }
                     else
                     {
-                        modifiers = modifiers.ReplaceAt(insertIndex, newToken);
+                        modifiers = modifiers.ReplaceAt(index, newToken);
                     }
                 }
 
@@ -80,7 +93,7 @@ namespace Roslynator.CSharp.ModifierHelpers
                     modifier = modifier.WithTrailingTrivia(TriviaList(Space));
             }
 
-            modifiers = modifiers.Insert(insertIndex, modifier);
+            modifiers = modifiers.Insert(index, modifier);
 
             return WithModifiers(node, modifiers);
         }
