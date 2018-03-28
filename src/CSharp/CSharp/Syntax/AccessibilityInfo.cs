@@ -377,7 +377,7 @@ namespace Roslynator.CSharp.Syntax
         /// <param name="newAccessibility"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public AccessibilityInfo WithExplicitAccessibility(Accessibility newAccessibility, IModifierComparer comparer = null)
+        public AccessibilityInfo WithExplicitAccessibility(Accessibility newAccessibility, IComparer<SyntaxKind> comparer = null)
         {
             ThrowInvalidOperationIfNotInitialized();
 
@@ -386,14 +386,14 @@ namespace Roslynator.CSharp.Syntax
             if (accessibility == newAccessibility)
                 return this;
 
-            comparer = comparer ?? ModifierComparer.Instance;
+            comparer = comparer ?? ModifierKindComparer.Default;
 
             SyntaxNode declaration = Node;
 
             if (accessibility.IsSingleTokenAccessibility()
                 && newAccessibility.IsSingleTokenAccessibility())
             {
-                int insertIndex = comparer.GetInsertIndex(Modifiers, GetTokenKind());
+                int insertIndex = ModifierKindComparer.GetInsertIndex(Modifiers, GetTokenKind(), comparer);
 
                 if (TokenIndex == insertIndex
                     || TokenIndex == insertIndex - 1)

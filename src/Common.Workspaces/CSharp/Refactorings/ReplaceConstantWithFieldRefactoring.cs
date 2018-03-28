@@ -19,7 +19,7 @@ namespace Roslynator.CSharp.Refactorings
         {
             FieldDeclarationSyntax newField = field
                 .RemoveModifier(SyntaxKind.ConstKeyword)
-                .InsertModifier(SyntaxKind.ReadOnlyKeyword, ModifierComparer.Instance);
+                .InsertModifier(SyntaxKind.ReadOnlyKeyword);
 
             var containingDeclaration = (MemberDeclarationSyntax)field.Parent;
 
@@ -27,7 +27,7 @@ namespace Roslynator.CSharp.Refactorings
 
             if (semanticModel.GetDeclaredSymbol(containingDeclaration, cancellationToken)?.IsStatic == true)
             {
-                newField = newField.InsertModifier(SyntaxKind.StaticKeyword, ModifierComparer.Instance);
+                newField = newField.InsertModifier(SyntaxKind.StaticKeyword);
             }
 
             newField = newField.WithFormatterAnnotation();

@@ -60,6 +60,11 @@ namespace Roslynator.CSharp.Syntax
             get { return BinaryExpression != null; }
         }
 
+        /// <summary>
+        /// Returns expressions of this binary expression, including expressions of nested binary expressions of the same kind.
+        /// </summary>
+        /// <param name="leftToRight">If true expressions are enumerated as they are displayed in the source code.</param>
+        /// <returns></returns>
         public IEnumerable<ExpressionSyntax> Expressions(bool leftToRight = false)
         {
             ThrowInvalidOperationIfNotInitialized();

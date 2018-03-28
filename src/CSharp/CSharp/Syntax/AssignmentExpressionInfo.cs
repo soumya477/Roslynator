@@ -49,6 +49,9 @@ namespace Roslynator.CSharp.Syntax
             get { return AssignmentExpression?.OperatorToken ?? default(SyntaxToken); }
         }
 
+        /// <summary>
+        /// The kind of the assignment expression.
+        /// </summary>
         public SyntaxKind Kind
         {
             get { return AssignmentExpression?.Kind() ?? SyntaxKind.None; }

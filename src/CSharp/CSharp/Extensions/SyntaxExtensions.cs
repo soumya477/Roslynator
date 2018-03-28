@@ -257,7 +257,7 @@ namespace Roslynator.CSharp
         /// <param name="member"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public static ClassDeclarationSyntax InsertMember(this ClassDeclarationSyntax classDeclaration, MemberDeclarationSyntax member, IMemberDeclarationComparer comparer = null)
+        public static ClassDeclarationSyntax InsertMember(this ClassDeclarationSyntax classDeclaration, MemberDeclarationSyntax member, IComparer<MemberDeclarationSyntax> comparer = null)
         {
             if (classDeclaration == null)
                 throw new ArgumentNullException(nameof(classDeclaration));
@@ -403,7 +403,7 @@ namespace Roslynator.CSharp
         /// <param name="member"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public static CompilationUnitSyntax InsertMember(this CompilationUnitSyntax compilationUnit, MemberDeclarationSyntax member, IMemberDeclarationComparer comparer = null)
+        public static CompilationUnitSyntax InsertMember(this CompilationUnitSyntax compilationUnit, MemberDeclarationSyntax member, IComparer<MemberDeclarationSyntax> comparer = null)
         {
             if (compilationUnit == null)
                 throw new ArgumentNullException(nameof(compilationUnit));
@@ -836,6 +836,11 @@ namespace Roslynator.CSharp
             return (statement?.Kind() == SyntaxKind.Block) ? null : statement;
         }
 
+        /// <summary>
+        /// Returns <see cref="IfStatementCascade"/> that enables to enumerate if-else cascade.
+        /// </summary>
+        /// <param name="ifStatement"></param>
+        /// <returns></returns>
         public static IfStatementCascade AsCascade(this IfStatementSyntax ifStatement)
         {
             if (ifStatement == null)
@@ -956,7 +961,7 @@ namespace Roslynator.CSharp
         /// <param name="member"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public static InterfaceDeclarationSyntax InsertMember(this InterfaceDeclarationSyntax interfaceDeclaration, MemberDeclarationSyntax member, IMemberDeclarationComparer comparer = null)
+        public static InterfaceDeclarationSyntax InsertMember(this InterfaceDeclarationSyntax interfaceDeclaration, MemberDeclarationSyntax member, IComparer<MemberDeclarationSyntax> comparer = null)
         {
             if (interfaceDeclaration == null)
                 throw new ArgumentNullException(nameof(interfaceDeclaration));
@@ -1241,15 +1246,15 @@ namespace Roslynator.CSharp
             if (member == null)
                 throw new ArgumentNullException(nameof(member));
 
-            DocumentationCommentInserter inserter = DocumentationCommentInserter.Create(member);
+            DocumentationCommentInserter comparer = DocumentationCommentInserter.Create(member);
 
             settings = settings ?? DocumentationCommentGeneratorSettings.Default;
 
-            settings = settings.WithIndentation(inserter.Indent);
+            settings = settings.WithIndentation(comparer.Indent);
 
             SyntaxTriviaList comment = DocumentationCommentGenerator.Generate(member, settings);
 
-            SyntaxTriviaList newLeadingTrivia = inserter.InsertRange(comment);
+            SyntaxTriviaList newLeadingTrivia = comparer.InsertRange(comment);
 
             return member.WithLeadingTrivia(newLeadingTrivia);
         }
@@ -1282,9 +1287,9 @@ namespace Roslynator.CSharp
             if (member == null)
                 throw new ArgumentNullException(nameof(member));
 
-            DocumentationCommentInserter inserter = DocumentationCommentInserter.Create(member);
+            DocumentationCommentInserter comparer = DocumentationCommentInserter.Create(member);
 
-            SyntaxTriviaList newLeadingTrivia = inserter.Insert(comment, indent: indent);
+            SyntaxTriviaList newLeadingTrivia = comparer.Insert(comment, indent: indent);
 
             return member.WithLeadingTrivia(newLeadingTrivia);
         }
@@ -1357,7 +1362,7 @@ namespace Roslynator.CSharp
         /// <param name="member"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public static NamespaceDeclarationSyntax InsertMember(this NamespaceDeclarationSyntax namespaceDeclaration, MemberDeclarationSyntax member, IMemberDeclarationComparer comparer = null)
+        public static NamespaceDeclarationSyntax InsertMember(this NamespaceDeclarationSyntax namespaceDeclaration, MemberDeclarationSyntax member, IComparer<MemberDeclarationSyntax> comparer = null)
         {
             if (namespaceDeclaration == null)
                 throw new ArgumentNullException(nameof(namespaceDeclaration));
@@ -1871,7 +1876,7 @@ namespace Roslynator.CSharp
         /// <param name="member"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public static StructDeclarationSyntax InsertMember(this StructDeclarationSyntax structDeclaration, MemberDeclarationSyntax member, IMemberDeclarationComparer comparer = null)
+        public static StructDeclarationSyntax InsertMember(this StructDeclarationSyntax structDeclaration, MemberDeclarationSyntax member, IComparer<MemberDeclarationSyntax> comparer = null)
         {
             if (structDeclaration == null)
                 throw new ArgumentNullException(nameof(structDeclaration));
@@ -1896,6 +1901,11 @@ namespace Roslynator.CSharp
         #endregion SwitchSectionSyntax
 
         #region SwitchStatementSyntax
+        /// <summary>
+        /// Returns a section that contains default label, or null if the specified swtich statement does not contains section with default label.
+        /// </summary>
+        /// <param name="switchStatement"></param>
+        /// <returns></returns>
         public static SwitchSectionSyntax DefaultSection(this SwitchStatementSyntax switchStatement)
         {
             if (switchStatement == null)
@@ -1953,6 +1963,7 @@ namespace Roslynator.CSharp
             return default(TNode);
         }
 
+        //TODO: pub
         /// <summary>
         /// Creates a new list with the specified node inserted.
         /// </summary>
@@ -1960,15 +1971,11 @@ namespace Roslynator.CSharp
         /// <param name="member"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public static SyntaxList<MemberDeclarationSyntax> Insert(this SyntaxList<MemberDeclarationSyntax> members, MemberDeclarationSyntax member, IMemberDeclarationComparer comparer = null)
+        internal static SyntaxList<MemberDeclarationSyntax> Insert(this SyntaxList<MemberDeclarationSyntax> members, MemberDeclarationSyntax member, IComparer<MemberDeclarationSyntax> comparer = null)
         {
-            if (member == null)
-                throw new ArgumentNullException(nameof(member));
+            int index = MemberDeclarationComparer.GetInsertIndex(members, member, comparer ?? MemberDeclarationComparer.ByKind);
 
-            if (comparer == null)
-                comparer = MemberDeclarationComparer.ByKind;
-
-            return members.Insert(comparer.GetInsertIndex(members, member), member);
+            return members.Insert(index, member);
         }
 
         internal static bool IsSingleLine<TNode>(
@@ -2780,12 +2787,12 @@ namespace Roslynator.CSharp
             return Modifier.Remove(node, modifier);
         }
 
-        internal static TNode InsertModifier<TNode>(this TNode node, SyntaxKind modifierKind, IModifierComparer comparer = null) where TNode : SyntaxNode
+        internal static TNode InsertModifier<TNode>(this TNode node, SyntaxKind modifierKind, IComparer<SyntaxKind> comparer = null) where TNode : SyntaxNode
         {
             return Modifier.Insert(node, modifierKind, comparer);
         }
 
-        internal static TNode InsertModifier<TNode>(this TNode node, SyntaxToken modifier, IModifierComparer comparer = null) where TNode : SyntaxNode
+        internal static TNode InsertModifier<TNode>(this TNode node, SyntaxToken modifier, IComparer<SyntaxToken> comparer = null) where TNode : SyntaxNode
         {
             return Modifier.Insert(node, modifier, comparer);
         }
@@ -3617,7 +3624,7 @@ namespace Roslynator.CSharp
         /// <param name="member"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public static TypeDeclarationSyntax InsertMember(this TypeDeclarationSyntax typeDeclaration, MemberDeclarationSyntax member, IMemberDeclarationComparer comparer = null)
+        public static TypeDeclarationSyntax InsertMember(this TypeDeclarationSyntax typeDeclaration, MemberDeclarationSyntax member, IComparer<MemberDeclarationSyntax> comparer = null)
         {
             if (typeDeclaration == null)
                 throw new ArgumentNullException(nameof(typeDeclaration));

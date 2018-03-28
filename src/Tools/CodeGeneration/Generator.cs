@@ -17,7 +17,7 @@ namespace Roslynator.CodeGeneration
         public Generator(string rootPath, StringComparer comparer = null)
         {
             RootPath = rootPath;
-            Comparer = comparer ?? StringComparer.InvariantCulture;
+            Comparer = comparer ?? StringComparer.CurrentCulture;
         }
 
         public string RootPath { get; }

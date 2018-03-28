@@ -496,6 +496,13 @@ namespace Roslynator.CSharp
                 && value == value2;
         }
 
+        /// <summary>
+        /// Returns what extension method symbol, if any, the specified expression syntax bound to.
+        /// </summary>
+        /// <param name="semanticModel"></param>
+        /// <param name="expression"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public static ExtensionMethodSymbolInfo GetExtensionMethodInfo(
             this SemanticModel semanticModel,
             ExpressionSyntax expression,
@@ -515,6 +522,13 @@ namespace Roslynator.CSharp
             return default(ExtensionMethodSymbolInfo);
         }
 
+        /// <summary>
+        /// Returns what extension method symbol, if any, the specified expression syntax bound to.
+        /// </summary>
+        /// <param name="semanticModel"></param>
+        /// <param name="expression"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public static ExtensionMethodSymbolInfo GetReducedExtensionMethodInfo(
             this SemanticModel semanticModel,
             ExpressionSyntax expression,
@@ -562,6 +576,13 @@ namespace Roslynator.CSharp
             return null;
         }
 
+        /// <summary>
+        /// Returns true if the specified node has a constant value.
+        /// </summary>
+        /// <param name="semanticModel"></param>
+        /// <param name="expression"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public static bool HasConstantValue(
             this SemanticModel semanticModel,
             ExpressionSyntax expression,

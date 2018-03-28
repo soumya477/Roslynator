@@ -144,7 +144,7 @@ namespace Roslynator.CSharp.Analysis
             if (modifiers.Count <= 1)
                 return;
 
-            if (modifiers.IsSorted(ModifierComparer.Instance))
+            if (modifiers.IsSorted(ModifierComparer.Default))
                 return;
 
             if (modifiers.SpanContainsDirectives())
