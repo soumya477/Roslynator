@@ -5,6 +5,9 @@ using Microsoft.CodeAnalysis;
 
 namespace Roslynator
 {
+    /// <summary>
+    /// Represents an extension method symbol.
+    /// </summary>
     public readonly struct ExtensionMethodSymbolInfo
     {
         internal ExtensionMethodSymbolInfo(IMethodSymbol symbol, IMethodSymbol reducedSymbol)
@@ -13,23 +16,30 @@ namespace Roslynator
             ReducedSymbol = reducedSymbol;
         }
 
+        /// <summary>
+        /// The definition of extension method from which this symbol was reduced, or null, if the symbol was not reduced.
+        /// </summary>
         public IMethodSymbol ReducedSymbol { get; }
 
+        /// <summary>
+        /// The extension method symbol.
+        /// </summary>
         public IMethodSymbol Symbol { get; }
 
+        /// <summary>
+        /// The reduced symbol or the symbol if the reduced symbol is null.
+        /// </summary>
         public IMethodSymbol ReducedSymbolOrSymbol
         {
             get { return ReducedSymbol ?? Symbol; }
         }
 
+        /// <summary>
+        /// True if the symbol was reduced.
+        /// </summary>
         public bool IsReduced
         {
             get { return Symbol != null && !object.ReferenceEquals(ReducedSymbol, Symbol); }
-        }
-
-        public bool IsOrdinary
-        {
-            get { return Symbol != null && object.ReferenceEquals(ReducedSymbol, Symbol); }
         }
 
 #pragma warning disable CS1591

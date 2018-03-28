@@ -23,7 +23,7 @@ namespace Roslynator.CSharp.CodeFixes
             SyntaxKind modifierKind,
             string title = null,
             string additionalKey = null,
-            IModifierComparer comparer = null)
+            IComparer<SyntaxKind> comparer = null)
         {
             AddModifier(context, context.Document, diagnostic, node, modifierKind, title, additionalKey, comparer);
         }
@@ -36,7 +36,7 @@ namespace Roslynator.CSharp.CodeFixes
             SyntaxKind modifierKind,
             string title = null,
             string additionalKey = null,
-            IModifierComparer comparer = null)
+            IComparer<SyntaxKind> comparer = null)
         {
             CodeAction codeAction = CodeAction.Create(
                 title ?? GetAddModifierTitle(modifierKind, node),
@@ -50,7 +50,7 @@ namespace Roslynator.CSharp.CodeFixes
             Document document,
             TNode node,
             SyntaxKind modifierKind,
-            IModifierComparer comparer = null,
+            IComparer<SyntaxKind> comparer = null,
             CancellationToken cancellationToken = default(CancellationToken)) where TNode : SyntaxNode
         {
             TNode newNode = AddModifier(node, modifierKind, comparer);
@@ -61,7 +61,7 @@ namespace Roslynator.CSharp.CodeFixes
         private static TNode AddModifier<TNode>(
             TNode node,
             SyntaxKind modifierKind,
-            IModifierComparer comparer = null) where TNode : SyntaxNode
+            IComparer<SyntaxKind> comparer = null) where TNode : SyntaxNode
         {
             switch (modifierKind)
             {
@@ -101,7 +101,7 @@ namespace Roslynator.CSharp.CodeFixes
             SyntaxKind modifierKind,
             string title = null,
             string additionalKey = null,
-            IModifierComparer comparer = null) where TNode : SyntaxNode
+            IComparer<SyntaxKind> comparer = null) where TNode : SyntaxNode
         {
             if (nodes is IList<TNode> list)
             {
@@ -356,7 +356,7 @@ namespace Roslynator.CSharp.CodeFixes
             SyntaxToken modifier,
             string title = null,
             string additionalKey = null,
-            IModifierComparer comparer = null)
+            IComparer<SyntaxKind> comparer = null)
         {
             Document document = context.Document;
 

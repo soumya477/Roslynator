@@ -48,11 +48,17 @@ namespace Roslynator.CSharp.Syntax
         /// </summary>
         public ExpressionSyntax WhenFalse { get; }
 
+        /// <summary>
+        /// The token representing the question mark.
+        /// </summary>
         public SyntaxToken QuestionToken
         {
             get { return ConditionalExpression?.QuestionToken ?? default(SyntaxToken); }
         }
 
+        /// <summary>
+        /// The token representing the colon.
+        /// </summary>
         public SyntaxToken ColonToken
         {
             get { return ConditionalExpression?.ColonToken ?? default(SyntaxToken); }

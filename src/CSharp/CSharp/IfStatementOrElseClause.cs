@@ -114,6 +114,9 @@ namespace Roslynator.CSharp
             get { return _ifStatement?.Parent ?? _elseClause?.Parent; }
         }
 
+        /// <summary>
+        /// The absolute span of this node in characters, not including its leading and trailing trivia.
+        /// </summary>
         public TextSpan Span
         {
             get
@@ -128,6 +131,9 @@ namespace Roslynator.CSharp
             }
         }
 
+        /// <summary>
+        /// The absolute span of this node in characters, including its leading and trailing trivia.
+        /// </summary>
         public TextSpan FullSpan
         {
             get

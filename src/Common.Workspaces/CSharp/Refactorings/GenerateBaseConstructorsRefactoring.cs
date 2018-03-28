@@ -28,7 +28,7 @@ namespace Roslynator.CSharp.Refactorings
 
             bool isSealedClass = classDeclaration.Modifiers.Contains(SyntaxKind.SealedKeyword);
 
-            int insertIndex = MemberDeclarationComparer.ByKind.GetInsertIndex(members, SyntaxKind.ConstructorDeclaration);
+            int insertIndex = MemberDeclarationKindComparer.GetInsertIndex(members, SyntaxKind.ConstructorDeclaration);
 
             int position = (insertIndex == 0)
                 ? classDeclaration.OpenBraceToken.FullSpan.End

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Josef Pihrt. All rights reserved. Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
@@ -1476,7 +1477,7 @@ namespace Roslynator
 
             while (t != null)
             {
-                Debug.Assert(t.TypeKind == TypeKind.Class, t.TypeKind.ToString());
+                Debug.Assert(t.TypeKind.Is(TypeKind.Class, TypeKind.Error), t.TypeKind.ToString());
 
                 if (t.Equals(baseType))
                     return true;
