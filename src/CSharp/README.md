@@ -40,9 +40,7 @@
 
 ### Classes
 
-* MemberDeclarationComparer
 * MemberDeclarationListSelection
-* ModifierComparer
 * StatementListSelection
 
 ### Structs
@@ -50,15 +48,9 @@
 * CommentKinds
 * IfStatementCascade
 * IfStatementOrElseClause
-* MemberDeclarationSortMode
 * ModifierKinds
 * NullCheckStyles
 * PreprocessorDirectiveKinds
-
-### Interfaces
-
-* IMemberDeclarationComparer
-* IModifierComparer
 
 ## Namespace Roslynator\.CSharp\.Syntax
 
@@ -95,3 +87,5 @@
 ### Classes
 
 * TextLineCollectionSelection
+
+*\(Generated with [DotMarkdown](http://github.com/JosefPihrt/DotMarkdown)\)*

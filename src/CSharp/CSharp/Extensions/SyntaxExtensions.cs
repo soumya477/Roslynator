@@ -1246,15 +1246,15 @@ namespace Roslynator.CSharp
             if (member == null)
                 throw new ArgumentNullException(nameof(member));
 
-            DocumentationCommentInserter comparer = DocumentationCommentInserter.Create(member);
+            DocumentationCommentInserter inserter = DocumentationCommentInserter.Create(member);
 
             settings = settings ?? DocumentationCommentGeneratorSettings.Default;
 
-            settings = settings.WithIndentation(comparer.Indent);
+            settings = settings.WithIndentation(inserter.Indent);
 
             SyntaxTriviaList comment = DocumentationCommentGenerator.Generate(member, settings);
 
-            SyntaxTriviaList newLeadingTrivia = comparer.InsertRange(comment);
+            SyntaxTriviaList newLeadingTrivia = inserter.InsertRange(comment);
 
             return member.WithLeadingTrivia(newLeadingTrivia);
         }
@@ -1287,9 +1287,9 @@ namespace Roslynator.CSharp
             if (member == null)
                 throw new ArgumentNullException(nameof(member));
 
-            DocumentationCommentInserter comparer = DocumentationCommentInserter.Create(member);
+            DocumentationCommentInserter inserter = DocumentationCommentInserter.Create(member);
 
-            SyntaxTriviaList newLeadingTrivia = comparer.Insert(comment, indent: indent);
+            SyntaxTriviaList newLeadingTrivia = inserter.Insert(comment, indent: indent);
 
             return member.WithLeadingTrivia(newLeadingTrivia);
         }
