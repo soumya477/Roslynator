@@ -38,7 +38,10 @@ namespace Roslynator.CSharp.Refactorings
             if (!context.Span.IsEmptyAndContainedInSpan(unsafeModifier))
                 return;
 
-            SyntaxNode parent = node.Parent;
+            SyntaxNode parent = node.FirstAncestor(f => CSharpFacts.CanHaveUnsafeModifier(f.Kind()));
+
+            if (parent == null)
+                return;
 
             ModifierListInfo modifiersInfo = SyntaxInfo.ModifierListInfo(parent);
 
@@ -50,7 +53,7 @@ namespace Roslynator.CSharp.Refactorings
 
             context.RegisterRefactoring(
                 GetTitle(parent.Kind()),
-                ct => RefactorAsync(context.Document, node, ct));
+                ct => RefactorAsync(context.Document, node, parent, ct));
         }
 
         public static void ComputeRefactoring(RefactoringContext context, UnsafeStatementSyntax unsafeStatement)
@@ -95,17 +98,14 @@ namespace Roslynator.CSharp.Refactorings
         public static Task<Document> RefactorAsync(
             Document document,
             SyntaxNode node,
+            SyntaxNode containingNode,
             CancellationToken cancellationToken)
         {
-            SyntaxNode newNode = node.RemoveModifier(SyntaxKind.UnsafeKeyword);
-
-            SyntaxNode parent = node.Parent;
-
-            SyntaxNode newParent = parent
-                .ReplaceNode(node, newNode)
+            SyntaxNode newNode = containingNode
+                .ReplaceNode(node, node.RemoveModifier(SyntaxKind.UnsafeKeyword))
                 .InsertModifier(SyntaxKind.UnsafeKeyword);
 
-            return document.ReplaceNodeAsync(parent, newParent, cancellationToken);
+            return document.ReplaceNodeAsync(containingNode, newNode, cancellationToken);
         }
 
         public static Task<Document> RefactorAsync(
