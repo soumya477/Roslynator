@@ -39,7 +39,11 @@ namespace Roslynator.CSharp.Analysis
             if (statement == null)
                 return;
 
-            if ((statement as BlockSyntax)?.Statements.Any() == false)
+            var block = statement as BlockSyntax;
+
+            if (block?.Statements.Any() == false
+                && block.OpenBraceToken.TrailingTrivia.IsEmptyOrWhitespace()
+                && block.CloseBraceToken.LeadingTrivia.IsEmptyOrWhitespace())
             {
                 if (IsFixableIfElse(ifStatement))
                     context.ReportDiagnostic(DiagnosticDescriptors.SimplifyCodeBranching, ifStatement);
