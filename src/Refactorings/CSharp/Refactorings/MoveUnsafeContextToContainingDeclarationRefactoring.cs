@@ -131,13 +131,6 @@ namespace Roslynator.CSharp.Refactorings
             }
             else
             {
-                //TODO: Change type to 'var'
-                //IEnumerable<SyntaxTrivia> leadingTrivia2 = keyword.LeadingTrivia
-                //    .AddRange(keyword.TrailingTrivia.EmptyIfWhitespace())
-                //    .AddRange(block.GetLeadingTrivia().EmptyIfWhitespace())
-                //    .AddRange(block.OpenBraceToken.TrailingTrivia.EmptyIfWhitespace())
-                //    .AddRange(statements.First().GetLeadingTrivia().EmptyIfWhitespace());
-
                 StatementSyntax first = statements.First();
                 StatementSyntax last = statements.Last();
 
