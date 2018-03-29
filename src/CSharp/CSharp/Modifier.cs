@@ -10,12 +10,14 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace Roslynator.CSharp
 {
+    //TODO: ren ModifierList
     /// <summary>
     /// A set of static methods that allows manipulation with modifiers.
     /// </summary>
     public static class Modifier
     {
-        internal static SyntaxNode Insert(SyntaxNode node, Accessibility accessibility, IComparer<SyntaxKind> comparer)
+        //TODO: mov
+        internal static SyntaxNode Insert(SyntaxNode node, Accessibility accessibility, IComparer<SyntaxKind> comparer = null)
         {
             switch (accessibility)
             {
@@ -964,7 +966,7 @@ namespace Roslynator.CSharp
             if (!modifiers.Any())
                 return modifiers.Add(Token(kind));
 
-            return Insert(modifiers, Token(kind), ModifierKindComparer.GetInsertIndex(modifiers, kind, comparer));
+            return Insert(modifiers, Token(kind), SyntaxInserter.GetInsertIndex(modifiers, kind, comparer));
         }
 
         /// <summary>
@@ -979,7 +981,7 @@ namespace Roslynator.CSharp
             if (!modifiers.Any())
                 return modifiers.Add(modifier);
 
-            return Insert(modifiers, modifier, ModifierComparer.GetInsertIndex(modifiers, modifier, comparer));
+            return Insert(modifiers, modifier, SyntaxInserter.GetInsertIndex(modifiers, modifier, comparer));
         }
 
         private static SyntaxTokenList Insert(SyntaxTokenList modifiers, SyntaxToken modifier, int index)

@@ -393,7 +393,7 @@ namespace Roslynator.CSharp.Syntax
             if (accessibility.IsSingleTokenAccessibility()
                 && newAccessibility.IsSingleTokenAccessibility())
             {
-                int insertIndex = ModifierKindComparer.GetInsertIndex(Modifiers, GetTokenKind(), comparer);
+                int insertIndex = SyntaxInserter.GetInsertIndex(Modifiers, GetTokenKind(), comparer);
 
                 if (TokenIndex == insertIndex
                     || TokenIndex == insertIndex - 1)
