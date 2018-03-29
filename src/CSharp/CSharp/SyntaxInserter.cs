@@ -35,6 +35,9 @@ namespace Roslynator.CSharp
                 }
             }
 
+            if (index == -1)
+                return members.Count;
+
             return index;
         }
 
@@ -59,6 +62,9 @@ namespace Roslynator.CSharp
                     index = i;
                 }
             }
+
+            if (index == -1)
+                return members.Count;
 
             return index;
         }
@@ -85,6 +91,9 @@ namespace Roslynator.CSharp
                 }
             }
 
+            if (index == -1)
+                return tokens.Count;
+
             return index;
         }
 
@@ -109,6 +118,9 @@ namespace Roslynator.CSharp
                     index = i;
                 }
             }
+
+            if (index == -1)
+                return tokens.Count;
 
             return index;
         }

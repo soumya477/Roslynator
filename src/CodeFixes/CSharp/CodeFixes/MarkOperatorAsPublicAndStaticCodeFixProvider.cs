@@ -59,19 +59,22 @@ namespace Roslynator.CSharp.CodeFixes
                                 title,
                                 cancellationToken =>
                                 {
+                                    SyntaxNode newNode = memberDeclaration;
+
                                     SyntaxTokenList modifiers = info.Modifiers;
 
-                                    SyntaxTokenList newModifiers = modifiers;
+                                    if (modifiers.ContainsAny(SyntaxKind.InternalKeyword, SyntaxKind.ProtectedKeyword, SyntaxKind.PrivateKeyword))
+                                        newNode = Modifier.RemoveAccessibility(newNode);
 
                                     if (!modifiers.Contains(SyntaxKind.PublicKeyword))
-                                        newModifiers = Modifier.Insert(newModifiers, SyntaxKind.PublicKeyword);
+                                        newNode = Modifier.Insert(newNode, SyntaxKind.PublicKeyword);
 
-                                    if (!modifiers.Contains(SyntaxKind.StaticKeyword))
-                                        newModifiers = Modifier.Insert(newModifiers, SyntaxKind.StaticKeyword);
+                                    if (!info.IsStatic)
+                                        newNode = Modifier.Insert(newNode, SyntaxKind.StaticKeyword);
 
-                                    return context.Document.ReplaceModifiersAsync(info, newModifiers, cancellationToken);
+                                    return context.Document.ReplaceNodeAsync(memberDeclaration, newNode, cancellationToken);
                                 },
-                                GetEquivalenceKey(diagnostic));
+                                base.GetEquivalenceKey(diagnostic));
 
                             context.RegisterCodeFix(codeAction, diagnostic);
                             break;

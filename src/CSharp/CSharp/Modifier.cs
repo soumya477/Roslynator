@@ -356,6 +356,7 @@ namespace Roslynator.CSharp
             throw new ArgumentException($"'{node.Kind()}' does not have modifiers.", nameof(node));
         }
 
+        //TODO: RemoveExplicitAccessibility
         /// <summary>
         /// Creates a new node with accessibility modifiers removed.
         /// </summary>
