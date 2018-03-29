@@ -10,12 +10,14 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace Roslynator.CSharp
 {
+    //TODO: ren ModifierList
     /// <summary>
     /// A set of static methods that allows manipulation with modifiers.
     /// </summary>
     public static class Modifier
     {
-        internal static SyntaxNode Insert(SyntaxNode node, Accessibility accessibility, IComparer<SyntaxKind> comparer)
+        //TODO: mov
+        internal static SyntaxNode Insert(SyntaxNode node, Accessibility accessibility, IComparer<SyntaxKind> comparer = null)
         {
             switch (accessibility)
             {
@@ -354,6 +356,7 @@ namespace Roslynator.CSharp
             throw new ArgumentException($"'{node.Kind()}' does not have modifiers.", nameof(node));
         }
 
+        //TODO: RemoveExplicitAccessibility
         /// <summary>
         /// Creates a new node with accessibility modifiers removed.
         /// </summary>

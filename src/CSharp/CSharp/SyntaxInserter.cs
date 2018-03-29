@@ -10,29 +10,33 @@ namespace Roslynator.CSharp
 {
     internal static class SyntaxInserter
     {
-        internal static int GetInsertIndex(SyntaxList<MemberDeclarationSyntax> list, MemberDeclarationSyntax node, IComparer<MemberDeclarationSyntax> comparer)
+        internal static int GetInsertIndex(SyntaxList<MemberDeclarationSyntax> members, MemberDeclarationSyntax member, IComparer<MemberDeclarationSyntax> comparer = null)
         {
-            if (node == null)
-                throw new ArgumentNullException(nameof(node));
+            if (member == null)
+                throw new ArgumentNullException(nameof(member));
 
             if (comparer == null)
                 comparer = MemberDeclarationComparer.ByKind;
 
-            int index = list.Count;
+            int index = -1;
 
-            for (int i = index - 1; i >= 0; i--)
+            for (int i = members.Count - 1; i >= 0; i--)
             {
-                int result = comparer.Compare(list[i], node);
+                int result = comparer.Compare(members[i], member);
 
                 if (result == 0)
                 {
                     return i + 1;
                 }
-                else if (result > 0)
+                else if (result < 0
+                    && index == -1)
                 {
                     index = i;
                 }
             }
+
+            if (index == -1)
+                return members.Count;
 
             return index;
         }
@@ -42,9 +46,9 @@ namespace Roslynator.CSharp
             if (comparer == null)
                 comparer = MemberDeclarationKindComparer.Default;
 
-            int index = members.Count;
+            int index = -1;
 
-            for (int i = index - 1; i >= 0; i--)
+            for (int i = members.Count - 1; i >= 0; i--)
             {
                 int result = comparer.Compare(members[i].Kind(), kind);
 
@@ -52,23 +56,27 @@ namespace Roslynator.CSharp
                 {
                     return i + 1;
                 }
-                else if (result > 0)
+                else if (result < 0
+                    && index == -1)
                 {
                     index = i;
                 }
             }
 
+            if (index == -1)
+                return members.Count;
+
             return index;
         }
 
-        public static int GetInsertIndex(SyntaxTokenList tokens, SyntaxToken token, IComparer<SyntaxToken> comparer)
+        public static int GetInsertIndex(SyntaxTokenList tokens, SyntaxToken token, IComparer<SyntaxToken> comparer = null)
         {
             if (comparer == null)
                 comparer = ModifierComparer.Default;
 
-            int index = tokens.Count;
+            int index = -1;
 
-            for (int i = index - 1; i >= 0; i--)
+            for (int i = tokens.Count - 1; i >= 0; i--)
             {
                 int result = comparer.Compare(tokens[i], token);
 
@@ -76,23 +84,27 @@ namespace Roslynator.CSharp
                 {
                     return i + 1;
                 }
-                else if (result > 0)
+                else if (result < 0
+                    && index == -1)
                 {
                     index = i;
                 }
             }
 
+            if (index == -1)
+                return tokens.Count;
+
             return index;
         }
 
-        public static int GetInsertIndex(SyntaxTokenList tokens, SyntaxKind kind, IComparer<SyntaxKind> comparer)
+        public static int GetInsertIndex(SyntaxTokenList tokens, SyntaxKind kind, IComparer<SyntaxKind> comparer = null)
         {
             if (comparer == null)
                 comparer = ModifierKindComparer.Default;
 
-            int index = tokens.Count;
+            int index = -1;
 
-            for (int i = index - 1; i >= 0; i--)
+            for (int i = tokens.Count - 1; i >= 0; i--)
             {
                 int result = comparer.Compare(tokens[i].Kind(), kind);
 
@@ -100,11 +112,15 @@ namespace Roslynator.CSharp
                 {
                     return i + 1;
                 }
-                else if (result > 0)
+                else if (result < 0
+                    && index == -1)
                 {
                     index = i;
                 }
             }
+
+            if (index == -1)
+                return tokens.Count;
 
             return index;
         }
