@@ -23,7 +23,7 @@ namespace Roslynator.CSharp.ModifierHelpers
 
             SyntaxTokenList modifiers = GetModifiers(node);
 
-            int index = ModifierKindComparer.GetInsertIndex(modifiers, kind, comparer);
+            int index = SyntaxInserter.GetInsertIndex(modifiers, kind, comparer);
 
             return InsertModifier(node, modifiers, Token(kind), index);
         }
@@ -35,7 +35,7 @@ namespace Roslynator.CSharp.ModifierHelpers
 
             SyntaxTokenList modifiers = GetModifiers(node);
 
-            int index = ModifierComparer.GetInsertIndex(modifiers, modifier, comparer);
+            int index = SyntaxInserter.GetInsertIndex(modifiers, modifier, comparer);
 
             return InsertModifier(node, modifiers, modifier, index);
         }

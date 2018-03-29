@@ -1973,7 +1973,7 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         internal static SyntaxList<MemberDeclarationSyntax> Insert(this SyntaxList<MemberDeclarationSyntax> members, MemberDeclarationSyntax member, IComparer<MemberDeclarationSyntax> comparer = null)
         {
-            int index = MemberDeclarationComparer.GetInsertIndex(members, member, comparer ?? MemberDeclarationComparer.ByKind);
+            int index = SyntaxInserter.GetInsertIndex(members, member, comparer ?? MemberDeclarationComparer.ByKind);
 
             return members.Insert(index, member);
         }

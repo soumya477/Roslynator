@@ -2,9 +2,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Roslynator.CSharp
 {
@@ -61,30 +59,6 @@ namespace Roslynator.CSharp
                         return MemberDeclarationComparer.MaxRank;
                     }
             }
-        }
-
-        public static int GetInsertIndex(SyntaxList<MemberDeclarationSyntax> members, SyntaxKind kind, IComparer<SyntaxKind> comparer = null)
-        {
-            if (comparer == null)
-                comparer = Default;
-
-            int index = members.Count;
-
-            for (int i = index - 1; i >= 0; i--)
-            {
-                int result = comparer.Compare(members[i].Kind(), kind);
-
-                if (result == 0)
-                {
-                    return i + 1;
-                }
-                else if (result > 0)
-                {
-                    index = i;
-                }
-            }
-
-            return index;
         }
     }
 }
