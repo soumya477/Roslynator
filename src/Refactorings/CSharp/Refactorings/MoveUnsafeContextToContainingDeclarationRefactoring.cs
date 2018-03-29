@@ -114,13 +114,50 @@ namespace Roslynator.CSharp.Refactorings
             SyntaxNode containingNode,
             CancellationToken cancellationToken)
         {
-            BlockSyntax block = RefactoringUtility.RemoveUnsafeContext(unsafeStatement);
+            SyntaxToken keyword = unsafeStatement.UnsafeKeyword;
 
-            SyntaxNode newParent = containingNode
-                .ReplaceNode(unsafeStatement, block)
-                .InsertModifier(SyntaxKind.UnsafeKeyword);
+            BlockSyntax block = unsafeStatement.Block;
 
-            return document.ReplaceNodeAsync(containingNode, newParent, cancellationToken);
+            SyntaxList<StatementSyntax> statements = block.Statements;
+
+            SyntaxNode newNode = null;
+
+            if (!statements.Any())
+            {
+                newNode = containingNode.RemoveNode(unsafeStatement);
+            }
+            else
+            {
+                //TODO: Change type to 'var'
+                //IEnumerable<SyntaxTrivia> leadingTrivia = keyword.LeadingTrivia
+                //    .AddRange(keyword.TrailingTrivia.EmptyIfWhitespace())
+                //    .AddRange(block.GetLeadingTrivia().EmptyIfWhitespace())
+                //    .AddRange(block.OpenBraceToken.TrailingTrivia.EmptyIfWhitespace())
+                //    .AddRange(statements.First().GetLeadingTrivia().EmptyIfWhitespace());
+
+                StatementSyntax first = statements.First();
+                StatementSyntax last = statements.Last();
+
+                SyntaxTriviaList leadingTrivia = keyword.LeadingTrivia
+                    .AddRange(keyword.TrailingTrivia.EmptyIfWhitespace())
+                    .AddRange(block.GetLeadingTrivia().EmptyIfWhitespace())
+                    .AddRange(block.OpenBraceToken.TrailingTrivia.EmptyIfWhitespace())
+                    .AddRange(first.GetLeadingTrivia().EmptyIfWhitespace());
+
+                SyntaxTriviaList trailingTrivia = last.GetTrailingTrivia().EmptyIfWhitespace()
+                    .AddRange(block.CloseBraceToken.LeadingTrivia.EmptyIfWhitespace())
+                    .AddRange(block.GetTrailingTrivia());
+
+                statements = statements
+                    .ReplaceAt(0, first.WithLeadingTrivia(leadingTrivia))
+                    .ReplaceAt(statements.Count - 1, last.WithTrailingTrivia(trailingTrivia));
+
+                newNode = containingNode.ReplaceNode(unsafeStatement, statements);
+            }
+
+            newNode = newNode.InsertModifier(SyntaxKind.UnsafeKeyword);
+
+            return document.ReplaceNodeAsync(containingNode, newNode, cancellationToken);
         }
     }
 }

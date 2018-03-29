@@ -14,6 +14,8 @@ namespace Roslynator.CSharp.Refactorings.Tests
                     {
                         unsafe
                         {
+                            Bar();
+                            Bar();
                         }
                     }
                 }
