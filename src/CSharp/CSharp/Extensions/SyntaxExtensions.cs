@@ -420,8 +420,8 @@ namespace Roslynator.CSharp
             SyntaxToken operatorToken = conditionalAccessExpression.OperatorToken;
 
             string text = conditionalAccessExpression
-                .ToString()
-                .Remove(operatorToken.FullSpan.Start - conditionalAccessExpression.SpanStart, operatorToken.FullSpan.Length);
+                .ToFullString()
+                .Remove(operatorToken.FullSpan.Start - conditionalAccessExpression.FullSpan.Start, operatorToken.FullSpan.Length);
 
             return ParseExpression(text);
         }

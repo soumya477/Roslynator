@@ -41,12 +41,14 @@ namespace Roslynator.CSharp.Refactorings
 
             IfStatementSyntax ifStatement = IfStatement(
                 CSharpSnippets.NotEqualsToNull(IdentifierName(localName)),
-                Block(ExpressionStatement(conditionalAccess.RemoveOperatorToken())),
-                ElseClause(Block(ExpressionStatement(newExpression))));
+                Block(ReturnStatement(conditionalAccess.RemoveOperatorToken())),
+                ElseClause(Block(ReturnStatement(newExpression))));
 
             SyntaxList<StatementSyntax> statements = List(new StatementSyntax[] { localStatement, ifStatement });
 
-            if (conditionalAccess.Parent is ReturnStatementSyntax returnStatement)
+            SyntaxNode parent = conditionalAccess.Parent;
+
+            if (parent is ReturnStatementSyntax returnStatement)
             {
                 statements = statements.WithTriviaFrom(returnStatement);
 
@@ -59,16 +61,34 @@ namespace Roslynator.CSharp.Refactorings
                     return await document.ReplaceNodeAsync(returnStatement, statements, cancellationToken).ConfigureAwait(false);
                 }
             }
+            else if (parent is SimpleLambdaExpressionSyntax simpleLambda)
+            {
+                SimpleLambdaExpressionSyntax newNode = simpleLambda
+                    .WithBody(Block(statements))
+                    .WithFormatterAnnotation();
 
-            var arrowExpressionClause = (ArrowExpressionClauseSyntax)conditionalAccess.Parent;
+                return await document.ReplaceNodeAsync(simpleLambda, newNode, cancellationToken).ConfigureAwait(false);
+            }
+            else if (parent is ParenthesizedLambdaExpressionSyntax parenthesizedLambda)
+            {
+                ParenthesizedLambdaExpressionSyntax newNode = parenthesizedLambda
+                    .WithBody(Block(statements))
+                    .WithFormatterAnnotation();
 
-            SyntaxNode node = arrowExpressionClause.Parent;
+                return await document.ReplaceNodeAsync(parenthesizedLambda, newNode, cancellationToken).ConfigureAwait(false);
+            }
+            else
+            {
+                var arrowExpressionClause = (ArrowExpressionClauseSyntax)parent;
 
-            SyntaxNode newNode = CreateNewNode().WithFormatterAnnotation();
+                SyntaxNode node = arrowExpressionClause.Parent;
 
-            return await document.ReplaceNodeAsync(node, newNode, cancellationToken).ConfigureAwait(false);
+                SyntaxNode newNode = CreateNewNode(node).WithFormatterAnnotation();
 
-            SyntaxNode CreateNewNode()
+                return await document.ReplaceNodeAsync(node, newNode, cancellationToken).ConfigureAwait(false);
+            }
+
+            SyntaxNode CreateNewNode(SyntaxNode node)
             {
                 switch (node)
                 {

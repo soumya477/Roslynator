@@ -3,7 +3,7 @@
 using System;
 using System.Threading.Tasks;
 
-#pragma warning disable CS0162, CS0168, CS8321, RCS1007, RCS1016, RCS1021, RCS1048, RCS1163
+#pragma warning disable CS0162, CS0168, CS8321, RCS1004, RCS1007, RCS1016, RCS1021, RCS1048, RCS1163
 
 namespace Roslynator.CSharp.Analyzers.Tests
 {
