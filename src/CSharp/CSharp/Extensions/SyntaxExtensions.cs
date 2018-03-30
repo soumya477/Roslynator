@@ -415,6 +415,17 @@ namespace Roslynator.CSharp
         }
         #endregion CompilationUnitSyntax
 
+        internal static ExpressionSyntax RemoveOperatorToken(this ConditionalAccessExpressionSyntax conditionalAccessExpression)
+        {
+            SyntaxToken operatorToken = conditionalAccessExpression.OperatorToken;
+
+            string text = conditionalAccessExpression
+                .ToString()
+                .Remove(operatorToken.FullSpan.Start - conditionalAccessExpression.SpanStart, operatorToken.FullSpan.Length);
+
+            return ParseExpression(text);
+        }
+
         #region ConstructorDeclarationSyntax
         internal static TextSpan HeaderSpan(this ConstructorDeclarationSyntax constructorDeclaration)
         {
