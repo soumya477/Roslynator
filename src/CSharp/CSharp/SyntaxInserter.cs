@@ -31,7 +31,7 @@ namespace Roslynator.CSharp
                 else if (result < 0
                     && index == -1)
                 {
-                    index = i;
+                    index = i + 1;
                 }
             }
 
@@ -59,7 +59,7 @@ namespace Roslynator.CSharp
                 else if (result < 0
                     && index == -1)
                 {
-                    index = i;
+                    index = i + 1;
                 }
             }
 
@@ -87,7 +87,7 @@ namespace Roslynator.CSharp
                 else if (result < 0
                     && index == -1)
                 {
-                    index = i;
+                    index = i + 1;
                 }
             }
 
@@ -115,7 +115,7 @@ namespace Roslynator.CSharp
                 else if (result < 0
                     && index == -1)
                 {
-                    index = i;
+                    index = i + 1;
                 }
             }
 
