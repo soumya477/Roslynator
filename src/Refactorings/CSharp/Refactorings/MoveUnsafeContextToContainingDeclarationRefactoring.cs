@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Josef Pihrt. All rights reserved. Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
@@ -122,19 +123,14 @@ namespace Roslynator.CSharp.Refactorings
 
             SyntaxNode newNode = null;
 
-            if (!statements.Any())
+            int count = statements.Count;
+
+            if (count == 0)
             {
                 newNode = containingNode.RemoveNode(unsafeStatement);
             }
             else
             {
-                //TODO: Change type to 'var'
-                //IEnumerable<SyntaxTrivia> leadingTrivia = keyword.LeadingTrivia
-                //    .AddRange(keyword.TrailingTrivia.EmptyIfWhitespace())
-                //    .AddRange(block.GetLeadingTrivia().EmptyIfWhitespace())
-                //    .AddRange(block.OpenBraceToken.TrailingTrivia.EmptyIfWhitespace())
-                //    .AddRange(statements.First().GetLeadingTrivia().EmptyIfWhitespace());
-
                 StatementSyntax first = statements.First();
                 StatementSyntax last = statements.Last();
 
@@ -150,9 +146,9 @@ namespace Roslynator.CSharp.Refactorings
 
                 statements = statements
                     .ReplaceAt(0, first.WithLeadingTrivia(leadingTrivia))
-                    .ReplaceAt(statements.Count - 1, last.WithTrailingTrivia(trailingTrivia));
+                    .ReplaceAt(count - 1, last.WithTrailingTrivia(trailingTrivia));
 
-                newNode = containingNode.ReplaceNode(unsafeStatement, statements);
+                newNode = containingNode.ReplaceNode(unsafeStatement, statements.Select(f => f.WithFormatterAnnotation()));
             }
 
             newNode = newNode.InsertModifier(SyntaxKind.UnsafeKeyword);
