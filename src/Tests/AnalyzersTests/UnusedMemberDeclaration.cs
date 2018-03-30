@@ -40,6 +40,55 @@ namespace Roslynator.CSharp.Analyzers.Tests
         {
         }
 
+        private static void FooRecursion()
+        {
+            FooRecursion();
+        }
+
+        private static void FooRecursion<T>()
+        {
+            FooRecursion<T>();
+        }
+
+        private static void FooRecursion2<T>()
+        {
+            FooRecursion2<string>();
+        }
+
+        private static void FooExtensionMethodRecursion(this string value)
+        {
+            FooExtensionMethodRecursion(value);
+        }
+
+        private static void FooExtensionMethodRecursion2(this string value)
+        {
+            value.FooExtensionMethodRecursion2();
+        }
+
+        private static void FooExtensionMethodRecursion<T>(this T value)
+        {
+            FooExtensionMethodRecursion<T>(value);
+        }
+
+        private static void FooExtensionMethodRecursion2<T>(this T value)
+        {
+            value.FooExtensionMethodRecursion2<T>();
+        }
+
+        private static void FooExtensionMethodRecursion3<T>(this T value)
+        {
+            string s = null;
+
+            FooExtensionMethodRecursion3<string>(s);
+        }
+
+        private static void FooExtensionMethodRecursion4<T>(this T value)
+        {
+            string s = null;
+
+            s.FooExtensionMethodRecursion4<string>();
+        }
+
         // n
 
         private partial class FooPartial
