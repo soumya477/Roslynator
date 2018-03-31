@@ -169,6 +169,86 @@ namespace Roslynator.CSharp.Analyzers.Tests
             internal Task<string> this[int index, int index2, int index3] => default(Task<string>);
         }
 
+        private class FooDefaultLiteral
+        {
+            internal Task<string> FooAsync()
+            {
+                Func<string, Task<string>> func1 = f => default;
+
+                Func<string, Task<string>> func2 = f =>
+                {
+                    if (true)
+                        return default;
+
+                    return default;
+                };
+
+                Func<string, Task<string>> func3 = (f) => default;
+
+                Func<string, Task<string>> func4 = (f) =>
+                {
+                    if (true)
+                        return default;
+
+                    return default;
+                };
+
+                Func<string, Task<string>> func5 = delegate (string f)
+                {
+                    if (true)
+                        return default;
+
+                    return default;
+                };
+
+                return default;
+
+                Task<string> FooLocalAsync()
+                {
+                    if (true)
+                        return default;
+
+                    return default;
+                }
+            }
+
+            internal Task<string> PropertyAsync
+            {
+                get
+                {
+                    if (true)
+                        return default;
+
+                    return default;
+                }
+            }
+
+            internal Task<string> Property2Async
+            {
+                get => default;
+            }
+
+            internal Task<string> Property3Async => default;
+
+            internal Task<string> this[int index]
+            {
+                get
+                {
+                    if (true)
+                        return default;
+
+                    return default;
+                }
+            }
+
+            internal Task<string> this[int index1, int index2]
+            {
+                get => default;
+            }
+
+            internal Task<string> this[int index, int index2, int index3] => default;
+        }
+
         private class FooConditionalAccess
         {
             internal Task<string> FooAsync()

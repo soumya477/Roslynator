@@ -37,7 +37,7 @@ namespace Roslynator.CSharp.Refactorings
                 Identifier(localName).WithRenameAnnotation(),
                 expression);
 
-            InvocationExpressionSyntax newExpression = CreateTaskFromResultExpression(expression, semanticModel, cancellationToken);
+            InvocationExpressionSyntax newExpression = CreateTaskFromResultExpression(conditionalAccess, semanticModel, cancellationToken);
 
             IfStatementSyntax ifStatement = IfStatement(
                 CSharpSnippets.NotEqualsToNull(IdentifierName(localName)),
@@ -108,18 +108,21 @@ namespace Roslynator.CSharp.Refactorings
                         {
                             return propertyDeclaration
                                 .WithExpressionBody(null)
+                                .WithSemicolonToken(default(SyntaxToken))
                                 .WithAccessorList(AccessorList(GetAccessorDeclaration(Block(statements))));
                         }
                     case IndexerDeclarationSyntax indexerDeclaration:
                         {
                             return indexerDeclaration
                                 .WithExpressionBody(null)
+                                .WithSemicolonToken(default(SyntaxToken))
                                 .WithAccessorList(AccessorList(GetAccessorDeclaration(Block(statements))));
                         }
                     case AccessorDeclarationSyntax accessorDeclaration:
                         {
                             return accessorDeclaration
                                 .WithExpressionBody(null)
+                                .WithSemicolonToken(default(SyntaxToken))
                                 .WithBody(Block(statements));
                         }
                     default:
@@ -131,22 +134,6 @@ namespace Roslynator.CSharp.Refactorings
             }
         }
 
-        private static InvocationExpressionSyntax CreateTaskFromResultExpression(
-            ExpressionSyntax expression,
-            SemanticModel semanticModel,
-            CancellationToken cancellationToken)
-        {
-            var typeSymbol = (INamedTypeSymbol)semanticModel.GetTypeInfo(expression, cancellationToken).ConvertedType;
-
-            int position = expression.SpanStart;
-
-            TypeSyntax type = typeSymbol.ToMinimalTypeSyntax(semanticModel, position);
-
-            ExpressionSyntax defaultValue = typeSymbol.GetDefaultValueSyntax(type);
-
-            return CreateTaskFromResultExpression(expression, type, defaultValue, position, semanticModel);
-        }
-
         public static async Task<Document> RefactorAsync(
             Document document,
             ExpressionSyntax expression,
@@ -154,6 +141,16 @@ namespace Roslynator.CSharp.Refactorings
         {
             SemanticModel semanticModel = await document.GetSemanticModelAsync().ConfigureAwait(false);
 
+            ExpressionSyntax newExpression = CreateTaskFromResultExpression(expression, semanticModel, cancellationToken);
+
+            return await document.ReplaceNodeAsync(expression, newExpression, cancellationToken).ConfigureAwait(false);
+        }
+
+        private static InvocationExpressionSyntax CreateTaskFromResultExpression(
+            ExpressionSyntax expression,
+            SemanticModel semanticModel,
+            CancellationToken cancellationToken)
+        {
             var typeSymbol = (INamedTypeSymbol)semanticModel.GetTypeInfo(expression, cancellationToken).ConvertedType;
 
             int position = expression.SpanStart;
@@ -164,18 +161,6 @@ namespace Roslynator.CSharp.Refactorings
 
             ExpressionSyntax defaultValue = typeArgument.GetDefaultValueSyntax(type);
 
-            InvocationExpressionSyntax newExpression = CreateTaskFromResultExpression(expression, type, defaultValue, position, semanticModel);
-
-            return await document.ReplaceNodeAsync(expression, newExpression, cancellationToken).ConfigureAwait(false);
-        }
-
-        private static InvocationExpressionSyntax CreateTaskFromResultExpression(
-            ExpressionSyntax expression,
-            TypeSyntax type,
-            ExpressionSyntax defaultValue,
-            int position,
-            SemanticModel semanticModel)
-        {
             SimpleNameSyntax name;
 
             if (defaultValue.IsKind(
