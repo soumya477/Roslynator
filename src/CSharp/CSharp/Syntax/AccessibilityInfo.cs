@@ -372,6 +372,17 @@ namespace Roslynator.CSharp.Syntax
         }
 
         /// <summary>
+        /// Creates a new <see cref="AccessibilityInfo"/> with accessibility modifiers removed.
+        /// </summary>
+        /// <param name="newAccessibility"></param>
+        /// <param name="comparer"></param>
+        /// <returns></returns>
+        public AccessibilityInfo WithoutExplicitAccessibility()
+        {
+            return WithExplicitAccessibility(Accessibility.NotApplicable);
+        }
+
+        /// <summary>
         /// Creates a new <see cref="AccessibilityInfo"/> with accessibility modifiers updated.
         /// </summary>
         /// <param name="newAccessibility"></param>
@@ -393,7 +404,7 @@ namespace Roslynator.CSharp.Syntax
             if (accessibility.IsSingleTokenAccessibility()
                 && newAccessibility.IsSingleTokenAccessibility())
             {
-                int insertIndex = SyntaxInserter.GetInsertIndex(Modifiers, GetTokenKind(), comparer);
+                int insertIndex = ModifierList.GetInsertIndex(Modifiers, GetTokenKind(), comparer);
 
                 if (TokenIndex == insertIndex
                     || TokenIndex == insertIndex - 1)
@@ -408,14 +419,14 @@ namespace Roslynator.CSharp.Syntax
 
             if (accessibility != Accessibility.NotApplicable)
             {
-                declaration = Modifier.RemoveAt(declaration, Math.Max(TokenIndex, SecondTokenIndex));
+                declaration = ModifierList.RemoveAt(declaration, Math.Max(TokenIndex, SecondTokenIndex));
 
                 if (SecondTokenIndex != -1)
-                    declaration = Modifier.RemoveAt(declaration, Math.Min(TokenIndex, SecondTokenIndex));
+                    declaration = ModifierList.RemoveAt(declaration, Math.Min(TokenIndex, SecondTokenIndex));
             }
 
             if (newAccessibility != Accessibility.NotApplicable)
-                declaration = Modifier.Insert(declaration, newAccessibility, comparer);
+                declaration = ModifierList.Insert(declaration, newAccessibility, comparer);
 
             return SyntaxInfo.AccessibilityInfo(declaration);
 

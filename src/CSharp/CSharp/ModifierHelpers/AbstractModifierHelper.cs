@@ -23,7 +23,7 @@ namespace Roslynator.CSharp.ModifierHelpers
 
             SyntaxTokenList modifiers = GetModifiers(node);
 
-            int index = SyntaxInserter.GetInsertIndex(modifiers, kind, comparer);
+            int index = ModifierList.GetInsertIndex(modifiers, kind, comparer);
 
             return InsertModifier(node, modifiers, Token(kind), index);
         }
@@ -35,7 +35,7 @@ namespace Roslynator.CSharp.ModifierHelpers
 
             SyntaxTokenList modifiers = GetModifiers(node);
 
-            int index = SyntaxInserter.GetInsertIndex(modifiers, modifier, comparer);
+            int index = ModifierList.GetInsertIndex(modifiers, modifier, comparer);
 
             return InsertModifier(node, modifiers, modifier, index);
         }
@@ -211,22 +211,7 @@ namespace Roslynator.CSharp.ModifierHelpers
             return AddIfNotEmptyOrWhitespace(trivia, triviaToAdd2);
         }
 
-        public TNode RemoveAccessibility(TNode node)
-        {
-            SyntaxTokenList modifiers = GetModifiers(node);
-
-            for (int i = modifiers.Count - 1; i >= 0; i--)
-            {
-                SyntaxToken modifier = modifiers[i];
-
-                if (SyntaxFacts.IsAccessibilityModifier(modifier.Kind()))
-                    node = RemoveModifier(node, modifiers, modifier, i);
-            }
-
-            return node;
-        }
-
-        public TNode RemoveModifiers(TNode node)
+        public TNode RemoveAll(TNode node)
         {
             SyntaxTokenList modifiers = GetModifiers(node);
 
@@ -269,6 +254,21 @@ namespace Roslynator.CSharp.ModifierHelpers
             }
 
             return WithModifiers(node, default(SyntaxTokenList));
+        }
+
+        public TNode RemoveAll(TNode node, Func<SyntaxToken, bool> predicate)
+        {
+            SyntaxTokenList modifiers = GetModifiers(node);
+
+            for (int i = modifiers.Count - 1; i >= 0; i--)
+            {
+                SyntaxToken modifier = modifiers[i];
+
+                if (predicate(modifier))
+                    node = RemoveModifier(node, modifiers, modifier, i);
+            }
+
+            return node;
         }
     }
 }

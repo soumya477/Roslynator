@@ -10,13 +10,67 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace Roslynator.CSharp
 {
-    //TODO: ren ModifierList
     /// <summary>
     /// A set of static methods that allows manipulation with modifiers.
     /// </summary>
-    public static class Modifier
+    public static class ModifierList
     {
-        //TODO: mov
+        public static int GetInsertIndex(SyntaxTokenList tokens, SyntaxToken token, IComparer<SyntaxToken> comparer = null)
+        {
+            if (comparer == null)
+                comparer = ModifierComparer.Default;
+
+            int index = -1;
+
+            for (int i = tokens.Count - 1; i >= 0; i--)
+            {
+                int result = comparer.Compare(tokens[i], token);
+
+                if (result == 0)
+                {
+                    return i + 1;
+                }
+                else if (result < 0
+                    && index == -1)
+                {
+                    index = i + 1;
+                }
+            }
+
+            if (index == -1)
+                return 0;
+
+            return index;
+        }
+
+        public static int GetInsertIndex(SyntaxTokenList tokens, SyntaxKind kind, IComparer<SyntaxKind> comparer = null)
+        {
+            if (comparer == null)
+                comparer = ModifierKindComparer.Default;
+
+            int index = -1;
+
+            for (int i = tokens.Count - 1; i >= 0; i--)
+            {
+                int result = comparer.Compare(tokens[i].Kind(), kind);
+
+                if (result == 0)
+                {
+                    return i + 1;
+                }
+                else if (result < 0
+                    && index == -1)
+                {
+                    index = i + 1;
+                }
+            }
+
+            if (index == -1)
+                return 0;
+
+            return index;
+        }
+
         internal static SyntaxNode Insert(SyntaxNode node, Accessibility accessibility, IComparer<SyntaxKind> comparer = null)
         {
             switch (accessibility)
@@ -112,7 +166,7 @@ namespace Roslynator.CSharp
                     return (TNode)(SyntaxNode)Insert((IncompleteMemberSyntax)(SyntaxNode)node, kind, comparer);
             }
 
-            throw new ArgumentException($"'{node.Kind()}' does not have modifiers.", nameof(node));
+            throw new ArgumentException($"'{node.Kind()}' cannot have modifiers.", nameof(node));
         }
 
         /// <summary>
@@ -173,7 +227,7 @@ namespace Roslynator.CSharp
                     return (TNode)(SyntaxNode)Insert((IncompleteMemberSyntax)(SyntaxNode)node, modifier, comparer);
             }
 
-            throw new ArgumentException($"'{node.Kind()}' does not have modifiers.", nameof(node));
+            throw new ArgumentException($"'{node.Kind()}' cannot have modifiers.", nameof(node));
         }
 
         /// <summary>
@@ -233,7 +287,7 @@ namespace Roslynator.CSharp
                     return (TNode)(SyntaxNode)Remove((IncompleteMemberSyntax)(SyntaxNode)node, kind);
             }
 
-            throw new ArgumentException($"'{node.Kind()}' does not have modifiers.", nameof(node));
+            throw new ArgumentException($"'{node.Kind()}' cannot have modifiers.", nameof(node));
         }
 
         /// <summary>
@@ -293,7 +347,7 @@ namespace Roslynator.CSharp
                     return (TNode)(SyntaxNode)Remove((IncompleteMemberSyntax)(SyntaxNode)node, modifier);
             }
 
-            throw new ArgumentException($"'{node.Kind()}' does not have modifiers.", nameof(node));
+            throw new ArgumentException($"'{node.Kind()}' cannot have modifiers.", nameof(node));
         }
 
         /// <summary>
@@ -353,67 +407,67 @@ namespace Roslynator.CSharp
                     return (TNode)(SyntaxNode)RemoveAt((IncompleteMemberSyntax)(SyntaxNode)node, index);
             }
 
-            throw new ArgumentException($"'{node.Kind()}' does not have modifiers.", nameof(node));
+            throw new ArgumentException($"'{node.Kind()}' cannot have modifiers.", nameof(node));
         }
 
-        //TODO: RemoveExplicitAccessibility
         /// <summary>
         /// Creates a new node with accessibility modifiers removed.
         /// </summary>
         /// <typeparam name="TNode"></typeparam>
         /// <param name="node"></param>
+        /// <param name="predicate"></param>
         /// <returns></returns>
-        public static TNode RemoveAccessibility<TNode>(TNode node) where TNode : SyntaxNode
+        public static TNode RemoveAll<TNode>(TNode node, Func<SyntaxToken, bool> predicate) where TNode : SyntaxNode
         {
             switch (node.Kind())
             {
                 case SyntaxKind.ClassDeclaration:
-                    return (TNode)(SyntaxNode)RemoveAccessibility((ClassDeclarationSyntax)(SyntaxNode)node);
+                    return (TNode)(SyntaxNode)RemoveAll((ClassDeclarationSyntax)(SyntaxNode)node, predicate);
                 case SyntaxKind.ConstructorDeclaration:
-                    return (TNode)(SyntaxNode)RemoveAccessibility((ConstructorDeclarationSyntax)(SyntaxNode)node);
+                    return (TNode)(SyntaxNode)RemoveAll((ConstructorDeclarationSyntax)(SyntaxNode)node, predicate);
                 case SyntaxKind.ConversionOperatorDeclaration:
-                    return (TNode)(SyntaxNode)RemoveAccessibility((ConversionOperatorDeclarationSyntax)(SyntaxNode)node);
+                    return (TNode)(SyntaxNode)RemoveAll((ConversionOperatorDeclarationSyntax)(SyntaxNode)node, predicate);
                 case SyntaxKind.DelegateDeclaration:
-                    return (TNode)(SyntaxNode)RemoveAccessibility((DelegateDeclarationSyntax)(SyntaxNode)node);
+                    return (TNode)(SyntaxNode)RemoveAll((DelegateDeclarationSyntax)(SyntaxNode)node, predicate);
                 case SyntaxKind.DestructorDeclaration:
-                    return (TNode)(SyntaxNode)RemoveAccessibility((DestructorDeclarationSyntax)(SyntaxNode)node);
+                    return (TNode)(SyntaxNode)RemoveAll((DestructorDeclarationSyntax)(SyntaxNode)node, predicate);
                 case SyntaxKind.EnumDeclaration:
-                    return (TNode)(SyntaxNode)RemoveAccessibility((EnumDeclarationSyntax)(SyntaxNode)node);
+                    return (TNode)(SyntaxNode)RemoveAll((EnumDeclarationSyntax)(SyntaxNode)node, predicate);
                 case SyntaxKind.EventDeclaration:
-                    return (TNode)(SyntaxNode)RemoveAccessibility((EventDeclarationSyntax)(SyntaxNode)node);
+                    return (TNode)(SyntaxNode)RemoveAll((EventDeclarationSyntax)(SyntaxNode)node, predicate);
                 case SyntaxKind.EventFieldDeclaration:
-                    return (TNode)(SyntaxNode)RemoveAccessibility((EventFieldDeclarationSyntax)(SyntaxNode)node);
+                    return (TNode)(SyntaxNode)RemoveAll((EventFieldDeclarationSyntax)(SyntaxNode)node, predicate);
                 case SyntaxKind.FieldDeclaration:
-                    return (TNode)(SyntaxNode)RemoveAccessibility((FieldDeclarationSyntax)(SyntaxNode)node);
+                    return (TNode)(SyntaxNode)RemoveAll((FieldDeclarationSyntax)(SyntaxNode)node, predicate);
                 case SyntaxKind.IndexerDeclaration:
-                    return (TNode)(SyntaxNode)RemoveAccessibility((IndexerDeclarationSyntax)(SyntaxNode)node);
+                    return (TNode)(SyntaxNode)RemoveAll((IndexerDeclarationSyntax)(SyntaxNode)node, predicate);
                 case SyntaxKind.InterfaceDeclaration:
-                    return (TNode)(SyntaxNode)RemoveAccessibility((InterfaceDeclarationSyntax)(SyntaxNode)node);
+                    return (TNode)(SyntaxNode)RemoveAll((InterfaceDeclarationSyntax)(SyntaxNode)node, predicate);
                 case SyntaxKind.MethodDeclaration:
-                    return (TNode)(SyntaxNode)RemoveAccessibility((MethodDeclarationSyntax)(SyntaxNode)node);
+                    return (TNode)(SyntaxNode)RemoveAll((MethodDeclarationSyntax)(SyntaxNode)node, predicate);
                 case SyntaxKind.OperatorDeclaration:
-                    return (TNode)(SyntaxNode)RemoveAccessibility((OperatorDeclarationSyntax)(SyntaxNode)node);
+                    return (TNode)(SyntaxNode)RemoveAll((OperatorDeclarationSyntax)(SyntaxNode)node, predicate);
                 case SyntaxKind.PropertyDeclaration:
-                    return (TNode)(SyntaxNode)RemoveAccessibility((PropertyDeclarationSyntax)(SyntaxNode)node);
+                    return (TNode)(SyntaxNode)RemoveAll((PropertyDeclarationSyntax)(SyntaxNode)node, predicate);
                 case SyntaxKind.StructDeclaration:
-                    return (TNode)(SyntaxNode)RemoveAccessibility((StructDeclarationSyntax)(SyntaxNode)node);
+                    return (TNode)(SyntaxNode)RemoveAll((StructDeclarationSyntax)(SyntaxNode)node, predicate);
                 case SyntaxKind.GetAccessorDeclaration:
                 case SyntaxKind.SetAccessorDeclaration:
                 case SyntaxKind.AddAccessorDeclaration:
                 case SyntaxKind.RemoveAccessorDeclaration:
                 case SyntaxKind.UnknownAccessorDeclaration:
-                    return (TNode)(SyntaxNode)RemoveAccessibility((AccessorDeclarationSyntax)(SyntaxNode)node);
+                    return (TNode)(SyntaxNode)RemoveAll((AccessorDeclarationSyntax)(SyntaxNode)node, predicate);
                 case SyntaxKind.LocalDeclarationStatement:
-                    return (TNode)(SyntaxNode)RemoveAccessibility((LocalDeclarationStatementSyntax)(SyntaxNode)node);
+                    return (TNode)(SyntaxNode)RemoveAll((LocalDeclarationStatementSyntax)(SyntaxNode)node, predicate);
                 case SyntaxKind.LocalFunctionStatement:
-                    return (TNode)(SyntaxNode)RemoveAccessibility((LocalFunctionStatementSyntax)(SyntaxNode)node);
+                    return (TNode)(SyntaxNode)RemoveAll((LocalFunctionStatementSyntax)(SyntaxNode)node, predicate);
                 case SyntaxKind.Parameter:
-                    return (TNode)(SyntaxNode)RemoveAccessibility((ParameterSyntax)(SyntaxNode)node);
+                    return (TNode)(SyntaxNode)RemoveAll((ParameterSyntax)(SyntaxNode)node, predicate);
                 case SyntaxKind.IncompleteMember:
-                    return (TNode)(SyntaxNode)RemoveAccessibility((IncompleteMemberSyntax)(SyntaxNode)node);
+                    return (TNode)(SyntaxNode)RemoveAll((IncompleteMemberSyntax)(SyntaxNode)node, predicate);
             }
 
-            throw new ArgumentException($"'{node.Kind()}' does not have modifiers.", nameof(node));
+            throw new ArgumentException($"'{node.Kind()}' cannot have modifiers.", nameof(node));
         }
 
         /// <summary>
@@ -472,7 +526,7 @@ namespace Roslynator.CSharp
                     return (TNode)(SyntaxNode)RemoveAll((IncompleteMemberSyntax)(SyntaxNode)node);
             }
 
-            throw new ArgumentException($"'{node.Kind()}' does not have modifiers.", nameof(node));
+            throw new ArgumentException($"'{node.Kind()}' cannot have modifiers.", nameof(node));
         }
 
         /// <summary>
@@ -967,7 +1021,7 @@ namespace Roslynator.CSharp
             if (!modifiers.Any())
                 return modifiers.Add(Token(kind));
 
-            return Insert(modifiers, Token(kind), SyntaxInserter.GetInsertIndex(modifiers, kind, comparer));
+            return Insert(modifiers, Token(kind), GetInsertIndex(modifiers, kind, comparer));
         }
 
         /// <summary>
@@ -982,7 +1036,7 @@ namespace Roslynator.CSharp
             if (!modifiers.Any())
                 return modifiers.Add(modifier);
 
-            return Insert(modifiers, modifier, SyntaxInserter.GetInsertIndex(modifiers, modifier, comparer));
+            return Insert(modifiers, modifier, GetInsertIndex(modifiers, modifier, comparer));
         }
 
         private static SyntaxTokenList Insert(SyntaxTokenList modifiers, SyntaxToken modifier, int index)
@@ -1673,200 +1727,220 @@ namespace Roslynator.CSharp
         /// Creates a new declaration with accessibility modifiers removed.
         /// </summary>
         /// <param name="classDeclaration"></param>
+        /// <param name="predicate"></param>
         /// <returns></returns>
-        public static ClassDeclarationSyntax RemoveAccessibility(ClassDeclarationSyntax classDeclaration)
+        public static ClassDeclarationSyntax RemoveAll(ClassDeclarationSyntax classDeclaration, Func<SyntaxToken, bool> predicate)
         {
-            return ClassDeclarationModifierHelper.Instance.RemoveAccessibility(classDeclaration);
+            return ClassDeclarationModifierHelper.Instance.RemoveAll(classDeclaration, predicate);
         }
 
         /// <summary>
         /// Creates a new declaration with accessibility modifiers removed.
         /// </summary>
         /// <param name="constructorDeclaration"></param>
+        /// <param name="predicate"></param>
         /// <returns></returns>
-        public static ConstructorDeclarationSyntax RemoveAccessibility(ConstructorDeclarationSyntax constructorDeclaration)
+        public static ConstructorDeclarationSyntax RemoveAll(ConstructorDeclarationSyntax constructorDeclaration, Func<SyntaxToken, bool> predicate)
         {
-            return ConstructorDeclarationModifierHelper.Instance.RemoveAccessibility(constructorDeclaration);
+            return ConstructorDeclarationModifierHelper.Instance.RemoveAll(constructorDeclaration, predicate);
         }
 
         /// <summary>
         /// Creates a new declaration with accessibility modifiers removed.
         /// </summary>
         /// <param name="conversionOperatorDeclaration"></param>
+        /// <param name="predicate"></param>
         /// <returns></returns>
-        public static ConversionOperatorDeclarationSyntax RemoveAccessibility(ConversionOperatorDeclarationSyntax conversionOperatorDeclaration)
+        public static ConversionOperatorDeclarationSyntax RemoveAll(ConversionOperatorDeclarationSyntax conversionOperatorDeclaration, Func<SyntaxToken, bool> predicate)
         {
-            return ConversionOperatorDeclarationModifierHelper.Instance.RemoveAccessibility(conversionOperatorDeclaration);
+            return ConversionOperatorDeclarationModifierHelper.Instance.RemoveAll(conversionOperatorDeclaration, predicate);
         }
 
         /// <summary>
         /// Creates a new declaration with accessibility modifiers removed.
         /// </summary>
         /// <param name="delegateDeclaration"></param>
+        /// <param name="predicate"></param>
         /// <returns></returns>
-        public static DelegateDeclarationSyntax RemoveAccessibility(DelegateDeclarationSyntax delegateDeclaration)
+        public static DelegateDeclarationSyntax RemoveAll(DelegateDeclarationSyntax delegateDeclaration, Func<SyntaxToken, bool> predicate)
         {
-            return DelegateDeclarationModifierHelper.Instance.RemoveAccessibility(delegateDeclaration);
+            return DelegateDeclarationModifierHelper.Instance.RemoveAll(delegateDeclaration, predicate);
         }
 
         /// <summary>
         /// Creates a new declaration with accessibility modifiers removed.
         /// </summary>
         /// <param name="destructorDeclaration"></param>
+        /// <param name="predicate"></param>
         /// <returns></returns>
-        public static DestructorDeclarationSyntax RemoveAccessibility(DestructorDeclarationSyntax destructorDeclaration)
+        public static DestructorDeclarationSyntax RemoveAll(DestructorDeclarationSyntax destructorDeclaration, Func<SyntaxToken, bool> predicate)
         {
-            return DestructorDeclarationModifierHelper.Instance.RemoveAccessibility(destructorDeclaration);
+            return DestructorDeclarationModifierHelper.Instance.RemoveAll(destructorDeclaration, predicate);
         }
 
         /// <summary>
         /// Creates a new declaration with accessibility modifiers removed.
         /// </summary>
         /// <param name="enumDeclaration"></param>
+        /// <param name="predicate"></param>
         /// <returns></returns>
-        public static EnumDeclarationSyntax RemoveAccessibility(EnumDeclarationSyntax enumDeclaration)
+        public static EnumDeclarationSyntax RemoveAll(EnumDeclarationSyntax enumDeclaration, Func<SyntaxToken, bool> predicate)
         {
-            return EnumDeclarationModifierHelper.Instance.RemoveAccessibility(enumDeclaration);
+            return EnumDeclarationModifierHelper.Instance.RemoveAll(enumDeclaration, predicate);
         }
 
         /// <summary>
         /// Creates a new declaration with accessibility modifiers removed.
         /// </summary>
         /// <param name="eventDeclaration"></param>
+        /// <param name="predicate"></param>
         /// <returns></returns>
-        public static EventDeclarationSyntax RemoveAccessibility(EventDeclarationSyntax eventDeclaration)
+        public static EventDeclarationSyntax RemoveAll(EventDeclarationSyntax eventDeclaration, Func<SyntaxToken, bool> predicate)
         {
-            return EventDeclarationModifierHelper.Instance.RemoveAccessibility(eventDeclaration);
+            return EventDeclarationModifierHelper.Instance.RemoveAll(eventDeclaration, predicate);
         }
 
         /// <summary>
         /// Creates a new declaration with accessibility modifiers removed.
         /// </summary>
         /// <param name="eventFieldDeclaration"></param>
+        /// <param name="predicate"></param>
         /// <returns></returns>
-        public static EventFieldDeclarationSyntax RemoveAccessibility(EventFieldDeclarationSyntax eventFieldDeclaration)
+        public static EventFieldDeclarationSyntax RemoveAll(EventFieldDeclarationSyntax eventFieldDeclaration, Func<SyntaxToken, bool> predicate)
         {
-            return EventFieldDeclarationModifierHelper.Instance.RemoveAccessibility(eventFieldDeclaration);
+            return EventFieldDeclarationModifierHelper.Instance.RemoveAll(eventFieldDeclaration, predicate);
         }
 
         /// <summary>
         /// Creates a new declaration with accessibility modifiers removed.
         /// </summary>
         /// <param name="fieldDeclaration"></param>
+        /// <param name="predicate"></param>
         /// <returns></returns>
-        public static FieldDeclarationSyntax RemoveAccessibility(FieldDeclarationSyntax fieldDeclaration)
+        public static FieldDeclarationSyntax RemoveAll(FieldDeclarationSyntax fieldDeclaration, Func<SyntaxToken, bool> predicate)
         {
-            return FieldDeclarationModifierHelper.Instance.RemoveAccessibility(fieldDeclaration);
+            return FieldDeclarationModifierHelper.Instance.RemoveAll(fieldDeclaration, predicate);
         }
 
         /// <summary>
         /// Creates a new declaration with accessibility modifiers removed.
         /// </summary>
         /// <param name="indexerDeclaration"></param>
+        /// <param name="predicate"></param>
         /// <returns></returns>
-        public static IndexerDeclarationSyntax RemoveAccessibility(IndexerDeclarationSyntax indexerDeclaration)
+        public static IndexerDeclarationSyntax RemoveAll(IndexerDeclarationSyntax indexerDeclaration, Func<SyntaxToken, bool> predicate)
         {
-            return IndexerDeclarationModifierHelper.Instance.RemoveAccessibility(indexerDeclaration);
+            return IndexerDeclarationModifierHelper.Instance.RemoveAll(indexerDeclaration, predicate);
         }
 
         /// <summary>
         /// Creates a new declaration with accessibility modifiers removed.
         /// </summary>
         /// <param name="interfaceDeclaration"></param>
+        /// <param name="predicate"></param>
         /// <returns></returns>
-        public static InterfaceDeclarationSyntax RemoveAccessibility(InterfaceDeclarationSyntax interfaceDeclaration)
+        public static InterfaceDeclarationSyntax RemoveAll(InterfaceDeclarationSyntax interfaceDeclaration, Func<SyntaxToken, bool> predicate)
         {
-            return InterfaceDeclarationModifierHelper.Instance.RemoveAccessibility(interfaceDeclaration);
+            return InterfaceDeclarationModifierHelper.Instance.RemoveAll(interfaceDeclaration, predicate);
         }
 
         /// <summary>
         /// Creates a new declaration with accessibility modifiers removed.
         /// </summary>
         /// <param name="methodDeclaration"></param>
+        /// <param name="predicate"></param>
         /// <returns></returns>
-        public static MethodDeclarationSyntax RemoveAccessibility(MethodDeclarationSyntax methodDeclaration)
+        public static MethodDeclarationSyntax RemoveAll(MethodDeclarationSyntax methodDeclaration, Func<SyntaxToken, bool> predicate)
         {
-            return MethodDeclarationModifierHelper.Instance.RemoveAccessibility(methodDeclaration);
+            return MethodDeclarationModifierHelper.Instance.RemoveAll(methodDeclaration, predicate);
         }
 
         /// <summary>
         /// Creates a new declaration with accessibility modifiers removed.
         /// </summary>
         /// <param name="operatorDeclaration"></param>
+        /// <param name="predicate"></param>
         /// <returns></returns>
-        public static OperatorDeclarationSyntax RemoveAccessibility(OperatorDeclarationSyntax operatorDeclaration)
+        public static OperatorDeclarationSyntax RemoveAll(OperatorDeclarationSyntax operatorDeclaration, Func<SyntaxToken, bool> predicate)
         {
-            return OperatorDeclarationModifierHelper.Instance.RemoveAccessibility(operatorDeclaration);
+            return OperatorDeclarationModifierHelper.Instance.RemoveAll(operatorDeclaration, predicate);
         }
 
         /// <summary>
         /// Creates a new declaration with accessibility modifiers removed.
         /// </summary>
         /// <param name="propertyDeclaration"></param>
+        /// <param name="predicate"></param>
         /// <returns></returns>
-        public static PropertyDeclarationSyntax RemoveAccessibility(PropertyDeclarationSyntax propertyDeclaration)
+        public static PropertyDeclarationSyntax RemoveAll(PropertyDeclarationSyntax propertyDeclaration, Func<SyntaxToken, bool> predicate)
         {
-            return PropertyDeclarationModifierHelper.Instance.RemoveAccessibility(propertyDeclaration);
+            return PropertyDeclarationModifierHelper.Instance.RemoveAll(propertyDeclaration, predicate);
         }
 
         /// <summary>
         /// Creates a new declaration with accessibility modifiers removed.
         /// </summary>
         /// <param name="structDeclaration"></param>
+        /// <param name="predicate"></param>
         /// <returns></returns>
-        public static StructDeclarationSyntax RemoveAccessibility(StructDeclarationSyntax structDeclaration)
+        public static StructDeclarationSyntax RemoveAll(StructDeclarationSyntax structDeclaration, Func<SyntaxToken, bool> predicate)
         {
-            return StructDeclarationModifierHelper.Instance.RemoveAccessibility(structDeclaration);
+            return StructDeclarationModifierHelper.Instance.RemoveAll(structDeclaration, predicate);
         }
 
         /// <summary>
         /// Creates a new declaration with accessibility modifiers removed.
         /// </summary>
         /// <param name="accessorDeclaration"></param>
+        /// <param name="predicate"></param>
         /// <returns></returns>
-        public static AccessorDeclarationSyntax RemoveAccessibility(AccessorDeclarationSyntax accessorDeclaration)
+        public static AccessorDeclarationSyntax RemoveAll(AccessorDeclarationSyntax accessorDeclaration, Func<SyntaxToken, bool> predicate)
         {
-            return AccessorDeclarationModifierHelper.Instance.RemoveAccessibility(accessorDeclaration);
+            return AccessorDeclarationModifierHelper.Instance.RemoveAll(accessorDeclaration, predicate);
         }
 
         /// <summary>
         /// Creates a new declaration with accessibility modifiers removed.
         /// </summary>
         /// <param name="localDeclaration"></param>
+        /// <param name="predicate"></param>
         /// <returns></returns>
-        public static LocalDeclarationStatementSyntax RemoveAccessibility(LocalDeclarationStatementSyntax localDeclaration)
+        public static LocalDeclarationStatementSyntax RemoveAll(LocalDeclarationStatementSyntax localDeclaration, Func<SyntaxToken, bool> predicate)
         {
-            return LocalDeclarationStatementModifierHelper.Instance.RemoveAccessibility(localDeclaration);
+            return LocalDeclarationStatementModifierHelper.Instance.RemoveAll(localDeclaration, predicate);
         }
 
         /// <summary>
         /// Creates a new local function with accessibility modifiers removed.
         /// </summary>
         /// <param name="localFunction"></param>
+        /// <param name="predicate"></param>
         /// <returns></returns>
-        public static LocalFunctionStatementSyntax RemoveAccessibility(LocalFunctionStatementSyntax localFunction)
+        public static LocalFunctionStatementSyntax RemoveAll(LocalFunctionStatementSyntax localFunction, Func<SyntaxToken, bool> predicate)
         {
-            return LocalFunctionStatementModifierHelper.Instance.RemoveAccessibility(localFunction);
+            return LocalFunctionStatementModifierHelper.Instance.RemoveAll(localFunction, predicate);
         }
 
         /// <summary>
         /// Creates a new parameter with accessibility modifiers removed.
         /// </summary>
         /// <param name="parameter"></param>
+        /// <param name="predicate"></param>
         /// <returns></returns>
-        public static ParameterSyntax RemoveAccessibility(ParameterSyntax parameter)
+        public static ParameterSyntax RemoveAll(ParameterSyntax parameter, Func<SyntaxToken, bool> predicate)
         {
-            return ParameterModifierHelper.Instance.RemoveAccessibility(parameter);
+            return ParameterModifierHelper.Instance.RemoveAll(parameter, predicate);
         }
 
         /// <summary>
         /// Creates a new incomplete member with accessibility modifiers removed.
         /// </summary>
         /// <param name="incompleteMember"></param>
+        /// <param name="predicate"></param>
         /// <returns></returns>
-        public static IncompleteMemberSyntax RemoveAccessibility(IncompleteMemberSyntax incompleteMember)
+        public static IncompleteMemberSyntax RemoveAll(IncompleteMemberSyntax incompleteMember, Func<SyntaxToken, bool> predicate)
         {
-            return IncompleteMemberModifierHelper.Instance.RemoveAccessibility(incompleteMember);
+            return IncompleteMemberModifierHelper.Instance.RemoveAll(incompleteMember, predicate);
         }
 
         /// <summary>
@@ -1876,7 +1950,7 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         public static ClassDeclarationSyntax RemoveAll(ClassDeclarationSyntax classDeclaration)
         {
-            return ClassDeclarationModifierHelper.Instance.RemoveModifiers(classDeclaration);
+            return ClassDeclarationModifierHelper.Instance.RemoveAll(classDeclaration);
         }
 
         /// <summary>
@@ -1886,7 +1960,7 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         public static ConstructorDeclarationSyntax RemoveAll(ConstructorDeclarationSyntax constructorDeclaration)
         {
-            return ConstructorDeclarationModifierHelper.Instance.RemoveModifiers(constructorDeclaration);
+            return ConstructorDeclarationModifierHelper.Instance.RemoveAll(constructorDeclaration);
         }
 
         /// <summary>
@@ -1896,7 +1970,7 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         public static ConversionOperatorDeclarationSyntax RemoveAll(ConversionOperatorDeclarationSyntax conversionOperatorDeclaration)
         {
-            return ConversionOperatorDeclarationModifierHelper.Instance.RemoveModifiers(conversionOperatorDeclaration);
+            return ConversionOperatorDeclarationModifierHelper.Instance.RemoveAll(conversionOperatorDeclaration);
         }
 
         /// <summary>
@@ -1906,7 +1980,7 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         public static DelegateDeclarationSyntax RemoveAll(DelegateDeclarationSyntax delegateDeclaration)
         {
-            return DelegateDeclarationModifierHelper.Instance.RemoveModifiers(delegateDeclaration);
+            return DelegateDeclarationModifierHelper.Instance.RemoveAll(delegateDeclaration);
         }
 
         /// <summary>
@@ -1916,7 +1990,7 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         public static DestructorDeclarationSyntax RemoveAll(DestructorDeclarationSyntax destructorDeclaration)
         {
-            return DestructorDeclarationModifierHelper.Instance.RemoveModifiers(destructorDeclaration);
+            return DestructorDeclarationModifierHelper.Instance.RemoveAll(destructorDeclaration);
         }
 
         /// <summary>
@@ -1926,7 +2000,7 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         public static EnumDeclarationSyntax RemoveAll(EnumDeclarationSyntax enumDeclaration)
         {
-            return EnumDeclarationModifierHelper.Instance.RemoveModifiers(enumDeclaration);
+            return EnumDeclarationModifierHelper.Instance.RemoveAll(enumDeclaration);
         }
 
         /// <summary>
@@ -1936,7 +2010,7 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         public static EventDeclarationSyntax RemoveAll(EventDeclarationSyntax eventDeclaration)
         {
-            return EventDeclarationModifierHelper.Instance.RemoveModifiers(eventDeclaration);
+            return EventDeclarationModifierHelper.Instance.RemoveAll(eventDeclaration);
         }
 
         /// <summary>
@@ -1946,7 +2020,7 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         public static EventFieldDeclarationSyntax RemoveAll(EventFieldDeclarationSyntax eventFieldDeclaration)
         {
-            return EventFieldDeclarationModifierHelper.Instance.RemoveModifiers(eventFieldDeclaration);
+            return EventFieldDeclarationModifierHelper.Instance.RemoveAll(eventFieldDeclaration);
         }
 
         /// <summary>
@@ -1956,7 +2030,7 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         public static FieldDeclarationSyntax RemoveAll(FieldDeclarationSyntax fieldDeclaration)
         {
-            return FieldDeclarationModifierHelper.Instance.RemoveModifiers(fieldDeclaration);
+            return FieldDeclarationModifierHelper.Instance.RemoveAll(fieldDeclaration);
         }
 
         /// <summary>
@@ -1966,7 +2040,7 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         public static IndexerDeclarationSyntax RemoveAll(IndexerDeclarationSyntax indexerDeclaration)
         {
-            return IndexerDeclarationModifierHelper.Instance.RemoveModifiers(indexerDeclaration);
+            return IndexerDeclarationModifierHelper.Instance.RemoveAll(indexerDeclaration);
         }
 
         /// <summary>
@@ -1976,7 +2050,7 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         public static InterfaceDeclarationSyntax RemoveAll(InterfaceDeclarationSyntax interfaceDeclaration)
         {
-            return InterfaceDeclarationModifierHelper.Instance.RemoveModifiers(interfaceDeclaration);
+            return InterfaceDeclarationModifierHelper.Instance.RemoveAll(interfaceDeclaration);
         }
 
         /// <summary>
@@ -1986,7 +2060,7 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         public static MethodDeclarationSyntax RemoveAll(MethodDeclarationSyntax methodDeclaration)
         {
-            return MethodDeclarationModifierHelper.Instance.RemoveModifiers(methodDeclaration);
+            return MethodDeclarationModifierHelper.Instance.RemoveAll(methodDeclaration);
         }
 
         /// <summary>
@@ -1996,7 +2070,7 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         public static OperatorDeclarationSyntax RemoveAll(OperatorDeclarationSyntax operatorDeclaration)
         {
-            return OperatorDeclarationModifierHelper.Instance.RemoveModifiers(operatorDeclaration);
+            return OperatorDeclarationModifierHelper.Instance.RemoveAll(operatorDeclaration);
         }
 
         /// <summary>
@@ -2006,7 +2080,7 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         public static PropertyDeclarationSyntax RemoveAll(PropertyDeclarationSyntax propertyDeclaration)
         {
-            return PropertyDeclarationModifierHelper.Instance.RemoveModifiers(propertyDeclaration);
+            return PropertyDeclarationModifierHelper.Instance.RemoveAll(propertyDeclaration);
         }
 
         /// <summary>
@@ -2016,7 +2090,7 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         public static StructDeclarationSyntax RemoveAll(StructDeclarationSyntax structDeclaration)
         {
-            return StructDeclarationModifierHelper.Instance.RemoveModifiers(structDeclaration);
+            return StructDeclarationModifierHelper.Instance.RemoveAll(structDeclaration);
         }
 
         /// <summary>
@@ -2026,7 +2100,7 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         public static AccessorDeclarationSyntax RemoveAll(AccessorDeclarationSyntax accessorDeclaration)
         {
-            return AccessorDeclarationModifierHelper.Instance.RemoveModifiers(accessorDeclaration);
+            return AccessorDeclarationModifierHelper.Instance.RemoveAll(accessorDeclaration);
         }
 
         /// <summary>
@@ -2036,7 +2110,7 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         public static LocalDeclarationStatementSyntax RemoveAll(LocalDeclarationStatementSyntax localDeclaration)
         {
-            return LocalDeclarationStatementModifierHelper.Instance.RemoveModifiers(localDeclaration);
+            return LocalDeclarationStatementModifierHelper.Instance.RemoveAll(localDeclaration);
         }
 
         /// <summary>
@@ -2046,7 +2120,7 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         public static LocalFunctionStatementSyntax RemoveAll(LocalFunctionStatementSyntax localFunction)
         {
-            return LocalFunctionStatementModifierHelper.Instance.RemoveModifiers(localFunction);
+            return LocalFunctionStatementModifierHelper.Instance.RemoveAll(localFunction);
         }
 
         /// <summary>
@@ -2056,7 +2130,7 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         public static ParameterSyntax RemoveAll(ParameterSyntax parameter)
         {
-            return ParameterModifierHelper.Instance.RemoveModifiers(parameter);
+            return ParameterModifierHelper.Instance.RemoveAll(parameter);
         }
 
         /// <summary>
@@ -2066,7 +2140,7 @@ namespace Roslynator.CSharp
         /// <returns></returns>
         public static IncompleteMemberSyntax RemoveAll(IncompleteMemberSyntax incompleteMember)
         {
-            return IncompleteMemberModifierHelper.Instance.RemoveModifiers(incompleteMember);
+            return IncompleteMemberModifierHelper.Instance.RemoveAll(incompleteMember);
         }
     }
 }
