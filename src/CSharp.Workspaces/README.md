@@ -12,3 +12,5 @@
 
 * WorkspaceExtensions
 * WorkspaceSyntaxExtensions
+
+*\(Generated with [DotMarkdown](http://github.com/JosefPihrt/DotMarkdown)\)*

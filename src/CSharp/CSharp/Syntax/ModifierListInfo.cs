@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace Roslynator.CSharp.Syntax
 {
     /// <summary>
-    /// Provides information about modifiers.
+    /// Provides information about modifier list.
     /// </summary>
     public readonly struct ModifierListInfo : IEquatable<ModifierListInfo>
     {

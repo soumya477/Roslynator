@@ -23,30 +23,6 @@ namespace Roslynator.CSharp
             return ModifierKindComparer.Default.GetRank(token.Kind());
         }
 
-        public static int GetInsertIndex(SyntaxTokenList tokens, SyntaxToken token, IComparer<SyntaxToken> comparer)
-        {
-            if (comparer == null)
-                comparer = Default;
-
-            int index = tokens.Count;
-
-            for (int i = index - 1; i >= 0; i--)
-            {
-                int result = comparer.Compare(tokens[i], token);
-
-                if (result == 0)
-                {
-                    return i + 1;
-                }
-                else if (result > 0)
-                {
-                    index = i;
-                }
-            }
-
-            return index;
-        }
-
         private sealed class ByKindModifierComparer : ModifierComparer
         {
             public override int Compare(SyntaxToken x, SyntaxToken y)
