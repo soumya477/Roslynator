@@ -58,7 +58,7 @@ namespace Roslynator.CSharp.Refactorings
 
             SyntaxList<MemberDeclarationSyntax> newMembers = members.ReplaceAt(index, newContainingMember);
 
-            newMembers = newMembers.Insert(field);
+            newMembers = MemberDeclarationInserter.Default.Insert(newMembers, field);
 
             MemberDeclarationSyntax newNode = containingType.WithMembers(newMembers);
 

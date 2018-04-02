@@ -1429,6 +1429,20 @@ namespace Roslynator.CSharp
             return false;
         }
 
+        //TODO: WithoutExplicitAccessibility
+        /// <summary>
+        /// Creates a new node with the explicit accessibility removed.
+        /// </summary>
+        /// <typeparam name="TNode"></typeparam>
+        /// <param name="node"></param>
+        /// <param name="newAccessibility"></param>
+        /// <param name="comparer"></param>
+        /// <returns></returns>
+        public static TNode WithoutExplicitAccessibility<TNode>(TNode node) where TNode : SyntaxNode
+        {
+            return WithExplicitAccessibility(node, Accessibility.NotApplicable);
+        }
+
         /// <summary>
         /// Creates a new node with the specified explicit accessibility updated.
         /// </summary>

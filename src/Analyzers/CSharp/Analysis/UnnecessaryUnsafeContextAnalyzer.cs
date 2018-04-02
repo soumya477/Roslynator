@@ -242,7 +242,7 @@ namespace Roslynator.CSharp.Analysis
 
             if (node is MemberDeclarationSyntax memberDeclaration)
             {
-                if (SyntaxInfo.ModifierListInfo(memberDeclaration).Modifiers.Contains(SyntaxKind.UnsafeKeyword))
+                if (SyntaxInfo.ModifierListInfo(memberDeclaration).IsUnsafe)
                     return true;
 
                 return ParentTypeDeclarationsContainsUnsafeModifier(memberDeclaration);

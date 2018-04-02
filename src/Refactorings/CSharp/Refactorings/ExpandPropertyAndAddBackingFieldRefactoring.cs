@@ -61,9 +61,9 @@ namespace Roslynator.CSharp.Refactorings
                 members = newInfo.Members;
             }
 
-            SyntaxList<MemberDeclarationSyntax> newMembers = members
-                .ReplaceAt(propertyIndex, newPropertyDeclaration)
-                .Insert(fieldDeclaration);
+            SyntaxList<MemberDeclarationSyntax> newMembers = members.ReplaceAt(propertyIndex, newPropertyDeclaration);
+
+            newMembers = MemberDeclarationInserter.Default.Insert(newMembers, fieldDeclaration);
 
             return await document.ReplaceMembersAsync(info, newMembers, cancellationToken).ConfigureAwait(false);
         }
