@@ -20,6 +20,16 @@ namespace Roslynator.CSharp.CodeFixes.Tests
             {
                 return 0;
             }
+
+            internal implicit operator uint(Foo foo)
+            {
+                return 0;
+            }
+
+            internal static implicit operator ulong(Foo foo)
+            {
+                return 0;
+            }
         }
     }
 }

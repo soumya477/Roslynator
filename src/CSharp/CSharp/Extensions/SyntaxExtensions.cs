@@ -238,35 +238,6 @@ namespace Roslynator.CSharp
                 classDeclaration.OpenBraceToken.SpanStart,
                 classDeclaration.CloseBraceToken.Span.End);
         }
-
-        /// <summary>
-        /// Creates a new <see cref="ClassDeclarationSyntax"/> with the specified member removed.
-        /// </summary>
-        /// <param name="classDeclaration"></param>
-        /// <param name="member"></param>
-        /// <returns></returns>
-        public static ClassDeclarationSyntax RemoveMember(this ClassDeclarationSyntax classDeclaration, MemberDeclarationSyntax member)
-        {
-            return SyntaxRemover.RemoveMember(classDeclaration, member);
-        }
-
-        /// <summary>
-        /// Creates a new <see cref="ClassDeclarationSyntax"/> with the specified member inserted.
-        /// </summary>
-        /// <param name="classDeclaration"></param>
-        /// <param name="member"></param>
-        /// <param name="comparer"></param>
-        /// <returns></returns>
-        public static ClassDeclarationSyntax InsertMember(this ClassDeclarationSyntax classDeclaration, MemberDeclarationSyntax member, IComparer<MemberDeclarationSyntax> comparer = null)
-        {
-            if (classDeclaration == null)
-                throw new ArgumentNullException(nameof(classDeclaration));
-
-            if (member == null)
-                throw new ArgumentNullException(nameof(member));
-
-            return classDeclaration.WithMembers(classDeclaration.Members.Insert(member, comparer));
-        }
         #endregion ClassDeclarationSyntax
 
         #region CommonForEachStatementSyntax
@@ -383,35 +354,6 @@ namespace Roslynator.CSharp
             }
 
             return compilationUnit.AddUsings(usings);
-        }
-
-        /// <summary>
-        /// Creates a new <see cref="CompilationUnitSyntax"/> with the specified member removed.
-        /// </summary>
-        /// <param name="compilationUnit"></param>
-        /// <param name="member"></param>
-        /// <returns></returns>
-        public static CompilationUnitSyntax RemoveMember(this CompilationUnitSyntax compilationUnit, MemberDeclarationSyntax member)
-        {
-            return SyntaxRemover.RemoveMember(compilationUnit, member);
-        }
-
-        /// <summary>
-        /// Creates a new <see cref="CompilationUnitSyntax"/> with the specified member inserted.
-        /// </summary>
-        /// <param name="compilationUnit"></param>
-        /// <param name="member"></param>
-        /// <param name="comparer"></param>
-        /// <returns></returns>
-        public static CompilationUnitSyntax InsertMember(this CompilationUnitSyntax compilationUnit, MemberDeclarationSyntax member, IComparer<MemberDeclarationSyntax> comparer = null)
-        {
-            if (compilationUnit == null)
-                throw new ArgumentNullException(nameof(compilationUnit));
-
-            if (member == null)
-                throw new ArgumentNullException(nameof(member));
-
-            return compilationUnit.WithMembers(compilationUnit.Members.Insert(member, comparer));
         }
         #endregion CompilationUnitSyntax
 
@@ -944,35 +886,6 @@ namespace Roslynator.CSharp
         }
 
         /// <summary>
-        /// Creates a new <see cref="InterfaceDeclarationSyntax"/> with the specified member removed.
-        /// </summary>
-        /// <param name="interfaceDeclaration"></param>
-        /// <param name="member"></param>
-        /// <returns></returns>
-        public static InterfaceDeclarationSyntax RemoveMember(this InterfaceDeclarationSyntax interfaceDeclaration, MemberDeclarationSyntax member)
-        {
-            return SyntaxRemover.RemoveMember(interfaceDeclaration, member);
-        }
-
-        /// <summary>
-        /// Creates a new <see cref="InterfaceDeclarationSyntax"/> with the specified member inserted.
-        /// </summary>
-        /// <param name="interfaceDeclaration"></param>
-        /// <param name="member"></param>
-        /// <param name="comparer"></param>
-        /// <returns></returns>
-        public static InterfaceDeclarationSyntax InsertMember(this InterfaceDeclarationSyntax interfaceDeclaration, MemberDeclarationSyntax member, IComparer<MemberDeclarationSyntax> comparer = null)
-        {
-            if (interfaceDeclaration == null)
-                throw new ArgumentNullException(nameof(interfaceDeclaration));
-
-            if (member == null)
-                throw new ArgumentNullException(nameof(member));
-
-            return interfaceDeclaration.WithMembers(interfaceDeclaration.Members.Insert(member, comparer));
-        }
-
-        /// <summary>
         /// Creates a new <see cref="InterfaceDeclarationSyntax"/> with the members updated.
         /// </summary>
         /// <param name="interfaceDeclaration"></param>
@@ -1246,15 +1159,15 @@ namespace Roslynator.CSharp
             if (member == null)
                 throw new ArgumentNullException(nameof(member));
 
-            DocumentationCommentInserter comparer = DocumentationCommentInserter.Create(member);
+            DocumentationCommentInserter inserter = DocumentationCommentInserter.Create(member);
 
             settings = settings ?? DocumentationCommentGeneratorSettings.Default;
 
-            settings = settings.WithIndentation(comparer.Indent);
+            settings = settings.WithIndentation(inserter.Indent);
 
             SyntaxTriviaList comment = DocumentationCommentGenerator.Generate(member, settings);
 
-            SyntaxTriviaList newLeadingTrivia = comparer.InsertRange(comment);
+            SyntaxTriviaList newLeadingTrivia = inserter.InsertRange(comment);
 
             return member.WithLeadingTrivia(newLeadingTrivia);
         }
@@ -1287,9 +1200,9 @@ namespace Roslynator.CSharp
             if (member == null)
                 throw new ArgumentNullException(nameof(member));
 
-            DocumentationCommentInserter comparer = DocumentationCommentInserter.Create(member);
+            DocumentationCommentInserter inserter = DocumentationCommentInserter.Create(member);
 
-            SyntaxTriviaList newLeadingTrivia = comparer.Insert(comment, indent: indent);
+            SyntaxTriviaList newLeadingTrivia = inserter.Insert(comment, indent: indent);
 
             return member.WithLeadingTrivia(newLeadingTrivia);
         }
@@ -1344,35 +1257,6 @@ namespace Roslynator.CSharp
         #endregion MethodDeclarationSyntax
 
         #region NamespaceDeclarationSyntax
-        /// <summary>
-        /// Creates a new <see cref="NamespaceDeclarationSyntax"/> with the specified member removed.
-        /// </summary>
-        /// <param name="namespaceDeclaration"></param>
-        /// <param name="member"></param>
-        /// <returns></returns>
-        public static NamespaceDeclarationSyntax RemoveMember(this NamespaceDeclarationSyntax namespaceDeclaration, MemberDeclarationSyntax member)
-        {
-            return SyntaxRemover.RemoveMember(namespaceDeclaration, member);
-        }
-
-        /// <summary>
-        /// Creates a new <see cref="NamespaceDeclarationSyntax"/> with the specified member inserted.
-        /// </summary>
-        /// <param name="namespaceDeclaration"></param>
-        /// <param name="member"></param>
-        /// <param name="comparer"></param>
-        /// <returns></returns>
-        public static NamespaceDeclarationSyntax InsertMember(this NamespaceDeclarationSyntax namespaceDeclaration, MemberDeclarationSyntax member, IComparer<MemberDeclarationSyntax> comparer = null)
-        {
-            if (namespaceDeclaration == null)
-                throw new ArgumentNullException(nameof(namespaceDeclaration));
-
-            if (member == null)
-                throw new ArgumentNullException(nameof(member));
-
-            return namespaceDeclaration.WithMembers(namespaceDeclaration.Members.Insert(member, comparer));
-        }
-
         /// <summary>
         /// Creates a new <see cref="NamespaceDeclarationSyntax"/> with the members updated.
         /// </summary>
@@ -1857,35 +1741,6 @@ namespace Roslynator.CSharp
                 structDeclaration.OpenBraceToken.SpanStart,
                 structDeclaration.CloseBraceToken.Span.End);
         }
-
-        /// <summary>
-        /// Creates a new <see cref="StructDeclarationSyntax"/> with the specified member removed.
-        /// </summary>
-        /// <param name="structDeclaration"></param>
-        /// <param name="member"></param>
-        /// <returns></returns>
-        public static StructDeclarationSyntax RemoveMember(this StructDeclarationSyntax structDeclaration, MemberDeclarationSyntax member)
-        {
-            return SyntaxRemover.RemoveMember(structDeclaration, member);
-        }
-
-        /// <summary>
-        /// Creates a new <see cref="StructDeclarationSyntax"/> with the specified member inserted.
-        /// </summary>
-        /// <param name="structDeclaration"></param>
-        /// <param name="member"></param>
-        /// <param name="comparer"></param>
-        /// <returns></returns>
-        public static StructDeclarationSyntax InsertMember(this StructDeclarationSyntax structDeclaration, MemberDeclarationSyntax member, IComparer<MemberDeclarationSyntax> comparer = null)
-        {
-            if (structDeclaration == null)
-                throw new ArgumentNullException(nameof(structDeclaration));
-
-            if (member == null)
-                throw new ArgumentNullException(nameof(member));
-
-            return structDeclaration.WithMembers(structDeclaration.Members.Insert(member, comparer));
-        }
         #endregion StructDeclarationSyntax
 
         #region SwitchSectionSyntax
@@ -1961,21 +1816,6 @@ namespace Roslynator.CSharp
                 return list[index];
 
             return default(TNode);
-        }
-
-        //TODO: pub
-        /// <summary>
-        /// Creates a new list with the specified node inserted.
-        /// </summary>
-        /// <param name="members"></param>
-        /// <param name="member"></param>
-        /// <param name="comparer"></param>
-        /// <returns></returns>
-        internal static SyntaxList<MemberDeclarationSyntax> Insert(this SyntaxList<MemberDeclarationSyntax> members, MemberDeclarationSyntax member, IComparer<MemberDeclarationSyntax> comparer = null)
-        {
-            int index = MemberDeclarationComparer.GetInsertIndex(members, member, comparer ?? MemberDeclarationComparer.ByKind);
-
-            return members.Insert(index, member);
         }
 
         internal static bool IsSingleLine<TNode>(
@@ -2774,27 +2614,37 @@ namespace Roslynator.CSharp
 
         internal static TNode RemoveModifier<TNode>(this TNode node, SyntaxKind modifierKind) where TNode : SyntaxNode
         {
-            return Modifier.Remove(node, modifierKind);
+            return ModifierList.Remove(node, modifierKind);
         }
 
         internal static TNode RemoveModifiers<TNode>(this TNode node, SyntaxKind modifierKind1, SyntaxKind modifierKind2) where TNode : SyntaxNode
         {
-            return Modifier.Remove(Modifier.Remove(node, modifierKind1), modifierKind2);
+            return node
+                .RemoveModifier(modifierKind1)
+                .RemoveModifier(modifierKind2);
+        }
+
+        internal static TNode RemoveModifiers<TNode>(this TNode node, SyntaxKind modifierKind1, SyntaxKind modifierKind2, SyntaxKind modifierKind3) where TNode : SyntaxNode
+        {
+            return node
+                .RemoveModifier(modifierKind1)
+                .RemoveModifier(modifierKind2)
+                .RemoveModifier(modifierKind3);
         }
 
         internal static TNode RemoveModifier<TNode>(this TNode node, SyntaxToken modifier) where TNode : SyntaxNode
         {
-            return Modifier.Remove(node, modifier);
+            return ModifierList.Remove(node, modifier);
         }
 
         internal static TNode InsertModifier<TNode>(this TNode node, SyntaxKind modifierKind, IComparer<SyntaxKind> comparer = null) where TNode : SyntaxNode
         {
-            return Modifier.Insert(node, modifierKind, comparer);
+            return ModifierList.Insert(node, modifierKind, comparer);
         }
 
         internal static TNode InsertModifier<TNode>(this TNode node, SyntaxToken modifier, IComparer<SyntaxToken> comparer = null) where TNode : SyntaxNode
         {
-            return Modifier.Insert(node, modifier, comparer);
+            return ModifierList.Insert(node, modifier, comparer);
         }
 
         /// <summary>
@@ -3606,35 +3456,6 @@ namespace Roslynator.CSharp
         #endregion SyntaxTriviaList
 
         #region TypeDeclarationSyntax
-        /// <summary>
-        /// Creates a new <see cref="TypeDeclarationSyntax"/> with the specified member removed.
-        /// </summary>
-        /// <param name="typeDeclaration"></param>
-        /// <param name="member"></param>
-        /// <returns></returns>
-        public static TypeDeclarationSyntax RemoveMember(this TypeDeclarationSyntax typeDeclaration, MemberDeclarationSyntax member)
-        {
-            return SyntaxRemover.RemoveMember(typeDeclaration, member);
-        }
-
-        /// <summary>
-        /// Creates a new <see cref="TypeDeclarationSyntax"/> with the specified member removed.
-        /// </summary>
-        /// <param name="typeDeclaration"></param>
-        /// <param name="member"></param>
-        /// <param name="comparer"></param>
-        /// <returns></returns>
-        public static TypeDeclarationSyntax InsertMember(this TypeDeclarationSyntax typeDeclaration, MemberDeclarationSyntax member, IComparer<MemberDeclarationSyntax> comparer = null)
-        {
-            if (typeDeclaration == null)
-                throw new ArgumentNullException(nameof(typeDeclaration));
-
-            if (member == null)
-                throw new ArgumentNullException(nameof(member));
-
-            return typeDeclaration.WithMembers(typeDeclaration.Members.Insert(member, comparer));
-        }
-
         internal static TypeDeclarationSyntax WithMembers(this TypeDeclarationSyntax typeDeclaration, SyntaxList<MemberDeclarationSyntax> newMembers)
         {
             if (typeDeclaration == null)

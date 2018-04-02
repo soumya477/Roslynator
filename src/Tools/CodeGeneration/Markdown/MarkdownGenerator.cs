@@ -41,6 +41,8 @@ namespace Roslynator.CodeGeneration.Markdown
                 AddHeadingWithTypes(doc, "Interfaces", grouping.Where(f => f.IsInterface));
             }
 
+            doc.AddFootnote();
+
             return doc.ToString();
 
             void AddHeadingWithTypes(MContainer parent, string name, IEnumerable<TypeInfo> types)

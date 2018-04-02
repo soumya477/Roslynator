@@ -83,7 +83,7 @@ namespace Roslynator.CSharp.CodeFixes
                 case SyntaxKind.StaticKeyword:
                     {
                         if (node.Kind() == SyntaxKind.ConstructorDeclaration)
-                            node = Modifier.RemoveAccessibility(node);
+                            node = SyntaxAccessibility.WithoutExplicitAccessibility(node);
 
                         node = node.RemoveModifier(SyntaxKind.SealedKeyword);
 
@@ -173,7 +173,7 @@ namespace Roslynator.CSharp.CodeFixes
             SyntaxKind modifierKind,
             CancellationToken cancellationToken = default(CancellationToken)) where TNode : SyntaxNode
         {
-            SyntaxNode newNode = Modifier.Remove(node, modifierKind);
+            SyntaxNode newNode = ModifierList.Remove(node, modifierKind);
 
             return document.ReplaceNodeAsync(node, newNode, cancellationToken);
         }
@@ -184,7 +184,7 @@ namespace Roslynator.CSharp.CodeFixes
             SyntaxToken modifier,
             CancellationToken cancellationToken = default(CancellationToken)) where TNode : SyntaxNode
         {
-            SyntaxNode newNode = Modifier.Remove(node, modifier);
+            SyntaxNode newNode = ModifierList.Remove(node, modifier);
 
             return document.ReplaceNodeAsync(node, newNode, cancellationToken);
         }
@@ -215,7 +215,7 @@ namespace Roslynator.CSharp.CodeFixes
                 {
                     return context.Solution().ReplaceNodesAsync(
                         nodes,
-                        (f, _) => Modifier.Remove(f, modifierKind),
+                        (f, _) => ModifierList.Remove(f, modifierKind),
                         cancellationToken);
                 },
                 GetEquivalenceKey(diagnostic, additionalKey));
@@ -266,7 +266,7 @@ namespace Roslynator.CSharp.CodeFixes
                             SyntaxNode newNode = node;
 
                             for (int i = indexes.Count - 1; i >= 0; i--)
-                                newNode = Modifier.RemoveAt(newNode, indexes[i]);
+                                newNode = ModifierList.RemoveAt(newNode, indexes[i]);
 
                             return context.Document.ReplaceNodeAsync(node, newNode, cancellationToken);
                         },
@@ -295,7 +295,7 @@ namespace Roslynator.CSharp.CodeFixes
                     "Remove modifiers",
                     cancellationToken =>
                     {
-                        SyntaxNode newNode = Modifier.RemoveAll(node);
+                        SyntaxNode newNode = ModifierList.RemoveAll(node);
 
                         return context.Document.ReplaceNodeAsync(node, newNode, cancellationToken);
                     },
@@ -339,7 +339,7 @@ namespace Roslynator.CSharp.CodeFixes
                     "Remove access modifiers",
                     cancellationToken =>
                     {
-                        SyntaxNode newNode = Modifier.RemoveAccessibility(node);
+                        SyntaxNode newNode = SyntaxAccessibility.WithoutExplicitAccessibility(node);
 
                         return context.Document.ReplaceNodeAsync(node, newNode, cancellationToken);
                     },

@@ -69,7 +69,7 @@ namespace Roslynator.CSharp.CodeFixes
 
                                     MethodDeclarationSyntax methodDeclaration = ObjectEqualsMethodDeclaration(type, semanticModel, typeDeclaration.OpenBraceToken.Span.End);
 
-                                    TypeDeclarationSyntax newNode = typeDeclaration.InsertMember(methodDeclaration);
+                                    TypeDeclarationSyntax newNode = MemberDeclarationInserter.Default.Insert(typeDeclaration, methodDeclaration);
 
                                     return context.Document.ReplaceNodeAsync(typeDeclaration, newNode, cancellationToken);
                                 },
@@ -92,7 +92,7 @@ namespace Roslynator.CSharp.CodeFixes
                                 "Override object.GetHashCode",
                                 cancellationToken =>
                                 {
-                                    TypeDeclarationSyntax newNode = typeDeclaration.InsertMember(methodDeclaration);
+                                    TypeDeclarationSyntax newNode = MemberDeclarationInserter.Default.Insert(typeDeclaration, methodDeclaration);
 
                                     return context.Document.ReplaceNodeAsync(typeDeclaration, newNode, cancellationToken);
                                 },
