@@ -28,7 +28,8 @@
 Commonly Used Types:
 Roslynator.CSharp.CSharpFactory
 Roslynator.CSharp.CSharpFacts
-Roslynator.CSharp.SyntaxInfo</Description>
+Roslynator.CSharp.SyntaxInfo
+Roslynator.NameGenerator</Description>
     <Copyright>Copyright (c) 2017-2018 Josef Pihrt</Copyright>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageLicenseUrl>http://github.com/JosefPihrt/Roslynator/blob/master/LICENSE.txt</PackageLicenseUrl>

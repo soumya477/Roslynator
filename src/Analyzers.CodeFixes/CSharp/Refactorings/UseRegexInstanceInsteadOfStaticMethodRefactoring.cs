@@ -56,9 +56,7 @@ namespace Roslynator.CSharp.Refactorings
                         EqualsValueClause(
                             ObjectCreationExpression(regexType, pair.ArgumentList2)));
 
-                    SyntaxList<MemberDeclarationSyntax> newMembers = newTypeDeclaration
-                        .Members
-                        .Insert(fieldDeclaration);
+                    SyntaxList<MemberDeclarationSyntax> newMembers = MemberDeclarationInserter.Default.Insert(newTypeDeclaration.Members, fieldDeclaration);
 
                     newTypeDeclaration = newTypeDeclaration.WithMembers(newMembers);
 

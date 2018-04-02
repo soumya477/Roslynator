@@ -11,7 +11,7 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 namespace Roslynator.CSharp.Syntax
 {
     /// <summary>
-    /// Provides information about a list of member declarations.
+    /// Provides information about a list of member declaration list.
     /// </summary>
     public readonly struct MemberDeclarationListInfo : IEquatable<MemberDeclarationListInfo>, IReadOnlyList<MemberDeclarationSyntax>
     {

@@ -61,16 +61,14 @@ namespace Roslynator.CSharp.CodeFixes
                                 {
                                     SyntaxNode newNode = memberDeclaration;
 
-                                    SyntaxTokenList modifiers = info.Modifiers;
+                                    if (info.Modifiers.ContainsAny(SyntaxKind.InternalKeyword, SyntaxKind.ProtectedKeyword, SyntaxKind.PrivateKeyword))
+                                        newNode = SyntaxAccessibility.WithoutExplicitAccessibility(newNode);
 
-                                    if (modifiers.ContainsAny(SyntaxKind.InternalKeyword, SyntaxKind.ProtectedKeyword, SyntaxKind.PrivateKeyword))
-                                        newNode = Modifier.RemoveAccessibility(newNode);
-
-                                    if (!modifiers.Contains(SyntaxKind.PublicKeyword))
-                                        newNode = Modifier.Insert(newNode, SyntaxKind.PublicKeyword);
+                                    if (!info.Modifiers.Contains(SyntaxKind.PublicKeyword))
+                                        newNode = ModifierList.Insert(newNode, SyntaxKind.PublicKeyword);
 
                                     if (!info.IsStatic)
-                                        newNode = Modifier.Insert(newNode, SyntaxKind.StaticKeyword);
+                                        newNode = ModifierList.Insert(newNode, SyntaxKind.StaticKeyword);
 
                                     return context.Document.ReplaceNodeAsync(memberDeclaration, newNode, cancellationToken);
                                 },
