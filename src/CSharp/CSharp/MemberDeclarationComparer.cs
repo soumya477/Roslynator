@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -37,33 +36,6 @@ namespace Roslynator.CSharp
             }
 
             return MemberDeclarationKindComparer.Default.GetRank(kind);
-        }
-
-        internal static int GetInsertIndex(SyntaxList<MemberDeclarationSyntax> list, MemberDeclarationSyntax node, IComparer<MemberDeclarationSyntax> comparer)
-        {
-            if (node == null)
-                throw new ArgumentNullException(nameof(node));
-
-            if (comparer == null)
-                comparer = ByKind;
-
-            int index = list.Count;
-
-            for (int i = index - 1; i >= 0; i--)
-            {
-                int result = comparer.Compare(list[i], node);
-
-                if (result == 0)
-                {
-                    return i + 1;
-                }
-                else if (result > 0)
-                {
-                    index = i;
-                }
-            }
-
-            return index;
         }
 
         internal static bool CanBeSortedByName(SyntaxKind kind)

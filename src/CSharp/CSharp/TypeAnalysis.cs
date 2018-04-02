@@ -84,8 +84,7 @@ namespace Roslynator.CSharp
 
                 if (variables.Count == 1
                     && (variableDeclaration.Parent as LocalDeclarationStatementSyntax)?.IsConst != true
-                    && !expression.IsKind(SyntaxKind.NullLiteralExpression, SyntaxKind.DefaultLiteralExpression)
-                    && typeSymbol.Equals(semanticModel.GetTypeSymbol(expression, cancellationToken)))
+                    && !expression.IsKind(SyntaxKind.NullLiteralExpression, SyntaxKind.DefaultLiteralExpression))
                 {
                     flags |= TypeAnalysisFlags.SupportsImplicit;
                 }
