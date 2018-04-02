@@ -2,16 +2,12 @@
 
 using System;
 using System.Collections.Immutable;
-using System.Threading;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
-using Roslynator.CSharp.Analysis.ReturnTaskInsteadOfNull;
-using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
-using static Roslynator.CSharp.CSharpFactory;
 
-namespace Roslynator.CSharp.Analysis
+namespace Roslynator.CSharp.Analysis.ReturnTaskInsteadOfNull
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ReturnTaskInsteadOfReturningNullAnalyzer : BaseDiagnosticAnalyzer
@@ -60,12 +56,18 @@ namespace Roslynator.CSharp.Analysis
 
             if (expressionBody != null)
             {
-                ExpressionSyntax expression = expressionBody.Expression;
+                ExpressionSyntax expression = expressionBody.Expression?.WalkDownParentheses();
 
-                if (expression?.WalkDownParentheses().IsKind(SyntaxKind.NullLiteralExpression, SyntaxKind.DefaultExpression) != true)
+                if (expression?.IsKind(
+                    SyntaxKind.NullLiteralExpression,
+                    SyntaxKind.DefaultExpression,
+                    SyntaxKind.DefaultLiteralExpression,
+                    SyntaxKind.ConditionalAccessExpression) != true)
+                {
                     return;
+                }
 
-                if (!IsReturnTypeConstructedFromTaskOfT(methodDeclaration, taskOfTSymbol, context.SemanticModel, context.CancellationToken))
+                if (!IsReturnTypeConstructedFromTaskOfT())
                     return;
 
                 ReportDiagnostic(context, expression);
@@ -77,19 +79,20 @@ namespace Roslynator.CSharp.Analysis
                 if (body == null)
                     return;
 
-                if (!IsReturnTypeConstructedFromTaskOfT(methodDeclaration, taskOfTSymbol, context.SemanticModel, context.CancellationToken))
+                if (!IsReturnTypeConstructedFromTaskOfT())
                     return;
 
                 AnalyzeBlock(context, body);
             }
-        }
 
-        private static bool IsReturnTypeConstructedFromTaskOfT(MethodDeclarationSyntax methodDeclaration, INamedTypeSymbol taskOfTSymbol, SemanticModel semanticModel, CancellationToken cancellationToken)
-        {
-            IMethodSymbol methodSymbol = semanticModel.GetDeclaredSymbol(methodDeclaration, cancellationToken);
+            bool IsReturnTypeConstructedFromTaskOfT()
+            {
+                var returnType = context.SemanticModel
+                    .GetDeclaredSymbol(methodDeclaration, context.CancellationToken)?
+                    .ReturnType as INamedTypeSymbol;
 
-            return methodSymbol?.IsErrorType() == false
-                && methodSymbol.ReturnType.IsConstructedFrom(taskOfTSymbol);
+                return returnType?.ConstructedFrom.Equals(taskOfTSymbol) == true;
+            }
         }
 
         public static void AnalyzeLocalFunction(SyntaxNodeAnalysisContext context, INamedTypeSymbol taskOfTSymbol)
@@ -106,12 +109,18 @@ namespace Roslynator.CSharp.Analysis
 
             if (expressionBody != null)
             {
-                ExpressionSyntax expression = expressionBody.Expression;
+                ExpressionSyntax expression = expressionBody.Expression?.WalkDownParentheses();
 
-                if (expression?.WalkDownParentheses().IsKind(SyntaxKind.NullLiteralExpression, SyntaxKind.DefaultExpression) != true)
+                if (expression?.IsKind(
+                    SyntaxKind.NullLiteralExpression,
+                    SyntaxKind.DefaultExpression,
+                    SyntaxKind.DefaultLiteralExpression,
+                    SyntaxKind.ConditionalAccessExpression) != true)
+                {
                     return;
+                }
 
-                if (!IsReturnTypeConstructedFromTaskOfT(localFunction, taskOfTSymbol, context.SemanticModel, context.CancellationToken))
+                if (!IsReturnTypeConstructedFromTaskOfT())
                     return;
 
                 ReportDiagnostic(context, expression);
@@ -123,19 +132,20 @@ namespace Roslynator.CSharp.Analysis
                 if (body == null)
                     return;
 
-                if (!IsReturnTypeConstructedFromTaskOfT(localFunction, taskOfTSymbol, context.SemanticModel, context.CancellationToken))
+                if (!IsReturnTypeConstructedFromTaskOfT())
                     return;
 
                 AnalyzeBlock(context, body);
             }
-        }
 
-        private static bool IsReturnTypeConstructedFromTaskOfT(LocalFunctionStatementSyntax localFunction, INamedTypeSymbol taskOfTSymbol, SemanticModel semanticModel, CancellationToken cancellationToken)
-        {
-            var methodSymbol = (IMethodSymbol)semanticModel.GetDeclaredSymbol(localFunction, cancellationToken);
+            bool IsReturnTypeConstructedFromTaskOfT()
+            {
+                var returnType = context.SemanticModel
+                    .GetDeclaredSymbol(localFunction, context.CancellationToken)?
+                    .ReturnType as INamedTypeSymbol;
 
-            return methodSymbol?.IsErrorType() == false
-                && methodSymbol.ReturnType.IsConstructedFrom(taskOfTSymbol);
+                return returnType?.ConstructedFrom.Equals(taskOfTSymbol) == true;
+            }
         }
 
         public static void AnalyzePropertyDeclaration(SyntaxNodeAnalysisContext context, INamedTypeSymbol taskOfTSymbol)
@@ -149,12 +159,18 @@ namespace Roslynator.CSharp.Analysis
 
             if (expressionBody != null)
             {
-                ExpressionSyntax expression = expressionBody.Expression;
+                ExpressionSyntax expression = expressionBody.Expression?.WalkDownParentheses();
 
-                if (expression?.WalkDownParentheses().IsKind(SyntaxKind.NullLiteralExpression, SyntaxKind.DefaultExpression) != true)
+                if (expression?.IsKind(
+                    SyntaxKind.NullLiteralExpression,
+                    SyntaxKind.DefaultExpression,
+                    SyntaxKind.DefaultLiteralExpression,
+                    SyntaxKind.ConditionalAccessExpression) != true)
+                {
                     return;
+                }
 
-                if (!IsReturnTypeConstructedFromTaskOfT(propertyDeclaration, taskOfTSymbol, context.SemanticModel, context.CancellationToken))
+                if (!IsReturnTypeConstructedFromTaskOfT())
                     return;
 
                 ReportDiagnostic(context, expression);
@@ -166,19 +182,20 @@ namespace Roslynator.CSharp.Analysis
                 if (getter == null)
                     return;
 
-                if (!IsReturnTypeConstructedFromTaskOfT(propertyDeclaration, taskOfTSymbol, context.SemanticModel, context.CancellationToken))
+                if (!IsReturnTypeConstructedFromTaskOfT())
                     return;
 
                 AnalyzeGetAccessor(context, getter);
             }
-        }
 
-        private static bool IsReturnTypeConstructedFromTaskOfT(PropertyDeclarationSyntax propertyDeclaration, INamedTypeSymbol taskOfTSymbol, SemanticModel semanticModel, CancellationToken cancellationToken)
-        {
-            IPropertySymbol propertySymbol = semanticModel.GetDeclaredSymbol(propertyDeclaration, cancellationToken);
+            bool IsReturnTypeConstructedFromTaskOfT()
+            {
+                var returnType = context.SemanticModel
+                    .GetDeclaredSymbol(propertyDeclaration, context.CancellationToken)?
+                    .Type as INamedTypeSymbol;
 
-            return propertySymbol?.IsErrorType() == false
-                && propertySymbol.Type.IsConstructedFrom(taskOfTSymbol);
+                return returnType?.ConstructedFrom.Equals(taskOfTSymbol) == true;
+            }
         }
 
         public static void AnalyzeIndexerDeclaration(SyntaxNodeAnalysisContext context, INamedTypeSymbol taskOfTSymbol)
@@ -192,12 +209,18 @@ namespace Roslynator.CSharp.Analysis
 
             if (expressionBody != null)
             {
-                ExpressionSyntax expression = expressionBody.Expression;
+                ExpressionSyntax expression = expressionBody.Expression?.WalkDownParentheses();
 
-                if (expression?.WalkDownParentheses().IsKind(SyntaxKind.NullLiteralExpression, SyntaxKind.DefaultExpression) != true)
+                if (expression?.IsKind(
+                    SyntaxKind.NullLiteralExpression,
+                    SyntaxKind.DefaultExpression,
+                    SyntaxKind.DefaultLiteralExpression,
+                    SyntaxKind.ConditionalAccessExpression) != true)
+                {
                     return;
+                }
 
-                if (!IsReturnTypeConstructedFromTaskOfT(indexerDeclaration, taskOfTSymbol, context.SemanticModel, context.CancellationToken))
+                if (!IsReturnTypeConstructedFromTaskOfT())
                     return;
 
                 ReportDiagnostic(context, expression);
@@ -209,19 +232,20 @@ namespace Roslynator.CSharp.Analysis
                 if (getter == null)
                     return;
 
-                if (!IsReturnTypeConstructedFromTaskOfT(indexerDeclaration, taskOfTSymbol, context.SemanticModel, context.CancellationToken))
+                if (!IsReturnTypeConstructedFromTaskOfT())
                     return;
 
                 AnalyzeGetAccessor(context, getter);
             }
-        }
 
-        private static bool IsReturnTypeConstructedFromTaskOfT(IndexerDeclarationSyntax indexerDeclaration, INamedTypeSymbol taskOfTSymbol, SemanticModel semanticModel, CancellationToken cancellationToken)
-        {
-            IPropertySymbol propertySymbol = semanticModel.GetDeclaredSymbol(indexerDeclaration, cancellationToken);
+            bool IsReturnTypeConstructedFromTaskOfT()
+            {
+                var returnType = context.SemanticModel
+                    .GetDeclaredSymbol(indexerDeclaration, context.CancellationToken)?
+                    .Type as INamedTypeSymbol;
 
-            return propertySymbol?.IsErrorType() == false
-                && propertySymbol.Type.IsConstructedFrom(taskOfTSymbol);
+                return returnType?.ConstructedFrom.Equals(taskOfTSymbol) == true;
+            }
         }
 
         public static void AnalyzeLambdaExpression(SyntaxNodeAnalysisContext context, INamedTypeSymbol taskOfTSymbol)
@@ -235,20 +259,37 @@ namespace Roslynator.CSharp.Analysis
 
             if (body is ExpressionSyntax expression)
             {
-                if (expression?.WalkDownParentheses().IsKind(SyntaxKind.NullLiteralExpression, SyntaxKind.DefaultExpression) != true)
-                    return;
+                expression = expression.WalkDownParentheses();
 
-                if (!IsReturnTypeConstructedFromTaskOfT(lambda, taskOfTSymbol, context.SemanticModel, context.CancellationToken))
+                if (expression?.IsKind(
+                    SyntaxKind.NullLiteralExpression,
+                    SyntaxKind.DefaultExpression,
+                    SyntaxKind.DefaultLiteralExpression,
+                    SyntaxKind.ConditionalAccessExpression) != true)
+                {
+                    return;
+                }
+
+                if (!IsReturnTypeConstructedFromTaskOfT())
                     return;
 
                 ReportDiagnostic(context, expression);
             }
             else if (body is BlockSyntax block)
             {
-                if (!IsReturnTypeConstructedFromTaskOfT(lambda, taskOfTSymbol, context.SemanticModel, context.CancellationToken))
+                if (!IsReturnTypeConstructedFromTaskOfT())
                     return;
 
                 AnalyzeBlock(context, block);
+            }
+
+            bool IsReturnTypeConstructedFromTaskOfT()
+            {
+                var returnType = context.SemanticModel
+                    .GetMethodSymbol(lambda, context.CancellationToken)?
+                    .ReturnType as INamedTypeSymbol;
+
+                return returnType?.ConstructedFrom.Equals(taskOfTSymbol) == true;
             }
         }
 
@@ -259,18 +300,19 @@ namespace Roslynator.CSharp.Analysis
             if (anonymousMethod.AsyncKeyword.Kind() == SyntaxKind.AsyncKeyword)
                 return;
 
-            if (!IsReturnTypeConstructedFromTaskOfT(anonymousMethod, taskOfTSymbol, context.SemanticModel, context.CancellationToken))
+            if (!IsReturnTypeConstructedFromTaskOfT())
                 return;
 
             AnalyzeBlock(context, anonymousMethod.Block);
-        }
 
-        private static bool IsReturnTypeConstructedFromTaskOfT(SyntaxNode node, INamedTypeSymbol taskOfTSymbol, SemanticModel semanticModel, CancellationToken cancellationToken)
-        {
-            var methodSymbol = semanticModel.GetSymbol(node, cancellationToken) as IMethodSymbol;
+            bool IsReturnTypeConstructedFromTaskOfT()
+            {
+                var returnType = context.SemanticModel
+                    .GetMethodSymbol(anonymousMethod, context.CancellationToken)?
+                    .ReturnType as INamedTypeSymbol;
 
-            return methodSymbol?.IsErrorType() == false
-                && methodSymbol.ReturnType.IsConstructedFrom(taskOfTSymbol);
+                return returnType?.ConstructedFrom.Equals(taskOfTSymbol) == true;
+            }
         }
 
         private static void AnalyzeGetAccessor(SyntaxNodeAnalysisContext context, AccessorDeclarationSyntax getter)
@@ -279,11 +321,13 @@ namespace Roslynator.CSharp.Analysis
 
             if (expressionBody != null)
             {
-                ExpressionSyntax expression = expressionBody.Expression;
+                ExpressionSyntax expression = expressionBody.Expression?.WalkDownParentheses();
 
-                if (expression?
-                    .WalkDownParentheses()
-                    .IsKind(SyntaxKind.NullLiteralExpression, SyntaxKind.DefaultExpression) == true)
+                if (expression?.IsKind(
+                    SyntaxKind.NullLiteralExpression,
+                    SyntaxKind.DefaultExpression,
+                    SyntaxKind.DefaultLiteralExpression,
+                    SyntaxKind.ConditionalAccessExpression) == true)
                 {
                     ReportDiagnostic(context, expression);
                 }
@@ -310,45 +354,6 @@ namespace Roslynator.CSharp.Analysis
         private static void ReportDiagnostic(SyntaxNodeAnalysisContext context, ExpressionSyntax expression)
         {
             context.ReportDiagnostic(DiagnosticDescriptors.ReturnTaskInsteadOfNull, expression);
-        }
-
-        public static InvocationExpressionSyntax CreateNewExpression(
-            ExpressionSyntax expression,
-            SemanticModel semanticModel,
-            CancellationToken cancellationToken)
-        {
-            var typeSymbol = (INamedTypeSymbol)semanticModel.GetTypeInfo(expression, cancellationToken).ConvertedType;
-
-            int position = expression.SpanStart;
-
-            ITypeSymbol typeArgument = typeSymbol.TypeArguments[0];
-
-            TypeSyntax type = typeArgument.ToMinimalTypeSyntax(semanticModel, position);
-
-            ExpressionSyntax defaultValue = typeArgument.GetDefaultValueSyntax(type);
-
-            SimpleNameSyntax name;
-
-            if (defaultValue.IsKind(
-                SyntaxKind.TrueLiteralExpression,
-                SyntaxKind.FalseLiteralExpression,
-                SyntaxKind.CharacterLiteralExpression,
-                SyntaxKind.SimpleMemberAccessExpression,
-                SyntaxKind.DefaultExpression))
-            {
-                name = IdentifierName("FromResult");
-            }
-            else
-            {
-                name = GenericName("FromResult", type);
-            }
-
-            InvocationExpressionSyntax newNode = SimpleMemberInvocationExpression(
-                semanticModel.GetTypeByMetadataName(MetadataNames.System_Threading_Tasks_Task).ToMinimalTypeSyntax(semanticModel, position),
-                name,
-                Argument(defaultValue));
-
-            return newNode.WithTriviaFrom(expression);
         }
     }
 }

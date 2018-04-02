@@ -3,92 +3,95 @@
 using System;
 using System.Threading.Tasks;
 
-#pragma warning disable CS0162, CS0168, RCS1007, RCS1016, RCS1021, RCS1048, RCS1163
+#pragma warning disable CS0162, CS0168, CS8321, RCS1004, RCS1007, RCS1016, RCS1021, RCS1048, RCS1163
 
 namespace Roslynator.CSharp.Analyzers.Tests
 {
-    internal class ReturnTaskInsteadOfNull
+    internal static class ReturnTaskInsteadOfNull
     {
-        private Task<string> FooAsync()
+        private class FooNull
         {
-            Func<string, Task<string>> func1 = f => null;
-
-            Func<string, Task<string>> func2 = f =>
+            internal Task<string> FooAsync()
             {
-                if (true)
+                Func<string, Task<string>> func1 = f => null;
+
+                Func<string, Task<string>> func2 = f =>
+                {
+                    if (true)
+                        return null;
+
                     return null;
+                };
+
+                Func<string, Task<string>> func3 = (f) => null;
+
+                Func<string, Task<string>> func4 = (f) =>
+                {
+                    if (true)
+                        return null;
+
+                    return null;
+                };
+
+                Func<string, Task<string>> func5 = delegate (string f)
+                {
+                    if (true)
+                        return null;
+
+                    return null;
+                };
 
                 return null;
-            };
 
-            Func<string, Task<string>> func3 = (f) => null;
+                Task<string> FooLocalAsync(string value)
+                {
+                    if (true)
+                        return null;
 
-            Func<string, Task<string>> func4 = (f) =>
-            {
-                if (true)
                     return null;
-
-                return null;
-            };
-
-            Func<string, Task<string>> func5 = delegate (string f)
-            {
-                if (true)
-                    return null;
-
-                return null;
-            };
-
-            return null;
-
-            Task<string> FooLocalAsync(string value)
-            {
-                if (true)
-                    return null;
-
-                return null;
+                }
             }
-        }
 
-        private Task<string> PropertyAsync
-        {
-            get
+            internal Task<string> PropertyAsync
             {
-                if (true)
+                get
+                {
+                    if (true)
+                        return null;
+
                     return null;
-
-                return null;
+                }
             }
-        }
 
-        private Task<string> Property2Async
-        {
-            get => null;
-        }
-
-        private Task<string> Property3Async => null;
-
-        private Task<string> this[int index]
-        {
-            get
+            internal Task<string> Property2Async
             {
-                if (true)
-                    return null;
-
-                return null;
+                get => null;
             }
-        }
 
-        private Task<string> this[int index1, int index2]
-        {
-            get => null;
-        }
+            internal Task<string> Property3Async => null;
 
-        private Task<string> this[int index, int index2, int index3] => null;
+            internal Task<string> this[int index]
+            {
+                get
+                {
+                    if (true)
+                        return null;
+
+                    return null;
+                }
+            }
+
+            internal Task<string> this[int index1, int index2]
+            {
+                get => null;
+            }
+
+            internal Task<string> this[int index, int index2, int index3] => null;
+        }
 
         private class FooDefault
         {
-            private Task<string> FooAsync()
+            internal Task<string> FooAsync()
             {
                 Func<string, Task<string>> func1 = f => default(Task<string>);
 
@@ -129,7 +132,7 @@ namespace Roslynator.CSharp.Analyzers.Tests
                 }
             }
 
-            private Task<string> PropertyAsync
+            internal Task<string> PropertyAsync
             {
                 get
                 {
@@ -140,14 +143,14 @@ namespace Roslynator.CSharp.Analyzers.Tests
                 }
             }
 
-            private Task<string> Property2Async
+            internal Task<string> Property2Async
             {
                 get => default(Task<string>);
             }
 
-            private Task<string> Property3Async => default(Task<string>);
+            internal Task<string> Property3Async => default(Task<string>);
 
-            private Task<string> this[int index]
+            internal Task<string> this[int index]
             {
                 get
                 {
@@ -158,12 +161,182 @@ namespace Roslynator.CSharp.Analyzers.Tests
                 }
             }
 
-            private Task<string> this[int index1, int index2]
+            internal Task<string> this[int index1, int index2]
             {
                 get => default(Task<string>);
             }
 
-            private Task<string> this[int index, int index2, int index3] => default(Task<string>);
+            internal Task<string> this[int index, int index2, int index3] => default(Task<string>);
+        }
+
+        private class FooDefaultLiteral
+        {
+            internal Task<string> FooAsync()
+            {
+                Func<string, Task<string>> func1 = f => default;
+
+                Func<string, Task<string>> func2 = f =>
+                {
+                    if (true)
+                        return default;
+
+                    return default;
+                };
+
+                Func<string, Task<string>> func3 = (f) => default;
+
+                Func<string, Task<string>> func4 = (f) =>
+                {
+                    if (true)
+                        return default;
+
+                    return default;
+                };
+
+                Func<string, Task<string>> func5 = delegate (string f)
+                {
+                    if (true)
+                        return default;
+
+                    return default;
+                };
+
+                return default;
+
+                Task<string> FooLocalAsync()
+                {
+                    if (true)
+                        return default;
+
+                    return default;
+                }
+            }
+
+            internal Task<string> PropertyAsync
+            {
+                get
+                {
+                    if (true)
+                        return default;
+
+                    return default;
+                }
+            }
+
+            internal Task<string> Property2Async
+            {
+                get => default;
+            }
+
+            internal Task<string> Property3Async => default;
+
+            internal Task<string> this[int index]
+            {
+                get
+                {
+                    if (true)
+                        return default;
+
+                    return default;
+                }
+            }
+
+            internal Task<string> this[int index1, int index2]
+            {
+                get => default;
+            }
+
+            internal Task<string> this[int index, int index2, int index3] => default;
+        }
+
+        private class FooConditionalAccess
+        {
+            internal Task<string> FooAsync()
+            {
+                Func<string, Task<string>> func1 = f => _foo?.GetAsync();
+
+                Func<string, Task<string>> func2 = f =>
+                {
+                    if (true)
+                        return _foo?.GetAsync();
+
+                    return _foo?.GetAsync();
+                };
+
+                Func<string, Task<string>> func3 = (f) => _foo?.GetAsync();
+
+                Func<string, Task<string>> func4 = (f) =>
+                {
+                    if (true)
+                        return _foo?.GetAsync();
+
+                    return _foo?.GetAsync();
+                };
+
+                Func<string, Task<string>> func5 = delegate (string f)
+                {
+                    if (true)
+                        return _foo?.GetAsync();
+
+                    return _foo?.GetAsync();
+                };
+
+                return _foo?.GetAsync();
+
+                Task<string> FooLocalAsync(string value)
+                {
+                    if (true)
+                        return _foo?.GetAsync();
+
+                    return _foo?.GetAsync();
+                }
+            }
+
+            internal Task<string> PropertyAsync
+            {
+                get
+                {
+                    if (true)
+                        return _foo?.GetAsync();
+
+                    return _foo?.GetAsync();
+                }
+            }
+
+            internal Task<string> Property2Async
+            {
+                get => _foo?.GetAsync();
+            }
+
+            internal Task<string> Property3Async => _foo?.GetAsync();
+
+            internal Task<string> this[int index]
+            {
+                get
+                {
+                    if (true)
+                        return _foo?.GetAsync();
+
+                    return _foo?.GetAsync();
+                }
+            }
+
+            internal Task<string> this[int index1, int index2]
+            {
+                get => _foo?.GetAsync();
+            }
+
+            internal Task<string> this[int index, int index2, int index3] => _foo?.GetAsync();
+
+            private class Foo
+            {
+                internal Task<string> GetAsync()
+                {
+                    return Task.FromResult<string>(null);
+                }
+            }
+
+            private readonly Foo _foo;
         }
     }
 }
