@@ -148,6 +148,92 @@ namespace Roslynator
         {
             return (list.Count > 1) ? list.LastButOne() : default(TNode);
         }
+
+        //TODO: pub
+        internal static SeparatedSyntaxList<TNode> WithTriviaFrom<TNode>(this SeparatedSyntaxList<TNode> list, SyntaxNode node) where TNode : SyntaxNode
+        {
+            if (node == null)
+                throw new ArgumentNullException(nameof(node));
+
+            int count = list.Count;
+
+            if (count == 0)
+                return list;
+
+            int separatorCount = list.SeparatorCount;
+
+            if (count == 1)
+            {
+                if (separatorCount == 0)
+                {
+                    return list.ReplaceAt(0, list[0].WithTriviaFrom(node));
+                }
+                else
+                {
+                    list = list.ReplaceAt(0, list[0].WithLeadingTrivia(node.GetLeadingTrivia()));
+
+                    SyntaxToken separator = list.GetSeparator(0);
+
+                    return list.ReplaceSeparator(separator, separator.WithTrailingTrivia(node.GetTrailingTrivia()));
+                }
+            }
+            else
+            {
+                list = list.ReplaceAt(0, list[0].WithLeadingTrivia(node.GetLeadingTrivia()));
+
+                if (separatorCount == count - 1)
+                {
+                    return list.ReplaceAt(1, list[1].WithTrailingTrivia(node.GetTrailingTrivia()));
+                }
+                else
+                {
+                    SyntaxToken separator = list.GetSeparator(separatorCount - 1);
+
+                    return list.ReplaceSeparator(separator, separator.WithTrailingTrivia(node.GetTrailingTrivia()));
+                }
+            }
+        }
+
+        internal static SeparatedSyntaxList<TNode> WithTriviaFrom<TNode>(this SeparatedSyntaxList<TNode> list, SyntaxToken token) where TNode : SyntaxNode
+        {
+            int count = list.Count;
+
+            if (count == 0)
+                return list;
+
+            int separatorCount = list.SeparatorCount;
+
+            if (count == 1)
+            {
+                if (separatorCount == 0)
+                {
+                    return list.ReplaceAt(0, list[0].WithTriviaFrom(token));
+                }
+                else
+                {
+                    list = list.ReplaceAt(0, list[0].WithLeadingTrivia(token.LeadingTrivia));
+
+                    SyntaxToken separator = list.GetSeparator(0);
+
+                    return list.ReplaceSeparator(separator, separator.WithTrailingTrivia(token.TrailingTrivia));
+                }
+            }
+            else
+            {
+                list = list.ReplaceAt(0, list[0].WithLeadingTrivia(token.LeadingTrivia));
+
+                if (separatorCount == count - 1)
+                {
+                    return list.ReplaceAt(1, list[1].WithTrailingTrivia(token.TrailingTrivia));
+                }
+                else
+                {
+                    SyntaxToken separator = list.GetSeparator(separatorCount - 1);
+
+                    return list.ReplaceSeparator(separator, separator.WithTrailingTrivia(token.TrailingTrivia));
+                }
+            }
+        }
         #endregion SeparatedSyntaxList<T>
 
         #region SyntaxList<T>
@@ -303,6 +389,40 @@ namespace Roslynator
         internal static TNode LastButOneOrDefault<TNode>(this SyntaxList<TNode> list) where TNode : SyntaxNode
         {
             return (list.Count > 1) ? list.LastButOne() : default(TNode);
+        }
+
+        //TODO: pub
+        internal static SyntaxList<TNode> WithTriviaFrom<TNode>(this SyntaxList<TNode> list, SyntaxNode node) where TNode : SyntaxNode
+        {
+            if (node == null)
+                throw new ArgumentNullException(nameof(node));
+
+            int count = list.Count;
+
+            if (count == 0)
+                return list;
+
+            if (count == 1)
+                return list.ReplaceAt(0, list[0].WithTriviaFrom(node));
+
+            return list
+                .ReplaceAt(0, list[0].WithLeadingTrivia(node.GetLeadingTrivia()))
+                .ReplaceAt(1, list[1].WithTrailingTrivia(node.GetTrailingTrivia()));
+        }
+
+        internal static SyntaxList<TNode> WithTriviaFrom<TNode>(this SyntaxList<TNode> list, SyntaxToken token) where TNode : SyntaxNode
+        {
+            int count = list.Count;
+
+            if (count == 0)
+                return list;
+
+            if (count == 1)
+                return list.ReplaceAt(0, list[0].WithTriviaFrom(token));
+
+            return list
+                .ReplaceAt(0, list[0].WithLeadingTrivia(token.LeadingTrivia))
+                .ReplaceAt(1, list[1].WithTrailingTrivia(token.TrailingTrivia));
         }
         #endregion SyntaxList<T>
 
