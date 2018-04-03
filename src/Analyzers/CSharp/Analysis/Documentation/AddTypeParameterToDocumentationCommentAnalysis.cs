@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace Roslynator.CSharp.Analysis.DocumentationComment
+namespace Roslynator.CSharp.Analysis.Documentation
 {
     internal class AddTypeParameterToDocumentationCommentAnalysis : DocumentationCommentAnalysis<TypeParameterSyntax>
     {

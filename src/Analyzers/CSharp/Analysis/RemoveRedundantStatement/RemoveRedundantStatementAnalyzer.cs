@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 using static Roslynator.CSharp.Analysis.RemoveRedundantStatement.RemoveRedundantStatementAnalysis;
 
-namespace Roslynator.CSharp.Analysis
+namespace Roslynator.CSharp.Analysis.RemoveRedundantStatement
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class RemoveRedundantStatementAnalyzer : BaseDiagnosticAnalyzer
