@@ -158,7 +158,7 @@ namespace Roslynator
             int count = list.Count;
 
             if (count == 0)
-                return list;
+                throw new ArgumentException("The list is empty.", nameof(list));
 
             int separatorCount = list.SeparatorCount;
 
@@ -199,7 +199,7 @@ namespace Roslynator
             int count = list.Count;
 
             if (count == 0)
-                return list;
+                throw new ArgumentException("The list is empty.", nameof(list));
 
             int separatorCount = list.SeparatorCount;
 
@@ -400,7 +400,7 @@ namespace Roslynator
             int count = list.Count;
 
             if (count == 0)
-                return list;
+                throw new ArgumentException("The list is empty.", nameof(list));
 
             if (count == 1)
                 return list.ReplaceAt(0, list[0].WithTriviaFrom(node));
@@ -415,7 +415,7 @@ namespace Roslynator
             int count = list.Count;
 
             if (count == 0)
-                return list;
+                throw new ArgumentException("The list is empty.", nameof(list));
 
             if (count == 1)
                 return list.ReplaceAt(0, list[0].WithTriviaFrom(token));

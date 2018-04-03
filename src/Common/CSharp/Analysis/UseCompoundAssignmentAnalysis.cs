@@ -19,7 +19,7 @@ namespace Roslynator.CSharp.Analysis
             if (assignmentExpression.IsParentKind(SyntaxKind.ObjectInitializerExpression))
                 return false;
 
-            if (!SupportsCompoundAssignmentExpression(assignmentInfo.Right.Kind()))
+            if (!IsFixableBinaryExpression(assignmentInfo.Right.Kind()))
                 return false;
 
             BinaryExpressionInfo binaryInfo = SyntaxInfo.BinaryExpressionInfo((BinaryExpressionSyntax)assignmentInfo.Right);
@@ -31,6 +31,26 @@ namespace Roslynator.CSharp.Analysis
                 return false;
 
             return true;
+        }
+
+        private static bool IsFixableBinaryExpression(SyntaxKind kind)
+        {
+            switch (kind)
+            {
+                case SyntaxKind.AddExpression:
+                case SyntaxKind.SubtractExpression:
+                case SyntaxKind.MultiplyExpression:
+                case SyntaxKind.DivideExpression:
+                case SyntaxKind.ModuloExpression:
+                case SyntaxKind.BitwiseAndExpression:
+                case SyntaxKind.ExclusiveOrExpression:
+                case SyntaxKind.BitwiseOrExpression:
+                case SyntaxKind.LeftShiftExpression:
+                case SyntaxKind.RightShiftExpression:
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         public static string GetCompoundOperatorText(BinaryExpressionSyntax binaryExpression)
