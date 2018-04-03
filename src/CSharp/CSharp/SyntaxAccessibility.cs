@@ -1429,7 +1429,6 @@ namespace Roslynator.CSharp
             return false;
         }
 
-        //TODO: WithoutExplicitAccessibility
         /// <summary>
         /// Creates a new node with the explicit accessibility removed.
         /// </summary>
