@@ -7,10 +7,9 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
-using Roslynator.CSharp.Analysis.MarkLocalVariableAsConst;
 using Roslynator.CSharp.Syntax;
 
-namespace Roslynator.CSharp.Analysis
+namespace Roslynator.CSharp.Analysis.MarkLocalVariableAsConst
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class LocalDeclarationStatementAnalyzer : BaseDiagnosticAnalyzer

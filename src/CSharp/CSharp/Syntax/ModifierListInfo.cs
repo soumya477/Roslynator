@@ -349,9 +349,149 @@ namespace Roslynator.CSharp.Syntax
             return new ModifierListInfo(parameter, parameter.Modifiers);
         }
 
-        internal AccessibilityInfo AccessibilityInfo()
+        /// <summary>
+        /// Creates a new <see cref="ModifierListInfo"/> with accessibility modifiers removed.
+        /// </summary>
+        /// <param name="newAccessibility"></param>
+        /// <param name="comparer"></param>
+        /// <returns></returns>
+        public ModifierListInfo WithoutExplicitAccessibility()
         {
-            return Syntax.AccessibilityInfo.Create(Parent, Modifiers);
+            return WithExplicitAccessibility(Accessibility.NotApplicable);
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="ModifierListInfo"/> with accessibility modifiers updated.
+        /// </summary>
+        /// <param name="newAccessibility"></param>
+        /// <param name="comparer"></param>
+        /// <returns></returns>
+        public ModifierListInfo WithExplicitAccessibility(Accessibility newAccessibility, IComparer<SyntaxKind> comparer = null)
+        {
+            ThrowInvalidOperationIfNotInitialized();
+
+            Accessibility accessibility = ExplicitAccessibility;
+
+            if (accessibility == newAccessibility)
+                return this;
+
+            comparer = comparer ?? ModifierKindComparer.Default;
+
+            SyntaxNode declaration = Parent;
+
+            if (accessibility.IsSingleTokenAccessibility()
+                && newAccessibility.IsSingleTokenAccessibility())
+            {
+                int insertIndex = ModifierList.GetInsertIndex(Modifiers, GetTokenKind(), comparer);
+
+                int tokenIndex = GetFirstTokenIndex();
+
+                if (tokenIndex == insertIndex
+                    || tokenIndex == insertIndex - 1)
+                {
+                    SyntaxToken token = Modifiers[tokenIndex];
+
+                    SyntaxToken newToken = SyntaxFactory.Token(GetTokenKind()).WithTriviaFrom(token);
+
+                    SyntaxTokenList newModifiers = Modifiers.Replace(token, newToken);
+
+                    return WithModifiers(newModifiers);
+                }
+            }
+
+            if (accessibility != Accessibility.NotApplicable)
+            {
+                (int tokenIndex, int secondTokenIndex) = GetTokenIndexes();
+
+                declaration = ModifierList.RemoveAt(declaration, Math.Max(tokenIndex, secondTokenIndex));
+
+                if (secondTokenIndex != -1)
+                    declaration = ModifierList.RemoveAt(declaration, Math.Min(tokenIndex, secondTokenIndex));
+            }
+
+            if (newAccessibility != Accessibility.NotApplicable)
+                declaration = ModifierList.Insert(declaration, newAccessibility, comparer);
+
+            return SyntaxInfo.ModifierListInfo(declaration);
+
+            SyntaxKind GetTokenKind()
+            {
+                switch (newAccessibility)
+                {
+                    case Accessibility.Private:
+                        return SyntaxKind.PrivateKeyword;
+                    case Accessibility.Protected:
+                        return SyntaxKind.ProtectedKeyword;
+                    case Accessibility.Internal:
+                        return SyntaxKind.InternalKeyword;
+                    case Accessibility.Public:
+                        return SyntaxKind.PublicKeyword;
+                    case Accessibility.NotApplicable:
+                        return SyntaxKind.None;
+                    default:
+                        throw new ArgumentException("", nameof(newAccessibility));
+                }
+            }
+        }
+
+        private (int firstIndex, int secondIndex) GetTokenIndexes()
+        {
+            int count = Modifiers.Count;
+
+            for (int i = 0; i < count; i++)
+            {
+                switch (Modifiers[i].Kind())
+                {
+                    case SyntaxKind.PublicKeyword:
+                        {
+                            return (i, -1);
+                        }
+                    case SyntaxKind.PrivateKeyword:
+                    case SyntaxKind.InternalKeyword:
+                        {
+                            for (int j = i + 1; j < count; j++)
+                            {
+                                if (Modifiers[j].IsKind(SyntaxKind.ProtectedKeyword))
+                                    return (i, j);
+                            }
+
+                            return (i, -1);
+                        }
+                    case SyntaxKind.ProtectedKeyword:
+                        {
+                            for (int j = i + 1; j < count; j++)
+                            {
+                                if (Modifiers[j].IsKind(SyntaxKind.InternalKeyword, SyntaxKind.PrivateKeyword))
+                                    return (i, j);
+                            }
+
+                            return (i, -1);
+                        }
+                }
+            }
+
+            return (-1, -1);
+        }
+
+        private int GetFirstTokenIndex()
+        {
+            int count = Modifiers.Count;
+
+            for (int i = 0; i < count; i++)
+            {
+                switch (Modifiers[i].Kind())
+                {
+                    case SyntaxKind.PublicKeyword:
+                    case SyntaxKind.PrivateKeyword:
+                    case SyntaxKind.InternalKeyword:
+                    case SyntaxKind.ProtectedKeyword:
+                        {
+                            return i;
+                        }
+                }
+            }
+
+            return -1;
         }
 
         /// <summary>
