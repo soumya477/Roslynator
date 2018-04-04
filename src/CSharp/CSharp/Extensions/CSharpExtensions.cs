@@ -14,7 +14,13 @@ namespace Roslynator.CSharp
     /// </summary>
     public static class CSharpExtensions
     {
-        //TODO: pub
+        /// <summary>
+        /// Returns a method symbol for the specified local function syntax.
+        /// </summary>
+        /// <param name="semanticModel"></param>
+        /// <param name="localFunction"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         internal static IMethodSymbol GetDeclaredSymbol(
             this SemanticModel semanticModel,
             LocalFunctionStatementSyntax localFunction,

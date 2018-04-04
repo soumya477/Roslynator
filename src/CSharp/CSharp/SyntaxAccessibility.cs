@@ -1429,7 +1429,6 @@ namespace Roslynator.CSharp
             return false;
         }
 
-        //TODO: WithoutExplicitAccessibility
         /// <summary>
         /// Creates a new node with the explicit accessibility removed.
         /// </summary>
@@ -1459,14 +1458,14 @@ namespace Roslynator.CSharp
             if (node == null)
                 throw new ArgumentNullException(nameof(node));
 
-            AccessibilityInfo info = SyntaxInfo.AccessibilityInfo(node);
+            ModifierListInfo info = SyntaxInfo.ModifierListInfo(node);
 
             if (!info.Success)
                 throw new ArgumentException($"'{node.Kind()}' cannot have modifiers.", nameof(node));
 
-            AccessibilityInfo newInfo = info.WithExplicitAccessibility(newAccessibility, comparer);
+            ModifierListInfo newInfo = info.WithExplicitAccessibility(newAccessibility, comparer);
 
-            return (TNode)newInfo.Node;
+            return (TNode)newInfo.Parent;
         }
 
         /// <summary>

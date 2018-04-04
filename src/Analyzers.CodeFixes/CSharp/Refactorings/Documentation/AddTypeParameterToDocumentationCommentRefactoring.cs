@@ -3,7 +3,7 @@
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Roslynator.CSharp.Analysis.DocumentationComment;
+using Roslynator.CSharp.Analysis.Documentation;
 
 namespace Roslynator.CSharp.Refactorings.DocumentationComment
 {

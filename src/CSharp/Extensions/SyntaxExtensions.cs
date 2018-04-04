@@ -149,8 +149,7 @@ namespace Roslynator
             return (list.Count > 1) ? list.LastButOne() : default(TNode);
         }
 
-        //TODO: pub
-        internal static SeparatedSyntaxList<TNode> WithTriviaFrom<TNode>(this SeparatedSyntaxList<TNode> list, SyntaxNode node) where TNode : SyntaxNode
+        public static SeparatedSyntaxList<TNode> WithTriviaFrom<TNode>(this SeparatedSyntaxList<TNode> list, SyntaxNode node) where TNode : SyntaxNode
         {
             if (node == null)
                 throw new ArgumentNullException(nameof(node));
@@ -194,7 +193,7 @@ namespace Roslynator
             }
         }
 
-        internal static SeparatedSyntaxList<TNode> WithTriviaFrom<TNode>(this SeparatedSyntaxList<TNode> list, SyntaxToken token) where TNode : SyntaxNode
+        public static SeparatedSyntaxList<TNode> WithTriviaFrom<TNode>(this SeparatedSyntaxList<TNode> list, SyntaxToken token) where TNode : SyntaxNode
         {
             int count = list.Count;
 
@@ -391,8 +390,7 @@ namespace Roslynator
             return (list.Count > 1) ? list.LastButOne() : default(TNode);
         }
 
-        //TODO: pub
-        internal static SyntaxList<TNode> WithTriviaFrom<TNode>(this SyntaxList<TNode> list, SyntaxNode node) where TNode : SyntaxNode
+        public static SyntaxList<TNode> WithTriviaFrom<TNode>(this SyntaxList<TNode> list, SyntaxNode node) where TNode : SyntaxNode
         {
             if (node == null)
                 throw new ArgumentNullException(nameof(node));
@@ -410,7 +408,7 @@ namespace Roslynator
                 .ReplaceAt(1, list[1].WithTrailingTrivia(node.GetTrailingTrivia()));
         }
 
-        internal static SyntaxList<TNode> WithTriviaFrom<TNode>(this SyntaxList<TNode> list, SyntaxToken token) where TNode : SyntaxNode
+        public static SyntaxList<TNode> WithTriviaFrom<TNode>(this SyntaxList<TNode> list, SyntaxToken token) where TNode : SyntaxNode
         {
             int count = list.Count;
 
