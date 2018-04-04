@@ -14,7 +14,6 @@ namespace Roslynator.CSharp
     /// </summary>
     public static class CSharpExtensions
     {
-        //TODO: pub
         /// <summary>
         /// Returns a method symbol for the specified local function syntax.
         /// </summary>
