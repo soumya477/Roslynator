@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Roslynator.CSharp;
 using Roslynator.CSharp.Syntax;
 
-namespace Roslynator.CSharp.Analysis.DocumentationComment
+namespace Roslynator.CSharp.Analysis.Documentation
 {
     internal static class DocumentationCommentAnalysis
     {

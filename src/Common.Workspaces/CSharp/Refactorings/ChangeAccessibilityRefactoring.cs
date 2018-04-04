@@ -216,14 +216,14 @@ namespace Roslynator.CSharp.Refactorings
 
         private static SyntaxNode WithAccessibility(MemberDeclarationSyntax node, Accessibility newAccessibility)
         {
-            AccessibilityInfo info = SyntaxInfo.AccessibilityInfo(node);
+            ModifierListInfo info = SyntaxInfo.ModifierListInfo(node);
 
             if (info.ExplicitAccessibility == Accessibility.NotApplicable)
                 return node;
 
-            AccessibilityInfo newInfo = info.WithExplicitAccessibility(newAccessibility, ModifierKindComparer.Default);
+            ModifierListInfo newInfo = info.WithExplicitAccessibility(newAccessibility, ModifierKindComparer.Default);
 
-            return newInfo.Node;
+            return newInfo.Parent;
         }
     }
 }

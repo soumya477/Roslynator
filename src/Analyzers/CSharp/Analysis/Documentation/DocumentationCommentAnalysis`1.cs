@@ -7,7 +7,7 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Roslynator.CSharp.Analysis.DocumentationComment
+namespace Roslynator.CSharp.Analysis.Documentation
 {
     internal abstract class DocumentationCommentAnalysis<TNode> where TNode : SyntaxNode
     {
