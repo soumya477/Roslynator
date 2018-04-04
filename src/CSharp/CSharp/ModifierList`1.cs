@@ -119,7 +119,6 @@ namespace Roslynator.CSharp
             if (!modifiers.Any()
                 || index == modifiers.Count)
             {
-                //TODO: test
                 if (modifiers.Any())
                 {
                     token = modifiers.Last().GetNextToken();

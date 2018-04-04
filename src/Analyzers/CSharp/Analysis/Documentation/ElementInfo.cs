@@ -2,7 +2,7 @@
 
 using Microsoft.CodeAnalysis;
 
-namespace Roslynator.CSharp.Analysis.DocumentationComment
+namespace Roslynator.CSharp.Analysis.Documentation
 {
     internal abstract class ElementInfo<TNode> where TNode : SyntaxNode
     {

@@ -2,7 +2,7 @@
 
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Roslynator.CSharp.Analysis.DocumentationComment
+namespace Roslynator.CSharp.Analysis.Documentation
 {
     internal class TypeParamElementInfo : ElementInfo<TypeParameterSyntax>
     {
