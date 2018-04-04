@@ -35,6 +35,7 @@ namespace Roslynator.CSharp
             return document.RemoveNodeAsync(node, GetRemoveOptions(node), cancellationToken);
         }
 
+        //TODO: int
         /// <summary>
         /// Create a new document with the specified member declaration removed.
         /// </summary>

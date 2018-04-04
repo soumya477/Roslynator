@@ -1689,6 +1689,7 @@ namespace Roslynator
             return false;
         }
 
+        //TODO: del
         /// <summary>
         /// Returns true if the type is <see cref="IEnumerable"/>.
         /// </summary>
@@ -1786,6 +1787,7 @@ namespace Roslynator
                 || IsConstructedFromIEnumerableOfT(typeSymbol);
         }
 
+        //TODO: IsReferenceTypeOrNullableType
         /// <summary>
         /// Returns true if the type is a reference type or constructed from <see cref="Nullable{T}"/>.
         /// </summary>

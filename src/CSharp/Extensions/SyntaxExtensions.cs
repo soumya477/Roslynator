@@ -193,6 +193,7 @@ namespace Roslynator
             }
         }
 
+        //TODO: del
         public static SeparatedSyntaxList<TNode> WithTriviaFrom<TNode>(this SeparatedSyntaxList<TNode> list, SyntaxToken token) where TNode : SyntaxNode
         {
             int count = list.Count;

@@ -10,6 +10,7 @@ using Roslynator.CSharp.Syntax;
 
 namespace Roslynator.CSharp
 {
+    //TODO: AccessibilityAnalysis
     /// <summary>
     /// A set of static methods that are related to C# accessibility.
     /// </summary>
@@ -1384,6 +1385,7 @@ namespace Roslynator.CSharp
             return GetExplicitAccessibility(accessorDeclaration.Modifiers);
         }
 
+        //TODO: add overloads
         /// <summary>
         /// Return true if the specified declaration is publicly visible.
         /// </summary>
@@ -1429,6 +1431,7 @@ namespace Roslynator.CSharp
             return false;
         }
 
+        //TODO: del
         /// <summary>
         /// Creates a new node with the explicit accessibility removed.
         /// </summary>

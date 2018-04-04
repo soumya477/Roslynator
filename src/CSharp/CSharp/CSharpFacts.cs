@@ -397,12 +397,13 @@ namespace Roslynator.CSharp
             }
         }
 
+        //TODO: del
         /// <summary>
         /// Returns true if a syntax of the specified kind can have accessibility modifiers.
         /// </summary>
         /// <param name="kind"></param>
         /// <returns></returns>
-        public static bool CanHaveAccessibility(SyntaxKind kind)
+        public static bool CanHaveAccessibilityModifiers(SyntaxKind kind)
         {
             switch (kind)
             {
@@ -410,7 +411,6 @@ namespace Roslynator.CSharp
                 case SyntaxKind.ConstructorDeclaration:
                 case SyntaxKind.ConversionOperatorDeclaration:
                 case SyntaxKind.DelegateDeclaration:
-                case SyntaxKind.DestructorDeclaration:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.EventDeclaration:
                 case SyntaxKind.EventFieldDeclaration:

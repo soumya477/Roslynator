@@ -789,6 +789,7 @@ namespace Roslynator.CSharp
             return (statement?.Kind() == SyntaxKind.Block) ? null : statement;
         }
 
+        //TODO: ToCascade
         /// <summary>
         /// Returns <see cref="IfStatementCascade"/> that enables to enumerate if-else cascade.
         /// </summary>
@@ -3374,6 +3375,7 @@ namespace Roslynator.CSharp
             return trivia.IsKind(SyntaxKind.WhitespaceTrivia, SyntaxKind.EndOfLineTrivia);
         }
 
+        //TODO: del
         /// <summary>
         /// Returns true if the trivia is a documentation comment trivia.
         /// </summary>
