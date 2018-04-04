@@ -4,9 +4,8 @@ using System;
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
-using Roslynator.CSharp.Analysis.MakeMemberReadOnly;
 
-namespace Roslynator.CSharp.Analysis
+namespace Roslynator.CSharp.Analysis.MakeMemberReadOnly
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class MarkFieldAsReadOnlyAnalyzer : BaseDiagnosticAnalyzer
