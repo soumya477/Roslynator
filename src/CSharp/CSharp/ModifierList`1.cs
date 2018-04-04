@@ -15,6 +15,8 @@ namespace Roslynator.CSharp
         {
         }
 
+        internal abstract SyntaxList<AttributeListSyntax> GetAttributeLists(TNode node);
+
         internal abstract SyntaxTokenList GetModifiers(TNode node);
 
         internal abstract TNode WithModifiers(TNode node, SyntaxTokenList modifiers);
@@ -117,10 +119,23 @@ namespace Roslynator.CSharp
             if (!modifiers.Any()
                 || index == modifiers.Count)
             {
-                //TODO: test
-                token = (modifiers.Any())
-                    ? node.FindToken(modifiers.FullSpan.End)
-                    : node.GetFirstToken();
+                if (modifiers.Any())
+                {
+                    token = modifiers.Last().GetNextToken();
+                }
+                else
+                {
+                    AttributeListSyntax attributeList = GetAttributeLists(node).LastOrDefault();
+
+                    if (attributeList != null)
+                    {
+                        token = attributeList.GetLastToken().GetNextToken();
+                    }
+                    else
+                    {
+                        token = node.GetFirstToken();
+                    }
+                }
             }
             else
             {
@@ -337,6 +352,11 @@ namespace Roslynator.CSharp
 
         private class AccessorDeclarationModifierList : ModifierList<AccessorDeclarationSyntax>
         {
+            internal override SyntaxList<AttributeListSyntax> GetAttributeLists(AccessorDeclarationSyntax node)
+            {
+                return node.AttributeLists;
+            }
+
             internal override SyntaxTokenList GetModifiers(AccessorDeclarationSyntax node)
             {
                 return node.Modifiers;
@@ -350,6 +370,11 @@ namespace Roslynator.CSharp
 
         private class ClassDeclarationModifierList : ModifierList<ClassDeclarationSyntax>
         {
+            internal override SyntaxList<AttributeListSyntax> GetAttributeLists(ClassDeclarationSyntax node)
+            {
+                return node.AttributeLists;
+            }
+
             internal override SyntaxTokenList GetModifiers(ClassDeclarationSyntax node)
             {
                 return node.Modifiers;
@@ -363,6 +388,11 @@ namespace Roslynator.CSharp
 
         private class ConstructorDeclarationModifierList : ModifierList<ConstructorDeclarationSyntax>
         {
+            internal override SyntaxList<AttributeListSyntax> GetAttributeLists(ConstructorDeclarationSyntax node)
+            {
+                return node.AttributeLists;
+            }
+
             internal override SyntaxTokenList GetModifiers(ConstructorDeclarationSyntax node)
             {
                 return node.Modifiers;
@@ -376,6 +406,11 @@ namespace Roslynator.CSharp
 
         private class ConversionOperatorDeclarationModifierList : ModifierList<ConversionOperatorDeclarationSyntax>
         {
+            internal override SyntaxList<AttributeListSyntax> GetAttributeLists(ConversionOperatorDeclarationSyntax node)
+            {
+                return node.AttributeLists;
+            }
+
             internal override SyntaxTokenList GetModifiers(ConversionOperatorDeclarationSyntax node)
             {
                 return node.Modifiers;
@@ -389,6 +424,11 @@ namespace Roslynator.CSharp
 
         private class DelegateDeclarationModifierList : ModifierList<DelegateDeclarationSyntax>
         {
+            internal override SyntaxList<AttributeListSyntax> GetAttributeLists(DelegateDeclarationSyntax node)
+            {
+                return node.AttributeLists;
+            }
+
             internal override SyntaxTokenList GetModifiers(DelegateDeclarationSyntax node)
             {
                 return node.Modifiers;
@@ -402,6 +442,11 @@ namespace Roslynator.CSharp
 
         private class DestructorDeclarationModifierList : ModifierList<DestructorDeclarationSyntax>
         {
+            internal override SyntaxList<AttributeListSyntax> GetAttributeLists(DestructorDeclarationSyntax node)
+            {
+                return node.AttributeLists;
+            }
+
             internal override SyntaxTokenList GetModifiers(DestructorDeclarationSyntax node)
             {
                 return node.Modifiers;
@@ -415,6 +460,11 @@ namespace Roslynator.CSharp
 
         private class EnumDeclarationModifierList : ModifierList<EnumDeclarationSyntax>
         {
+            internal override SyntaxList<AttributeListSyntax> GetAttributeLists(EnumDeclarationSyntax node)
+            {
+                return node.AttributeLists;
+            }
+
             internal override SyntaxTokenList GetModifiers(EnumDeclarationSyntax node)
             {
                 return node.Modifiers;
@@ -428,6 +478,11 @@ namespace Roslynator.CSharp
 
         private class EventDeclarationModifierList : ModifierList<EventDeclarationSyntax>
         {
+            internal override SyntaxList<AttributeListSyntax> GetAttributeLists(EventDeclarationSyntax node)
+            {
+                return node.AttributeLists;
+            }
+
             internal override SyntaxTokenList GetModifiers(EventDeclarationSyntax node)
             {
                 return node.Modifiers;
@@ -441,6 +496,11 @@ namespace Roslynator.CSharp
 
         private class EventFieldDeclarationModifierList : ModifierList<EventFieldDeclarationSyntax>
         {
+            internal override SyntaxList<AttributeListSyntax> GetAttributeLists(EventFieldDeclarationSyntax node)
+            {
+                return node.AttributeLists;
+            }
+
             internal override SyntaxTokenList GetModifiers(EventFieldDeclarationSyntax node)
             {
                 return node.Modifiers;
@@ -454,6 +514,11 @@ namespace Roslynator.CSharp
 
         private class FieldDeclarationModifierList : ModifierList<FieldDeclarationSyntax>
         {
+            internal override SyntaxList<AttributeListSyntax> GetAttributeLists(FieldDeclarationSyntax node)
+            {
+                return node.AttributeLists;
+            }
+
             internal override SyntaxTokenList GetModifiers(FieldDeclarationSyntax node)
             {
                 return node.Modifiers;
@@ -467,6 +532,11 @@ namespace Roslynator.CSharp
 
         private class IncompleteMemberModifierList : ModifierList<IncompleteMemberSyntax>
         {
+            internal override SyntaxList<AttributeListSyntax> GetAttributeLists(IncompleteMemberSyntax node)
+            {
+                return node.AttributeLists;
+            }
+
             internal override SyntaxTokenList GetModifiers(IncompleteMemberSyntax node)
             {
                 return node.Modifiers;
@@ -480,6 +550,11 @@ namespace Roslynator.CSharp
 
         private class IndexerDeclarationModifierList : ModifierList<IndexerDeclarationSyntax>
         {
+            internal override SyntaxList<AttributeListSyntax> GetAttributeLists(IndexerDeclarationSyntax node)
+            {
+                return node.AttributeLists;
+            }
+
             internal override SyntaxTokenList GetModifiers(IndexerDeclarationSyntax node)
             {
                 return node.Modifiers;
@@ -493,6 +568,11 @@ namespace Roslynator.CSharp
 
         private class InterfaceDeclarationModifierList : ModifierList<InterfaceDeclarationSyntax>
         {
+            internal override SyntaxList<AttributeListSyntax> GetAttributeLists(InterfaceDeclarationSyntax node)
+            {
+                return node.AttributeLists;
+            }
+
             internal override SyntaxTokenList GetModifiers(InterfaceDeclarationSyntax node)
             {
                 return node.Modifiers;
@@ -506,6 +586,11 @@ namespace Roslynator.CSharp
 
         private class LocalDeclarationStatementModifierList : ModifierList<LocalDeclarationStatementSyntax>
         {
+            internal override SyntaxList<AttributeListSyntax> GetAttributeLists(LocalDeclarationStatementSyntax node)
+            {
+                return default(SyntaxList<AttributeListSyntax>);
+            }
+
             internal override SyntaxTokenList GetModifiers(LocalDeclarationStatementSyntax node)
             {
                 return node.Modifiers;
@@ -519,6 +604,11 @@ namespace Roslynator.CSharp
 
         private class LocalFunctionStatementModifierList : ModifierList<LocalFunctionStatementSyntax>
         {
+            internal override SyntaxList<AttributeListSyntax> GetAttributeLists(LocalFunctionStatementSyntax node)
+            {
+                return default(SyntaxList<AttributeListSyntax>);
+            }
+
             internal override SyntaxTokenList GetModifiers(LocalFunctionStatementSyntax node)
             {
                 return node.Modifiers;
@@ -532,6 +622,11 @@ namespace Roslynator.CSharp
 
         private class MethodDeclarationModifierList : ModifierList<MethodDeclarationSyntax>
         {
+            internal override SyntaxList<AttributeListSyntax> GetAttributeLists(MethodDeclarationSyntax node)
+            {
+                return node.AttributeLists;
+            }
+
             internal override SyntaxTokenList GetModifiers(MethodDeclarationSyntax node)
             {
                 return node.Modifiers;
@@ -545,6 +640,11 @@ namespace Roslynator.CSharp
 
         private class OperatorDeclarationModifierList : ModifierList<OperatorDeclarationSyntax>
         {
+            internal override SyntaxList<AttributeListSyntax> GetAttributeLists(OperatorDeclarationSyntax node)
+            {
+                return node.AttributeLists;
+            }
+
             internal override SyntaxTokenList GetModifiers(OperatorDeclarationSyntax node)
             {
                 return node.Modifiers;
@@ -558,6 +658,11 @@ namespace Roslynator.CSharp
 
         private class ParameterModifierList : ModifierList<ParameterSyntax>
         {
+            internal override SyntaxList<AttributeListSyntax> GetAttributeLists(ParameterSyntax node)
+            {
+                return node.AttributeLists;
+            }
+
             internal override SyntaxTokenList GetModifiers(ParameterSyntax node)
             {
                 return node.Modifiers;
@@ -571,6 +676,11 @@ namespace Roslynator.CSharp
 
         private class PropertyDeclarationModifierList : ModifierList<PropertyDeclarationSyntax>
         {
+            internal override SyntaxList<AttributeListSyntax> GetAttributeLists(PropertyDeclarationSyntax node)
+            {
+                return node.AttributeLists;
+            }
+
             internal override SyntaxTokenList GetModifiers(PropertyDeclarationSyntax node)
             {
                 return node.Modifiers;
@@ -584,6 +694,11 @@ namespace Roslynator.CSharp
 
         private class StructDeclarationModifierList : ModifierList<StructDeclarationSyntax>
         {
+            internal override SyntaxList<AttributeListSyntax> GetAttributeLists(StructDeclarationSyntax node)
+            {
+                return node.AttributeLists;
+            }
+
             internal override SyntaxTokenList GetModifiers(StructDeclarationSyntax node)
             {
                 return node.Modifiers;

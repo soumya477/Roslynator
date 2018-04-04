@@ -8,10 +8,9 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
-using Roslynator.CSharp.Analysis.UnusedParameter;
 using Roslynator.CSharp.Syntax;
 
-namespace Roslynator.CSharp.Analysis
+namespace Roslynator.CSharp.Analysis.UnusedParameter
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class UnusedParameterAnalyzer : BaseDiagnosticAnalyzer

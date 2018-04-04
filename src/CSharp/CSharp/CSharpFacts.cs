@@ -294,31 +294,6 @@ namespace Roslynator.CSharp
         }
 
         /// <summary>
-        /// Returns true if a syntax of the specified kind is a binary expression that can be simplified to a compound assignment expression.
-        /// </summary>
-        /// <param name="binaryExpressionKind"></param>
-        /// <returns></returns>
-        internal static bool SupportsCompoundAssignmentExpression(SyntaxKind binaryExpressionKind)
-        {
-            switch (binaryExpressionKind)
-            {
-                case SyntaxKind.AddExpression:
-                case SyntaxKind.SubtractExpression:
-                case SyntaxKind.MultiplyExpression:
-                case SyntaxKind.DivideExpression:
-                case SyntaxKind.ModuloExpression:
-                case SyntaxKind.BitwiseAndExpression:
-                case SyntaxKind.ExclusiveOrExpression:
-                case SyntaxKind.BitwiseOrExpression:
-                case SyntaxKind.LeftShiftExpression:
-                case SyntaxKind.RightShiftExpression:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        /// <summary>
         /// Returns true if a syntax of the specified kind can have modifiers.
         /// </summary>
         /// <param name="kind"></param>
@@ -357,7 +332,6 @@ namespace Roslynator.CSharp
             }
         }
 
-        //TODO: pub
         internal static bool CanHaveUnsafeModifier(SyntaxKind kind)
         {
             switch (kind)
@@ -370,6 +344,7 @@ namespace Roslynator.CSharp
                     return CanHaveModifiers(kind);
             }
         }
+
 
         /// <summary>
         /// Returns true if a syntax of the specified kind can have expression body.
@@ -506,15 +481,6 @@ namespace Roslynator.CSharp
             return false;
         }
 
-        internal static bool CanContainContinueStatement(SyntaxKind kind)
-        {
-            return kind.Is(
-                SyntaxKind.WhileStatement,
-                SyntaxKind.DoStatement,
-                SyntaxKind.ForStatement,
-                SyntaxKind.ForEachStatement);
-        }
-
         internal static bool IsSingleTokenExpression(SyntaxKind kind)
         {
             switch (kind)
@@ -529,6 +495,7 @@ namespace Roslynator.CSharp
                 case SyntaxKind.TrueLiteralExpression:
                 case SyntaxKind.FalseLiteralExpression:
                 case SyntaxKind.NullLiteralExpression:
+                case SyntaxKind.DefaultLiteralExpression:
                     return true;
                 default:
                     return false;
