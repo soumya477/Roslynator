@@ -397,40 +397,6 @@ namespace Roslynator.CSharp
             }
         }
 
-        //TODO: del
-        /// <summary>
-        /// Returns true if a syntax of the specified kind can have accessibility modifiers.
-        /// </summary>
-        /// <param name="kind"></param>
-        /// <returns></returns>
-        public static bool CanHaveAccessibilityModifiers(SyntaxKind kind)
-        {
-            switch (kind)
-            {
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.ConstructorDeclaration:
-                case SyntaxKind.ConversionOperatorDeclaration:
-                case SyntaxKind.DelegateDeclaration:
-                case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.EventDeclaration:
-                case SyntaxKind.EventFieldDeclaration:
-                case SyntaxKind.FieldDeclaration:
-                case SyntaxKind.IndexerDeclaration:
-                case SyntaxKind.InterfaceDeclaration:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.OperatorDeclaration:
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.StructDeclaration:
-                case SyntaxKind.IncompleteMember:
-                case SyntaxKind.GetAccessorDeclaration:
-                case SyntaxKind.SetAccessorDeclaration:
-                case SyntaxKind.UnknownAccessorDeclaration:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
         //XTODO: IsEmbeddableStatement
         /// <summary>
         /// Returns true if a syntax of the specified kind can be an embedded statement.

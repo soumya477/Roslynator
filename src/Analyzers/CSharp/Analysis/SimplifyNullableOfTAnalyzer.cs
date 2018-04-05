@@ -59,7 +59,7 @@ namespace Roslynator.CSharp.Analysis
             if (!(context.SemanticModel.GetSymbol(genericName, context.CancellationToken) is INamedTypeSymbol namedTypeSymbol))
                 return;
 
-            if (!namedTypeSymbol.IsConstructedFrom(SpecialType.System_Nullable_T))
+            if (!namedTypeSymbol.IsNullableType())
                 return;
 
             context.ReportDiagnostic(DiagnosticDescriptors.SimplifyNullableOfT, genericName);
@@ -81,7 +81,7 @@ namespace Roslynator.CSharp.Analysis
             if (CSharpFacts.IsPredefinedType(typeSymbol.SpecialType))
                 return;
 
-            if (!typeSymbol.IsConstructedFrom(SpecialType.System_Nullable_T))
+            if (!typeSymbol.IsNullableType())
                 return;
 
             context.ReportDiagnostic(DiagnosticDescriptors.SimplifyNullableOfT, qualifiedName);

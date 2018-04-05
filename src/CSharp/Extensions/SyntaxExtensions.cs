@@ -192,48 +192,6 @@ namespace Roslynator
                 }
             }
         }
-
-        //TODO: del
-        public static SeparatedSyntaxList<TNode> WithTriviaFrom<TNode>(this SeparatedSyntaxList<TNode> list, SyntaxToken token) where TNode : SyntaxNode
-        {
-            int count = list.Count;
-
-            if (count == 0)
-                return list;
-
-            int separatorCount = list.SeparatorCount;
-
-            if (count == 1)
-            {
-                if (separatorCount == 0)
-                {
-                    return list.ReplaceAt(0, list[0].WithTriviaFrom(token));
-                }
-                else
-                {
-                    list = list.ReplaceAt(0, list[0].WithLeadingTrivia(token.LeadingTrivia));
-
-                    SyntaxToken separator = list.GetSeparator(0);
-
-                    return list.ReplaceSeparator(separator, separator.WithTrailingTrivia(token.TrailingTrivia));
-                }
-            }
-            else
-            {
-                list = list.ReplaceAt(0, list[0].WithLeadingTrivia(token.LeadingTrivia));
-
-                if (separatorCount == count - 1)
-                {
-                    return list.ReplaceAt(1, list[1].WithTrailingTrivia(token.TrailingTrivia));
-                }
-                else
-                {
-                    SyntaxToken separator = list.GetSeparator(separatorCount - 1);
-
-                    return list.ReplaceSeparator(separator, separator.WithTrailingTrivia(token.TrailingTrivia));
-                }
-            }
-        }
         #endregion SeparatedSyntaxList<T>
 
         #region SyntaxList<T>
@@ -407,21 +365,6 @@ namespace Roslynator
             return list
                 .ReplaceAt(0, list[0].WithLeadingTrivia(node.GetLeadingTrivia()))
                 .ReplaceAt(1, list[1].WithTrailingTrivia(node.GetTrailingTrivia()));
-        }
-
-        public static SyntaxList<TNode> WithTriviaFrom<TNode>(this SyntaxList<TNode> list, SyntaxToken token) where TNode : SyntaxNode
-        {
-            int count = list.Count;
-
-            if (count == 0)
-                return list;
-
-            if (count == 1)
-                return list.ReplaceAt(0, list[0].WithTriviaFrom(token));
-
-            return list
-                .ReplaceAt(0, list[0].WithLeadingTrivia(token.LeadingTrivia))
-                .ReplaceAt(1, list[1].WithTrailingTrivia(token.TrailingTrivia));
         }
         #endregion SyntaxList<T>
 

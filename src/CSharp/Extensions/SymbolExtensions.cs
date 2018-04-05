@@ -341,23 +341,10 @@ namespace Roslynator
         }
 
         /// <summary>
-        /// Get a value indicating whether the symbol has any attribute.
-        /// </summary>
-        /// <param name="symbol"></param>
-        /// <returns></returns>
-        public static bool HasAttribute(this ISymbol symbol)
-        {
-            if (symbol == null)
-                throw new ArgumentNullException(nameof(symbol));
-
-            return !symbol.GetAttributes().IsDefaultOrEmpty;
-        }
-
-        /// <summary>
         /// Get a value indicating whether the symbol has specified attribute.
         /// </summary>
         /// <param name="symbol"></param>
-        /// <param name="attributeSymbol">The attribute class.</param>
+        /// <param name="attributeSymbol"></param>
         /// <returns></returns>
         public static bool HasAttribute(this ISymbol symbol, INamedTypeSymbol attributeSymbol)
         {
@@ -831,10 +818,7 @@ namespace Roslynator
         /// <returns></returns>
         public static IMethodSymbol ReducedFromOrSelf(this IMethodSymbol methodSymbol)
         {
-            if (methodSymbol == null)
-                throw new ArgumentNullException(nameof(methodSymbol));
-
-            return methodSymbol.ReducedFrom ?? methodSymbol;
+            return methodSymbol?.ReducedFrom ?? methodSymbol;
         }
 
         /// <summary>
@@ -844,10 +828,7 @@ namespace Roslynator
         /// <returns></returns>
         public static bool IsReducedExtensionMethod(this IMethodSymbol methodSymbol)
         {
-            if (methodSymbol == null)
-                throw new ArgumentNullException(nameof(methodSymbol));
-
-            return methodSymbol.MethodKind == MethodKind.ReducedExtension;
+            return methodSymbol?.MethodKind == MethodKind.ReducedExtension;
         }
 
         /// <summary>
@@ -857,10 +838,7 @@ namespace Roslynator
         /// <returns></returns>
         public static bool IsOrdinaryExtensionMethod(this IMethodSymbol methodSymbol)
         {
-            if (methodSymbol == null)
-                throw new ArgumentNullException(nameof(methodSymbol));
-
-            return methodSymbol.IsExtensionMethod
+            return methodSymbol?.IsExtensionMethod == true
                 && methodSymbol.MethodKind == MethodKind.Ordinary;
         }
 
@@ -884,6 +862,7 @@ namespace Roslynator
         }
         #endregion IMethodSymbol
 
+        //TODO: ren IsParameterArrayOf
         #region IParameterSymbol
         /// <summary>
         /// Returns true if the parameter was declared as a parameter array that has a specified element type.
@@ -893,10 +872,7 @@ namespace Roslynator
         /// <returns></returns>
         public static bool IsParamsOf(this IParameterSymbol parameterSymbol, SpecialType elementType)
         {
-            if (parameterSymbol == null)
-                throw new ArgumentNullException(nameof(parameterSymbol));
-
-            return parameterSymbol.IsParams
+            return parameterSymbol?.IsParams == true
                 && (parameterSymbol.Type as IArrayTypeSymbol)?.ElementType.SpecialType == elementType;
         }
 
@@ -912,10 +888,7 @@ namespace Roslynator
             SpecialType elementType1,
             SpecialType elementType2)
         {
-            if (parameterSymbol == null)
-                throw new ArgumentNullException(nameof(parameterSymbol));
-
-            return parameterSymbol.IsParams
+            return parameterSymbol?.IsParams == true
                 && (parameterSymbol.Type as IArrayTypeSymbol)?
                     .ElementType
                     .SpecialType
@@ -936,10 +909,7 @@ namespace Roslynator
             SpecialType elementType2,
             SpecialType elementType3)
         {
-            if (parameterSymbol == null)
-                throw new ArgumentNullException(nameof(parameterSymbol));
-
-            return parameterSymbol.IsParams
+            return parameterSymbol?.IsParams == true
                 && (parameterSymbol.Type as IArrayTypeSymbol)?
                     .ElementType
                     .SpecialType
@@ -1005,10 +975,7 @@ namespace Roslynator
         /// <returns></returns>
         public static bool IsNullableOf(this INamedTypeSymbol namedTypeSymbol, SpecialType specialType)
         {
-            if (namedTypeSymbol == null)
-                throw new ArgumentNullException(nameof(namedTypeSymbol));
-
-            return namedTypeSymbol.IsConstructedFrom(SpecialType.System_Nullable_T)
+            return namedTypeSymbol.IsNullableType()
                 && namedTypeSymbol.TypeArguments[0].SpecialType == specialType;
         }
 
@@ -1020,100 +987,8 @@ namespace Roslynator
         /// <returns></returns>
         public static bool IsNullableOf(this INamedTypeSymbol namedTypeSymbol, ITypeSymbol typeArgument)
         {
-            if (namedTypeSymbol == null)
-                throw new ArgumentNullException(nameof(namedTypeSymbol));
-
-            return namedTypeSymbol.IsConstructedFrom(SpecialType.System_Nullable_T)
+            return namedTypeSymbol.IsNullableType()
                 && namedTypeSymbol.TypeArguments[0] == typeArgument;
-        }
-
-        /// <summary>
-        /// Returns true if the type is constructed from a specified special type.
-        /// </summary>
-        /// <param name="namedTypeSymbol"></param>
-        /// <param name="specialType"></param>
-        /// <returns></returns>
-        public static bool IsConstructedFrom(this INamedTypeSymbol namedTypeSymbol, SpecialType specialType)
-        {
-            if (namedTypeSymbol == null)
-                throw new ArgumentNullException(nameof(namedTypeSymbol));
-
-            return namedTypeSymbol.ConstructedFrom.SpecialType == specialType;
-        }
-
-        /// <summary>
-        /// Returns true if the type is constructed from a specified symbol.
-        /// </summary>
-        /// <param name="namedTypeSymbol"></param>
-        /// <param name="symbol"></param>
-        /// <returns></returns>
-        public static bool IsConstructedFrom(this INamedTypeSymbol namedTypeSymbol, ISymbol symbol)
-        {
-            if (namedTypeSymbol == null)
-                throw new ArgumentNullException(nameof(namedTypeSymbol));
-
-            return namedTypeSymbol.ConstructedFrom.Equals(symbol);
-        }
-
-        /// <summary>
-        /// Returns true if the type is constructed from <see cref="IEnumerable{T}"/> and has specified type argument.
-        /// </summary>
-        /// <param name="namedTypeSymbol"></param>
-        /// <param name="typeArgument"></param>
-        /// <returns></returns>
-        public static bool IsIEnumerableOf(this INamedTypeSymbol namedTypeSymbol, ITypeSymbol typeArgument)
-        {
-            if (namedTypeSymbol == null)
-                throw new ArgumentNullException(nameof(namedTypeSymbol));
-
-            if (typeArgument == null)
-                throw new ArgumentNullException(nameof(typeArgument));
-
-            return IsConstructedFrom(namedTypeSymbol, SpecialType.System_Collections_Generic_IEnumerable_T)
-                && namedTypeSymbol.TypeArguments[0].Equals(typeArgument);
-        }
-
-        /// <summary>
-        /// Returns true if the type is constructed from <see cref="IEnumerable{T}"/> and has specified type argument.
-        /// </summary>
-        /// <param name="namedTypeSymbol"></param>
-        /// <param name="specialType"></param>
-        /// <returns></returns>
-        public static bool IsIEnumerableOf(this INamedTypeSymbol namedTypeSymbol, SpecialType specialType)
-        {
-            if (namedTypeSymbol == null)
-                throw new ArgumentNullException(nameof(namedTypeSymbol));
-
-            return IsConstructedFrom(namedTypeSymbol, SpecialType.System_Collections_Generic_IEnumerable_T)
-                && namedTypeSymbol.TypeArguments[0].SpecialType == specialType;
-        }
-
-        /// <summary>
-        /// Returns true if the type is constructed from <see cref="IEnumerable{T}"/>.
-        /// </summary>
-        /// <param name="namedTypeSymbol"></param>
-        /// <returns></returns>
-        public static bool IsConstructedFromIEnumerableOfT(this INamedTypeSymbol namedTypeSymbol)
-        {
-            return IsConstructedFrom(namedTypeSymbol, SpecialType.System_Collections_Generic_IEnumerable_T);
-        }
-
-        /// <summary>
-        /// Returns true if the type is <see cref="IEnumerable"/> or constructed from <see cref="IEnumerable{T}"/>.
-        /// </summary>
-        /// <param name="namedTypeSymbol"></param>
-        /// <returns></returns>
-        public static bool IsIEnumerableOrConstructedFromIEnumerableOfT(this INamedTypeSymbol namedTypeSymbol)
-        {
-            return IsIEnumerable(namedTypeSymbol)
-                || IsConstructedFromIEnumerableOfT(namedTypeSymbol);
-        }
-
-        internal static bool IsConstructedFromTaskOfT(this INamedTypeSymbol namedTypeSymbol, SemanticModel semanticModel)
-        {
-            return namedTypeSymbol
-                .ConstructedFrom
-                .EqualsOrInheritsFrom(semanticModel.GetTypeByMetadataName(MetadataNames.System_Threading_Tasks_Task_T));
         }
         #endregion INamedTypeSymbol
 
@@ -1142,11 +1017,7 @@ namespace Roslynator
         /// <returns></returns>
         public static bool IsNullableOf(this ITypeSymbol typeSymbol, SpecialType specialType)
         {
-            if (typeSymbol == null)
-                throw new ArgumentNullException(nameof(typeSymbol));
-
-            return typeSymbol.Kind == SymbolKind.NamedType
-                && IsNullableOf((INamedTypeSymbol)typeSymbol, specialType);
+            return (typeSymbol as INamedTypeSymbol)?.IsNullableOf(specialType) == true;
         }
 
         /// <summary>
@@ -1157,11 +1028,7 @@ namespace Roslynator
         /// <returns></returns>
         public static bool IsNullableOf(this ITypeSymbol typeSymbol, ITypeSymbol typeArgument)
         {
-            if (typeSymbol == null)
-                throw new ArgumentNullException(nameof(typeSymbol));
-
-            return typeSymbol.Kind == SymbolKind.NamedType
-                && IsNullableOf((INamedTypeSymbol)typeSymbol, typeArgument);
+            return (typeSymbol as INamedTypeSymbol)?.IsNullableOf(typeArgument) == true;
         }
 
         /// <summary>
@@ -1418,32 +1285,9 @@ namespace Roslynator
         /// <returns></returns>
         public static bool IsConstructedFrom(this ITypeSymbol typeSymbol, SpecialType specialType)
         {
-            return (typeSymbol as INamedTypeSymbol)?.ConstructedFrom.SpecialType == specialType;
-        }
+            Test(typeSymbol, specialType);
 
-        /// <summary>
-        /// Returns true if the type is constructed from any of specified types.
-        /// </summary>
-        /// <param name="typeSymbol"></param>
-        /// <param name="specialType1"></param>
-        /// <param name="specialType2"></param>
-        /// <returns></returns>
-        public static bool IsConstructedFrom(this ITypeSymbol typeSymbol, SpecialType specialType1, SpecialType specialType2)
-        {
-            return (typeSymbol as INamedTypeSymbol)?.ConstructedFrom.SpecialType.Is(specialType1, specialType2) == true;
-        }
-
-        /// <summary>
-        /// Returns true if the type is constructed from any of specified types.
-        /// </summary>
-        /// <param name="typeSymbol"></param>
-        /// <param name="specialType1"></param>
-        /// <param name="specialType2"></param>
-        /// <param name="specialType3"></param>
-        /// <returns></returns>
-        public static bool IsConstructedFrom(this ITypeSymbol typeSymbol, SpecialType specialType1, SpecialType specialType2, SpecialType specialType3)
-        {
-            return (typeSymbol as INamedTypeSymbol)?.ConstructedFrom.SpecialType.Is(specialType1, specialType2, specialType3) == true;
+            return typeSymbol?.OriginalDefinition.SpecialType == specialType;
         }
 
         /// <summary>
@@ -1454,8 +1298,9 @@ namespace Roslynator
         /// <returns></returns>
         public static bool IsConstructedFrom(this ITypeSymbol typeSymbol, ITypeSymbol constructedFromSymbol)
         {
-            return typeSymbol?.Kind == SymbolKind.NamedType
-                && ((INamedTypeSymbol)typeSymbol).ConstructedFrom?.Equals(constructedFromSymbol) == true;
+            Test(typeSymbol, constructedFromSymbol);
+
+            return typeSymbol?.OriginalDefinition.Equals(constructedFromSymbol) == true;
         }
 
         /// <summary>
@@ -1645,127 +1490,54 @@ namespace Roslynator
             return null;
         }
 
-        internal static bool IsTaskOrInheritsFromTask(this ITypeSymbol typeSymbol, SemanticModel semanticModel)
-        {
-            if (typeSymbol == null)
-                throw new ArgumentNullException(nameof(typeSymbol));
-
-            if (semanticModel == null)
-                throw new ArgumentNullException(nameof(semanticModel));
-
-            INamedTypeSymbol taskSymbol = semanticModel.GetTypeByMetadataName(MetadataNames.System_Threading_Tasks_Task);
-
-            return typeSymbol.EqualsOrInheritsFrom(taskSymbol);
-        }
-
+        //TODO: ren
         internal static bool IsConstructedFromTaskOfT(this ITypeSymbol typeSymbol, SemanticModel semanticModel)
         {
-            if (typeSymbol == null)
-                throw new ArgumentNullException(nameof(typeSymbol));
+            Debug.Assert((typeSymbol?.OriginalDefinition.EqualsOrInheritsFrom(semanticModel.GetTypeByMetadataName(MetadataNames.System_Threading_Tasks_Task_T)) == true) == IsConstructedFromTaskOfT2(), typeSymbol.ToString());
 
-            if (semanticModel == null)
-                throw new ArgumentNullException(nameof(semanticModel));
+            return typeSymbol?.OriginalDefinition.EqualsOrInheritsFrom(semanticModel.GetTypeByMetadataName(MetadataNames.System_Threading_Tasks_Task_T)) == true;
 
-            if (typeSymbol.Kind == SymbolKind.NamedType)
+            bool IsConstructedFromTaskOfT2()
             {
-                INamedTypeSymbol taskOfT = semanticModel.GetTypeByMetadataName(MetadataNames.System_Threading_Tasks_Task_T);
+                if (typeSymbol == null)
+                    throw new ArgumentNullException(nameof(typeSymbol));
 
-                return ((INamedTypeSymbol)typeSymbol).ConstructedFrom.EqualsOrInheritsFrom(taskOfT);
+                if (semanticModel == null)
+                    throw new ArgumentNullException(nameof(semanticModel));
+
+                if (typeSymbol.Kind == SymbolKind.NamedType)
+                {
+                    INamedTypeSymbol taskOfT = semanticModel.GetTypeByMetadataName(MetadataNames.System_Threading_Tasks_Task_T);
+
+                    return ((INamedTypeSymbol)typeSymbol).ConstructedFrom.EqualsOrInheritsFrom(taskOfT);
+                }
+
+                return false;
             }
-
-            return false;
         }
 
+        //TODO: ren
         internal static bool IsConstructedFromImmutableArrayOfT(this ITypeSymbol typeSymbol, SemanticModel semanticModel)
         {
-            if (typeSymbol.Kind == SymbolKind.NamedType)
+            Debug.Assert((typeSymbol?.OriginalDefinition.Equals(semanticModel.GetTypeByMetadataName(MetadataNames.System_Collections_Immutable_ImmutableArray_T)) == true) == IsConstructedFromImmutableArrayOfT2(), typeSymbol.ToString());
+
+            return typeSymbol?.OriginalDefinition.Equals(semanticModel.GetTypeByMetadataName(MetadataNames.System_Collections_Immutable_ImmutableArray_T)) == true;
+
+            bool IsConstructedFromImmutableArrayOfT2()
             {
-                INamedTypeSymbol symbol = semanticModel.GetTypeByMetadataName(MetadataNames.System_Collections_Immutable_ImmutableArray_T);
+                if (typeSymbol.Kind == SymbolKind.NamedType)
+                {
+                    INamedTypeSymbol symbol = semanticModel.GetTypeByMetadataName(MetadataNames.System_Collections_Immutable_ImmutableArray_T);
 
-                return symbol != null
-                    && ((INamedTypeSymbol)typeSymbol).ConstructedFrom.Equals(symbol);
+                    return symbol != null
+                        && ((INamedTypeSymbol)typeSymbol).ConstructedFrom.Equals(symbol);
+                }
+
+                return false;
             }
-
-            return false;
         }
 
-        //TODO: del
-        /// <summary>
-        /// Returns true if the type is <see cref="IEnumerable"/>.
-        /// </summary>
-        /// <param name="typeSymbol"></param>
-        /// <returns></returns>
-        public static bool IsIEnumerable(this ITypeSymbol typeSymbol)
-        {
-            return typeSymbol?.SpecialType == SpecialType.System_Collections_IEnumerable;
-        }
-
-        /// <summary>
-        /// Returns true if the type is constructed from <see cref="IEnumerable{T}"/> and has specified type argument.
-        /// </summary>
-        /// <param name="typeSymbol"></param>
-        /// <param name="specialType"></param>
-        /// <returns></returns>
-        public static bool IsIEnumerableOf(this ITypeSymbol typeSymbol, SpecialType specialType)
-        {
-            if (typeSymbol == null)
-                throw new ArgumentNullException(nameof(typeSymbol));
-
-            if (typeSymbol.Kind == SymbolKind.NamedType)
-            {
-                var namedTypeSymbol = (INamedTypeSymbol)typeSymbol;
-
-                return IsConstructedFrom(namedTypeSymbol, SpecialType.System_Collections_Generic_IEnumerable_T)
-                    && namedTypeSymbol.TypeArguments[0].Equals(specialType);
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Returns true if the type is constructed from <see cref="IEnumerable{T}"/> and has specified type argument.
-        /// </summary>
-        /// <param name="typeSymbol"></param>
-        /// <param name="typeArgument"></param>
-        /// <returns></returns>
-        public static bool IsIEnumerableOf(this ITypeSymbol typeSymbol, ITypeSymbol typeArgument)
-        {
-            if (typeSymbol == null)
-                throw new ArgumentNullException(nameof(typeSymbol));
-
-            if (typeArgument == null)
-                throw new ArgumentNullException(nameof(typeArgument));
-
-            if (typeSymbol.Kind == SymbolKind.NamedType)
-            {
-                var namedTypeSymbol = (INamedTypeSymbol)typeSymbol;
-
-                return IsConstructedFrom(namedTypeSymbol, SpecialType.System_Collections_Generic_IEnumerable_T)
-                    && namedTypeSymbol.TypeArguments[0].Equals(typeArgument);
-            }
-
-            return false;
-        }
-
-        internal static bool IsIEnumerableOf(this ITypeSymbol typeSymbol, Func<ITypeSymbol, bool> predicate)
-        {
-            if (typeSymbol == null)
-                throw new ArgumentNullException(nameof(typeSymbol));
-
-            if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
-
-            if (typeSymbol.Kind == SymbolKind.NamedType)
-            {
-                var namedTypeSymbol = (INamedTypeSymbol)typeSymbol;
-
-                return namedTypeSymbol.ConstructedFrom.SpecialType == SpecialType.System_Collections_Generic_IEnumerable_T
-                    && predicate(namedTypeSymbol.TypeArguments[0]);
-            }
-
-            return false;
-        }
-
+        //TODO: ren IsGenericIEnumerable
         /// <summary>
         /// Returns true if the type is constructed from <see cref="IEnumerable{T}"/>.
         /// </summary>
@@ -1773,9 +1545,12 @@ namespace Roslynator
         /// <returns></returns>
         public static bool IsConstructedFromIEnumerableOfT(this ITypeSymbol typeSymbol)
         {
+            Test(typeSymbol, SpecialType.System_Collections_Generic_IEnumerable_T);
+
             return IsConstructedFrom(typeSymbol, SpecialType.System_Collections_Generic_IEnumerable_T);
         }
 
+        //TODO: ren IsIEnumerableOrGenericIEnumerable, IsEnumerable
         /// <summary>
         /// Returns true if the type is <see cref="IEnumerable"/> or constructed from <see cref="IEnumerable{T}"/>.
         /// </summary>
@@ -1783,23 +1558,36 @@ namespace Roslynator
         /// <returns></returns>
         public static bool IsIEnumerableOrConstructedFromIEnumerableOfT(this ITypeSymbol typeSymbol)
         {
-            return IsIEnumerable(typeSymbol)
-                || IsConstructedFromIEnumerableOfT(typeSymbol);
+            Debug.Assert(typeSymbol?.SpecialType == SpecialType.System_Collections_IEnumerable
+                || IsConstructedFromIEnumerableOfT(typeSymbol), typeSymbol.ToString());
+
+            return typeSymbol?
+                .OriginalDefinition
+                .SpecialType
+                .Is(SpecialType.System_Collections_IEnumerable, SpecialType.System_Collections_Generic_IEnumerable_T) == true;
         }
 
-        //TODO: IsReferenceTypeOrNullableType
         /// <summary>
-        /// Returns true if the type is a reference type or constructed from <see cref="Nullable{T}"/>.
+        /// Returns true if the type is a reference type or a nullable type.
         /// </summary>
         /// <param name="typeSymbol"></param>
         /// <returns></returns>
-        public static bool IsReferenceOrNullableType(this ITypeSymbol typeSymbol)
+        public static bool IsReferenceTypeOrNullableType(this ITypeSymbol typeSymbol)
         {
-            if (typeSymbol == null)
-                throw new ArgumentNullException(nameof(typeSymbol));
+            return typeSymbol?.IsReferenceType == true
+                || typeSymbol.IsNullableType();
+        }
 
-            return typeSymbol.IsReferenceType
-                || IsConstructedFrom(typeSymbol, SpecialType.System_Nullable_T);
+        /// <summary>
+        /// Returns true if the type is a nullable type.
+        /// </summary>
+        /// <param name="typeSymbol"></param>
+        /// <returns></returns>
+        public static bool IsNullableType(this ITypeSymbol typeSymbol)
+        {
+            Test(typeSymbol, SpecialType.System_Nullable_T);
+
+            return typeSymbol?.OriginalDefinition.SpecialType == SpecialType.System_Nullable_T;
         }
 
         private static ImmutableArray<INamedTypeSymbol> GetInterfaces(this ITypeSymbol typeSymbol, bool allInterfaces)
@@ -1807,5 +1595,20 @@ namespace Roslynator
             return (allInterfaces) ? typeSymbol.AllInterfaces : typeSymbol.Interfaces;
         }
         #endregion ITypeSymbol
+
+        //TODO: test
+        [Conditional("DEBUG")]
+        private static void Test(ITypeSymbol typeSymbol, SpecialType specialType)
+        {
+            Debug.Assert((typeSymbol?.OriginalDefinition.SpecialType == specialType)
+                == ((typeSymbol as INamedTypeSymbol)?.ConstructedFrom.SpecialType == specialType), typeSymbol.ToString());
+        }
+
+        [Conditional("DEBUG")]
+        private static void Test(ITypeSymbol typeSymbol, ISymbol symbol)
+        {
+            Debug.Assert((typeSymbol?.OriginalDefinition.Equals(symbol) == true)
+                == ((typeSymbol as INamedTypeSymbol)?.ConstructedFrom.Equals(symbol)), typeSymbol.ToString());
+        }
     }
 }

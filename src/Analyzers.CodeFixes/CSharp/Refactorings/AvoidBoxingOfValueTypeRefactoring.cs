@@ -33,7 +33,7 @@ namespace Roslynator.CSharp.Refactorings
 
                 SemanticModel semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
 
-                if (semanticModel.GetTypeSymbol(expression, cancellationToken).IsConstructedFrom(SpecialType.System_Nullable_T))
+                if (semanticModel.GetTypeSymbol(expression, cancellationToken).IsNullableType())
                 {
                     newNode = ConditionalAccessExpression(
                         newExpression,

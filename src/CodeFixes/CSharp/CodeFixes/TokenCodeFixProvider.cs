@@ -70,7 +70,7 @@ namespace Roslynator.CSharp.CodeFixes
                                 ITypeSymbol typeSymbol = semanticModel.GetTypeSymbol(conditionalAccess.Expression, context.CancellationToken);
 
                                 if (typeSymbol?.IsErrorType() == false
-                                    && !typeSymbol.IsConstructedFrom(SpecialType.System_Nullable_T))
+                                    && !typeSymbol.IsNullableType())
                                 {
                                     if (typeSymbol.IsValueType)
                                     {

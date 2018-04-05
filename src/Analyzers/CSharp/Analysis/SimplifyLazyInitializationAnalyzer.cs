@@ -113,7 +113,7 @@ namespace Roslynator.CSharp.Analysis
             if (!ExpressionEquals(expression, assignmentInfo.Left))
                 return;
 
-            if (fieldSymbol.Type.IsConstructedFrom(SpecialType.System_Nullable_T)
+            if (fieldSymbol.Type.IsNullableType()
                 && returnExpression.Kind() == SyntaxKind.SimpleMemberAccessExpression)
             {
                 var memberAccessExpression = (MemberAccessExpressionSyntax)returnExpression;

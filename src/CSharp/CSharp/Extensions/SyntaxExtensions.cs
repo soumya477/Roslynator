@@ -3375,13 +3375,12 @@ namespace Roslynator.CSharp
             return trivia.IsKind(SyntaxKind.WhitespaceTrivia, SyntaxKind.EndOfLineTrivia);
         }
 
-        //TODO: del
         /// <summary>
         /// Returns true if the trivia is a documentation comment trivia.
         /// </summary>
         /// <param name="trivia"></param>
         /// <returns></returns>
-        public static bool IsDocumentationCommentTrivia(this SyntaxTrivia trivia)
+        internal static bool IsDocumentationCommentTrivia(this SyntaxTrivia trivia)
         {
             return SyntaxFacts.IsDocumentationCommentTrivia(trivia.Kind());
         }

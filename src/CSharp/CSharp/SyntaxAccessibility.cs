@@ -1385,7 +1385,6 @@ namespace Roslynator.CSharp
             return GetExplicitAccessibility(accessorDeclaration.Modifiers);
         }
 
-        //TODO: add overloads
         /// <summary>
         /// Return true if the specified declaration is publicly visible.
         /// </summary>
@@ -1431,14 +1430,11 @@ namespace Roslynator.CSharp
             return false;
         }
 
-        //TODO: del
         /// <summary>
         /// Creates a new node with the explicit accessibility removed.
         /// </summary>
         /// <typeparam name="TNode"></typeparam>
         /// <param name="node"></param>
-        /// <param name="newAccessibility"></param>
-        /// <param name="comparer"></param>
         /// <returns></returns>
         public static TNode WithoutExplicitAccessibility<TNode>(TNode node) where TNode : SyntaxNode
         {

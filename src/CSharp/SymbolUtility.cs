@@ -458,7 +458,7 @@ namespace Roslynator
             }
 
             if ((typeSymbol is INamedTypeSymbol namedTypeSymbol)
-                && namedTypeSymbol.ConstructedFrom.SpecialType == SpecialType.System_Nullable_T)
+                && namedTypeSymbol.IsNullableType())
             {
                 switch (namedTypeSymbol.TypeArguments[0].SpecialType)
                 {
