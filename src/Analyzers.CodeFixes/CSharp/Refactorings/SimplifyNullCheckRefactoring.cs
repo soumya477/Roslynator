@@ -42,7 +42,7 @@ namespace Roslynator.CSharp.Refactorings
             }
             else if (semanticModel
                 .GetTypeSymbol(nullCheck.Expression, cancellationToken)
-                .IsConstructedFrom(SpecialType.System_Nullable_T))
+                .IsNullableType())
             {
                 if (expression.IsParentKind(SyntaxKind.SimpleMemberAccessExpression))
                 {

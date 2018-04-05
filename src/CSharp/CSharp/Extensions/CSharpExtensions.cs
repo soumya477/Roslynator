@@ -474,7 +474,7 @@ namespace Roslynator.CSharp
                 }
             }
 
-            if (typeSymbol.IsConstructedFrom(SpecialType.System_Nullable_T)
+            if (typeSymbol.IsNullableType()
                 && kind == SyntaxKind.NullLiteralExpression)
             {
                 return true;

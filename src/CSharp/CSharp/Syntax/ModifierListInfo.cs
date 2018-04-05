@@ -352,8 +352,6 @@ namespace Roslynator.CSharp.Syntax
         /// <summary>
         /// Creates a new <see cref="ModifierListInfo"/> with accessibility modifiers removed.
         /// </summary>
-        /// <param name="newAccessibility"></param>
-        /// <param name="comparer"></param>
         /// <returns></returns>
         public ModifierListInfo WithoutExplicitAccessibility()
         {

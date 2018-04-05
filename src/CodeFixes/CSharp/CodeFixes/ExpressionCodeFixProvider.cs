@@ -79,7 +79,7 @@ namespace Roslynator.CSharp.CodeFixes
                             ITypeSymbol convertedType = typeInfo.ConvertedType;
 
                             if ((type is INamedTypeSymbol namedType)
-                                && namedType.ConstructedFrom.SpecialType == SpecialType.System_Nullable_T)
+                                && namedType.IsNullableType())
                             {
                                 if (convertedType?.SpecialType == SpecialType.System_Boolean
                                     || AddComparisonWithBooleanLiteralRefactoring.IsCondition(expression))

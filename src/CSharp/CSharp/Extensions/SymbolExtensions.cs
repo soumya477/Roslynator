@@ -147,7 +147,7 @@ namespace Roslynator.CSharp
             }
 
             if (value == null
-                && !typeSymbol.IsReferenceOrNullableType())
+                && !typeSymbol.IsReferenceTypeOrNullableType())
             {
                 return DefaultExpression(typeSymbol.ToMinimalTypeSyntax(semanticModel, position, format));
             }
@@ -259,7 +259,7 @@ namespace Roslynator.CSharp
                     return NumericLiteralExpression(0);
             }
 
-            if (typeSymbol.IsConstructedFrom(SpecialType.System_Nullable_T))
+            if (typeSymbol.IsNullableType())
                 return NullLiteralExpression();
 
             if (typeSymbol.BaseType?.SpecialType == SpecialType.System_Enum)

@@ -121,7 +121,7 @@ namespace Roslynator.CSharp.Analysis
 
             if (leftSymbol?.IsErrorType() == false
                 && leftSymbol.IsValueType
-                && !leftSymbol.IsConstructedFrom(SpecialType.System_Nullable_T))
+                && !leftSymbol.IsNullableType())
             {
                 return BinaryExpressionPart.Right;
             }

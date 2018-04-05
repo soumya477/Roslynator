@@ -10,6 +10,7 @@ using Roslynator.CSharp.Syntax;
 
 namespace Roslynator.CSharp
 {
+    //TODO: AccessibilityAnalysis
     /// <summary>
     /// A set of static methods that are related to C# accessibility.
     /// </summary>
@@ -1434,8 +1435,6 @@ namespace Roslynator.CSharp
         /// </summary>
         /// <typeparam name="TNode"></typeparam>
         /// <param name="node"></param>
-        /// <param name="newAccessibility"></param>
-        /// <param name="comparer"></param>
         /// <returns></returns>
         public static TNode WithoutExplicitAccessibility<TNode>(TNode node) where TNode : SyntaxNode
         {

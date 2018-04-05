@@ -38,7 +38,7 @@ namespace Roslynator.CSharp.Analysis.MakeMemberReadOnly
                         IMethodSymbol setMethod = propertySymbol.SetMethod;
 
                         if (setMethod?.DeclaredAccessibility == Accessibility.Private
-                            && !setMethod.HasAttribute()
+                            && setMethod.GetAttributes().IsEmpty
                             && setMethod.GetSyntaxOrDefault(context.CancellationToken) is AccessorDeclarationSyntax accessor
                             && accessor.BodyOrExpressionBody() == null)
                         {
