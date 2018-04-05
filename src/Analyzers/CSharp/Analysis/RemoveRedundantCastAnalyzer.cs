@@ -224,7 +224,7 @@ namespace Roslynator.CSharp.Analysis
 
             var memberAccessExpressionType = semanticModel.GetTypeSymbol(invocationInfo.Expression, cancellationToken) as INamedTypeSymbol;
 
-            if (memberAccessExpressionType?.IsConstructedFromIEnumerableOfT() != true)
+            if (memberAccessExpressionType?.IsGenericIEnumerable() != true)
                 return;
 
             if (!typeArgument.Equals(memberAccessExpressionType.TypeArguments[0]))

@@ -27,7 +27,7 @@ namespace Roslynator.CSharp.Refactorings
                     if (memberSymbol != null
                         && (memberTypeSymbol is INamedTypeSymbol namedTypeSymbol)
                         && namedTypeSymbol.SpecialType != SpecialType.System_Collections_IEnumerable
-                        && namedTypeSymbol.IsConstructedFromIEnumerableOfT())
+                        && namedTypeSymbol.IsGenericIEnumerable())
                     {
                         ITypeSymbol argumentSymbol = namedTypeSymbol.TypeArguments[0];
 

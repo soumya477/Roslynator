@@ -88,7 +88,7 @@ namespace Roslynator.CSharp.Analysis.ReturnTaskInsteadOfNull
             IMethodSymbol methodSymbol = semanticModel.GetDeclaredSymbol(methodDeclaration, cancellationToken);
 
             return methodSymbol?.IsErrorType() == false
-                && methodSymbol.ReturnType.IsConstructedFrom(taskOfTSymbol);
+                && methodSymbol.ReturnType.OriginalDefinition.Equals(taskOfTSymbol);
         }
 
         public static void AnalyzeLocalFunction(SyntaxNodeAnalysisContext context, INamedTypeSymbol taskOfTSymbol)
@@ -134,7 +134,7 @@ namespace Roslynator.CSharp.Analysis.ReturnTaskInsteadOfNull
             var methodSymbol = (IMethodSymbol)semanticModel.GetDeclaredSymbol(localFunction, cancellationToken);
 
             return methodSymbol?.IsErrorType() == false
-                && methodSymbol.ReturnType.IsConstructedFrom(taskOfTSymbol);
+                && methodSymbol.ReturnType.OriginalDefinition.Equals(taskOfTSymbol);
         }
 
         public static void AnalyzePropertyDeclaration(SyntaxNodeAnalysisContext context, INamedTypeSymbol taskOfTSymbol)
@@ -177,7 +177,7 @@ namespace Roslynator.CSharp.Analysis.ReturnTaskInsteadOfNull
             IPropertySymbol propertySymbol = semanticModel.GetDeclaredSymbol(propertyDeclaration, cancellationToken);
 
             return propertySymbol?.IsErrorType() == false
-                && propertySymbol.Type.IsConstructedFrom(taskOfTSymbol);
+                && propertySymbol.Type.OriginalDefinition.Equals(taskOfTSymbol);
         }
 
         public static void AnalyzeIndexerDeclaration(SyntaxNodeAnalysisContext context, INamedTypeSymbol taskOfTSymbol)
@@ -220,7 +220,7 @@ namespace Roslynator.CSharp.Analysis.ReturnTaskInsteadOfNull
             IPropertySymbol propertySymbol = semanticModel.GetDeclaredSymbol(indexerDeclaration, cancellationToken);
 
             return propertySymbol?.IsErrorType() == false
-                && propertySymbol.Type.IsConstructedFrom(taskOfTSymbol);
+                && propertySymbol.Type.OriginalDefinition.Equals(taskOfTSymbol);
         }
 
         public static void AnalyzeLambdaExpression(SyntaxNodeAnalysisContext context, INamedTypeSymbol taskOfTSymbol)
@@ -269,7 +269,7 @@ namespace Roslynator.CSharp.Analysis.ReturnTaskInsteadOfNull
             var methodSymbol = semanticModel.GetSymbol(node, cancellationToken) as IMethodSymbol;
 
             return methodSymbol?.IsErrorType() == false
-                && methodSymbol.ReturnType.IsConstructedFrom(taskOfTSymbol);
+                && methodSymbol.ReturnType.OriginalDefinition.Equals(taskOfTSymbol);
         }
 
         private static void AnalyzeGetAccessor(SyntaxNodeAnalysisContext context, AccessorDeclarationSyntax getter)

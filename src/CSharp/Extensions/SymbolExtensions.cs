@@ -1278,32 +1278,6 @@ namespace Roslynator
         }
 
         /// <summary>
-        /// Returns true if the type is constructed from a specified type.
-        /// </summary>
-        /// <param name="typeSymbol"></param>
-        /// <param name="specialType"></param>
-        /// <returns></returns>
-        public static bool IsConstructedFrom(this ITypeSymbol typeSymbol, SpecialType specialType)
-        {
-            Test(typeSymbol, specialType);
-
-            return typeSymbol?.OriginalDefinition.SpecialType == specialType;
-        }
-
-        /// <summary>
-        /// Returns true if the type is constructed from a specified type.
-        /// </summary>
-        /// <param name="typeSymbol"></param>
-        /// <param name="constructedFromSymbol"></param>
-        /// <returns></returns>
-        public static bool IsConstructedFrom(this ITypeSymbol typeSymbol, ITypeSymbol constructedFromSymbol)
-        {
-            Test(typeSymbol, constructedFromSymbol);
-
-            return typeSymbol?.OriginalDefinition.Equals(constructedFromSymbol) == true;
-        }
-
-        /// <summary>
         /// Returns true if the type inherits from a specified base type.
         /// </summary>
         /// <param name="type"></param>
@@ -1490,8 +1464,7 @@ namespace Roslynator
             return null;
         }
 
-        //TODO: ren
-        internal static bool IsConstructedFromTaskOfT(this ITypeSymbol typeSymbol, SemanticModel semanticModel)
+        internal static bool EqualsOrInheritsFromTaskOfT(this ITypeSymbol typeSymbol, SemanticModel semanticModel)
         {
             Debug.Assert((typeSymbol?.OriginalDefinition.EqualsOrInheritsFrom(semanticModel.GetTypeByMetadataName(MetadataNames.System_Threading_Tasks_Task_T)) == true) == IsConstructedFromTaskOfT2(), typeSymbol.ToString());
 
@@ -1516,50 +1489,29 @@ namespace Roslynator
             }
         }
 
-        //TODO: ren
-        internal static bool IsConstructedFromImmutableArrayOfT(this ITypeSymbol typeSymbol, SemanticModel semanticModel)
-        {
-            Debug.Assert((typeSymbol?.OriginalDefinition.Equals(semanticModel.GetTypeByMetadataName(MetadataNames.System_Collections_Immutable_ImmutableArray_T)) == true) == IsConstructedFromImmutableArrayOfT2(), typeSymbol.ToString());
-
-            return typeSymbol?.OriginalDefinition.Equals(semanticModel.GetTypeByMetadataName(MetadataNames.System_Collections_Immutable_ImmutableArray_T)) == true;
-
-            bool IsConstructedFromImmutableArrayOfT2()
-            {
-                if (typeSymbol.Kind == SymbolKind.NamedType)
-                {
-                    INamedTypeSymbol symbol = semanticModel.GetTypeByMetadataName(MetadataNames.System_Collections_Immutable_ImmutableArray_T);
-
-                    return symbol != null
-                        && ((INamedTypeSymbol)typeSymbol).ConstructedFrom.Equals(symbol);
-                }
-
-                return false;
-            }
-        }
-
-        //TODO: ren IsGenericIEnumerable
+        //TODO:  IsGenericIEnumerable
         /// <summary>
         /// Returns true if the type is constructed from <see cref="IEnumerable{T}"/>.
         /// </summary>
         /// <param name="typeSymbol"></param>
         /// <returns></returns>
-        public static bool IsConstructedFromIEnumerableOfT(this ITypeSymbol typeSymbol)
+        public static bool IsGenericIEnumerable(this ITypeSymbol typeSymbol)
         {
             Test(typeSymbol, SpecialType.System_Collections_Generic_IEnumerable_T);
 
-            return IsConstructedFrom(typeSymbol, SpecialType.System_Collections_Generic_IEnumerable_T);
+            return typeSymbol?.OriginalDefinition.SpecialType == SpecialType.System_Collections_Generic_IEnumerable_T;
         }
 
-        //TODO: ren IsIEnumerableOrGenericIEnumerable, IsEnumerable
+        //TODO: IsIEnumerableOrGenericIEnumerable
         /// <summary>
         /// Returns true if the type is <see cref="IEnumerable"/> or constructed from <see cref="IEnumerable{T}"/>.
         /// </summary>
         /// <param name="typeSymbol"></param>
         /// <returns></returns>
-        public static bool IsIEnumerableOrConstructedFromIEnumerableOfT(this ITypeSymbol typeSymbol)
+        public static bool IsIEnumerableOrGenericIEnumerable(this ITypeSymbol typeSymbol)
         {
             Debug.Assert(typeSymbol?.SpecialType == SpecialType.System_Collections_IEnumerable
-                || IsConstructedFromIEnumerableOfT(typeSymbol), typeSymbol.ToString());
+                || IsGenericIEnumerable(typeSymbol), typeSymbol.ToString());
 
             return typeSymbol?
                 .OriginalDefinition
@@ -1596,7 +1548,7 @@ namespace Roslynator
         }
         #endregion ITypeSymbol
 
-        //TODO: test
+        //XTEST:
         [Conditional("DEBUG")]
         private static void Test(ITypeSymbol typeSymbol, SpecialType specialType)
         {

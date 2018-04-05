@@ -163,7 +163,7 @@ namespace Roslynator.CSharp.Analysis.ReduceIfNesting
                         if (semanticModel
                                 .GetDeclaredSymbol(methodDeclaration, cancellationToken)?
                                 .ReturnType
-                                .IsIEnumerableOrConstructedFromIEnumerableOfT() == true
+                                .IsIEnumerableOrGenericIEnumerable() == true
                             && methodDeclaration.ContainsYield())
                         {
                             return Success(SyntaxKind.YieldBreakStatement, parent);
@@ -192,7 +192,7 @@ namespace Roslynator.CSharp.Analysis.ReduceIfNesting
 
                         if (((IMethodSymbol)semanticModel.GetDeclaredSymbol(localFunction, cancellationToken))?
                                 .ReturnType
-                                .IsIEnumerableOrConstructedFromIEnumerableOfT() == true
+                                .IsIEnumerableOrGenericIEnumerable() == true
                             && localFunction.ContainsYield())
                         {
                             return Success(SyntaxKind.YieldBreakStatement, parent);

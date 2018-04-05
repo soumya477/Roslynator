@@ -73,7 +73,7 @@ namespace Roslynator.CSharp.CodeFixes
                                     {
                                         if (semanticModel
                                             .GetTypeSymbol(expression, context.CancellationToken)
-                                            .IsIEnumerableOrConstructedFromIEnumerableOfT())
+                                            .IsIEnumerableOrGenericIEnumerable())
                                         {
                                             replacementKind = SyntaxKind.ForEachStatement;
                                         }
@@ -86,7 +86,7 @@ namespace Roslynator.CSharp.CodeFixes
                                     {
                                         var namedTypeSymbol = (INamedTypeSymbol)returnType;
 
-                                        if (namedTypeSymbol.IsConstructedFromIEnumerableOfT())
+                                        if (namedTypeSymbol.IsGenericIEnumerable())
                                         {
                                             if (semanticModel.IsImplicitConversion(expression, namedTypeSymbol.TypeArguments[0]))
                                             {
