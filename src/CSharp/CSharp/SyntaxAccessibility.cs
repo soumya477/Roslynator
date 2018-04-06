@@ -10,7 +10,6 @@ using Roslynator.CSharp.Syntax;
 
 namespace Roslynator.CSharp
 {
-    //TODO: ren
     /// <summary>
     /// A set of static methods that are related to C# accessibility.
     /// </summary>

@@ -862,7 +862,6 @@ namespace Roslynator
         }
         #endregion IMethodSymbol
 
-        //TODO: ren IsParameterArrayOf
         #region IParameterSymbol
         /// <summary>
         /// Returns true if the parameter was declared as a parameter array that has a specified element type.
@@ -870,7 +869,7 @@ namespace Roslynator
         /// <param name="parameterSymbol"></param>
         /// <param name="elementType"></param>
         /// <returns></returns>
-        public static bool IsParamsOf(this IParameterSymbol parameterSymbol, SpecialType elementType)
+        public static bool IsParameterArrayOf(this IParameterSymbol parameterSymbol, SpecialType elementType)
         {
             return parameterSymbol?.IsParams == true
                 && (parameterSymbol.Type as IArrayTypeSymbol)?.ElementType.SpecialType == elementType;
@@ -883,7 +882,7 @@ namespace Roslynator
         /// <param name="elementType1"></param>
         /// <param name="elementType2"></param>
         /// <returns></returns>
-        public static bool IsParamsOf(
+        public static bool IsParameterArrayOf(
             this IParameterSymbol parameterSymbol,
             SpecialType elementType1,
             SpecialType elementType2)
@@ -903,7 +902,7 @@ namespace Roslynator
         /// <param name="elementType2"></param>
         /// <param name="elementType3"></param>
         /// <returns></returns>
-        public static bool IsParamsOf(
+        public static bool IsParameterArrayOf(
             this IParameterSymbol parameterSymbol,
             SpecialType elementType1,
             SpecialType elementType2,
