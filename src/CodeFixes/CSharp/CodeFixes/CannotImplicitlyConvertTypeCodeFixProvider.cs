@@ -72,7 +72,7 @@ namespace Roslynator.CSharp.CodeFixes
                                 ISymbol containingSymbol = semanticModel.GetEnclosingSymbol(returnStatement.SpanStart, context.CancellationToken);
 
                                 if (containingSymbol?.Kind == SymbolKind.Method
-                                    && ((IMethodSymbol)containingSymbol).ReturnType?.IsIEnumerableOrConstructedFromIEnumerableOfT() == true)
+                                    && ((IMethodSymbol)containingSymbol).ReturnType.OriginalDefinition.IsIEnumerableOrIEnumerableOfT())
                                 {
                                     CodeAction codeAction = CodeAction.Create(
                                         "Use yield return instead of return",

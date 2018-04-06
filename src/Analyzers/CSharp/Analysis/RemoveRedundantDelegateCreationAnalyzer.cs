@@ -75,7 +75,7 @@ namespace Roslynator.CSharp.Analysis
                 return;
 
             if (!typeSymbol.Equals(eventHandler)
-                && !typeSymbol.IsConstructedFrom(eventHandlerOfT))
+                && !typeSymbol.OriginalDefinition.Equals(eventHandlerOfT))
             {
                 return;
             }

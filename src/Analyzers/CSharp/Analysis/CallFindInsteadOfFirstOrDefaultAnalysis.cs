@@ -34,7 +34,7 @@ namespace Roslynator.CSharp.Analysis
             {
                 context.ReportDiagnostic(DiagnosticDescriptors.CallFindInsteadOfFirstOrDefault, invocationInfo.Name);
             }
-            else if (typeSymbol.IsConstructedFrom(semanticModel.GetTypeByMetadataName(MetadataNames.System_Collections_Generic_List_T)))
+            else if (typeSymbol.OriginalDefinition.Equals(semanticModel.GetTypeByMetadataName(MetadataNames.System_Collections_Generic_List_T)))
             {
                 context.ReportDiagnostic(DiagnosticDescriptors.CallFindInsteadOfFirstOrDefault, invocationInfo.Name);
             }

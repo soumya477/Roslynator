@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Josef Pihrt. All rights reserved. Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
-using System.Diagnostics;
-using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -141,33 +139,6 @@ namespace Roslynator.CSharp.SyntaxWalkers
             ContainsYieldWalker walker = Create(span, yieldReturn, yieldBreak);
 
             walker.VisitBlock(block);
-
-            //XTEST: 
-            Debug.Assert(walker._success == block
-                .DescendantNodes(block.Span, node => !CSharpFacts.IsFunction(node.Kind()))
-                .Any(node =>
-                {
-                    if (span == null || span.Value.Contains(node.FullSpan))
-                    {
-                        if (yieldReturn)
-                        {
-                            if (yieldBreak)
-                            {
-                                return node.IsKind(SyntaxKind.YieldReturnStatement, SyntaxKind.YieldBreakStatement);
-                            }
-                            else
-                            {
-                                return node.IsKind(SyntaxKind.YieldReturnStatement);
-                            }
-                        }
-                        else if (yieldBreak)
-                        {
-                            return node.IsKind(SyntaxKind.YieldBreakStatement);
-                        }
-                    }
-
-                    return false;
-                }), nameof(ContainsYieldWalker));
 
             return walker._success;
         }

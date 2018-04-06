@@ -35,7 +35,7 @@ namespace Roslynator.CSharp.Refactorings
                         {
                             bool addAwait = false;
 
-                            if (typeSymbol.IsConstructedFromTaskOfT(semanticModel))
+                            if (typeSymbol.EqualsOrInheritsFromTaskOfT(semanticModel))
                             {
                                 ISymbol enclosingSymbol = semanticModel.GetEnclosingSymbol(expressionStatement.SpanStart, context.CancellationToken);
 

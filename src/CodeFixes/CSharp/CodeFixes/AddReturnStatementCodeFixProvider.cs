@@ -145,7 +145,7 @@ namespace Roslynator.CSharp.CodeFixes
         {
             if (typeSymbol?.IsErrorType() == false
                 && !typeSymbol.IsVoid()
-                && !typeSymbol.IsIEnumerableOrConstructedFromIEnumerableOfT())
+                && !typeSymbol.OriginalDefinition.IsIEnumerableOrIEnumerableOfT())
             {
                 CodeAction codeAction = CodeAction.Create(
                     "Add return statement that returns default value",

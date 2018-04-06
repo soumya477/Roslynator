@@ -276,7 +276,7 @@ namespace Roslynator.CSharp.Refactorings
                         {
                             return analysis.SemanticModel.Compilation.ObjectType;
                         }
-                        else if (returnType.IsConstructedFromIEnumerableOfT())
+                        else if (returnType.OriginalDefinition.IsIEnumerableOfT())
                         {
                             return ((INamedTypeSymbol)returnType).TypeArguments[0];
                         }

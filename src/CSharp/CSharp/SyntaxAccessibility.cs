@@ -10,7 +10,6 @@ using Roslynator.CSharp.Syntax;
 
 namespace Roslynator.CSharp
 {
-    //TODO: AccessibilityAnalysis
     /// <summary>
     /// A set of static methods that are related to C# accessibility.
     /// </summary>
@@ -1400,30 +1399,25 @@ namespace Roslynator.CSharp
                 if (declaration.IsKind(SyntaxKind.NamespaceDeclaration))
                     return true;
 
-                Accessibility accessibility = GetAccessibility(declaration);
-
-                if (accessibility == Accessibility.Public
-                    || accessibility == Accessibility.Protected
-                    || accessibility == Accessibility.ProtectedOrInternal)
-                {
-                    SyntaxNode parent = declaration.Parent;
-
-                    if (parent != null)
-                    {
-                        if (parent.IsKind(SyntaxKind.CompilationUnit))
-                            return true;
-
-                        declaration = parent as MemberDeclarationSyntax;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
+                if (!GetAccessibility(declaration).Is(
+                    Accessibility.Public,
+                    Accessibility.Protected,
+                    Accessibility.ProtectedOrInternal))
                 {
                     return false;
                 }
+
+                SyntaxNode parent = declaration.Parent;
+
+                if (parent == null)
+                    return true;
+
+                if (parent is ICompilationUnitSyntax)
+                    return true;
+
+                Debug.Assert(parent is MemberDeclarationSyntax, parent.Kind().ToString());
+
+                declaration = parent as MemberDeclarationSyntax;
 
             } while (declaration != null);
 

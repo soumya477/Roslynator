@@ -74,7 +74,7 @@ namespace Roslynator.CSharp.Refactorings
                 {
                     newTypeSymbol = taskOfT.Construct(expressionTypeSymbol);
                 }
-                else if (expressionTypeSymbol.IsConstructedFrom(taskOfT))
+                else if (expressionTypeSymbol.OriginalDefinition.Equals(taskOfT))
                 {
                     insertAwait = true;
                     additionalKey = "InsertAwait";
@@ -98,7 +98,7 @@ namespace Roslynator.CSharp.Refactorings
                 && !isAsyncMethod
                 && newTypeSymbol is INamedTypeSymbol newNamedType
                 && newNamedType.ConstructedFrom.Equals(semanticModel.GetTypeByMetadataName(MetadataNames.System_Linq_IOrderedEnumerable_T))
-                && !typeSymbol.IsConstructedFromIEnumerableOfT())
+                && !typeSymbol.OriginalDefinition.IsIEnumerableOfT())
             {
                 INamedTypeSymbol constructedEnumerableSymbol = semanticModel
                     .Compilation

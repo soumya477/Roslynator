@@ -32,7 +32,6 @@ namespace Roslynator.CSharp
         private static readonly SyntaxAnnotation[] _formatterAndSimplifierAnnotationArray = new SyntaxAnnotation[] { Formatter.Annotation, Simplifier.Annotation };
 
         #region ExpressionSyntax
-        //TODO: addSimplifierAnnotation, withSimplifierAnnotation
         /// <summary>
         /// Creates parenthesized expression that is parenthesizing the specified expression.
         /// </summary>

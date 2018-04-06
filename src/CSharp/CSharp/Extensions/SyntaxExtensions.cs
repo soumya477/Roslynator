@@ -789,7 +789,6 @@ namespace Roslynator.CSharp
             return (statement?.Kind() == SyntaxKind.Block) ? null : statement;
         }
 
-        //TODO: ToCascade
         /// <summary>
         /// Returns <see cref="IfStatementCascade"/> that enables to enumerate if-else cascade.
         /// </summary>

@@ -8,21 +8,11 @@ using static Roslynator.CSharp.CSharpFactory;
 
 namespace Roslynator.CSharp
 {
-    //TODO: ModifierListFactory
     /// <summary>
     /// Serves as a factory for a modifier list.
     /// </summary>
     public static class Modifiers
     {
-        /// <summary>
-        /// Creates an empty list of modifiers.
-        /// </summary>
-        /// <returns></returns>
-        public static SyntaxTokenList None()
-        {
-            return TokenList();
-        }
-
         /// <summary>
         /// Creates a list of modifiers that contains "public" modifier.
         /// </summary>

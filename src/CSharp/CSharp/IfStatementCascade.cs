@@ -3,8 +3,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Roslynator.CSharp
@@ -17,41 +15,6 @@ namespace Roslynator.CSharp
         internal IfStatementCascade(IfStatementSyntax ifStatement)
         {
             IfStatement = ifStatement;
-
-#if DEBUG
-            //XTEST:
-            Debug.Assert(System.Linq.Enumerable.SequenceEqual(GetChain(), this), nameof(IfStatementCascade));
-
-            IEnumerable<IfStatementOrElseClause> GetChain()
-            {
-                yield return ifStatement;
-
-                while (true)
-                {
-                    ElseClauseSyntax elseClause = ifStatement.Else;
-
-                    if (elseClause != null)
-                    {
-                        StatementSyntax statement = elseClause.Statement;
-
-                        if (statement.IsKind(Microsoft.CodeAnalysis.CSharp.SyntaxKind.IfStatement))
-                        {
-                            ifStatement = (IfStatementSyntax)statement;
-                            yield return ifStatement;
-                        }
-                        else
-                        {
-                            yield return elseClause;
-                            yield break;
-                        }
-                    }
-                    else
-                    {
-                        yield break;
-                    }
-                }
-            }
-#endif
         }
 
         /// <summary>

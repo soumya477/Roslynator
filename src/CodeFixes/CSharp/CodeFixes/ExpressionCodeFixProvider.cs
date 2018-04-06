@@ -352,7 +352,7 @@ namespace Roslynator.CSharp.CodeFixes
                                     if (Settings.IsCodeFixEnabled(CodeFixIdentifiers.IntroduceLocalVariable)
                                         && !expressionStatement.IsEmbedded())
                                     {
-                                        bool addAwait = typeSymbol.IsConstructedFromTaskOfT(semanticModel)
+                                        bool addAwait = typeSymbol.EqualsOrInheritsFromTaskOfT(semanticModel)
                                             && semanticModel.GetEnclosingSymbol(expressionStatement.SpanStart, context.CancellationToken).IsAsyncMethod();
 
                                         CodeAction codeAction = CodeAction.Create(
@@ -435,7 +435,7 @@ namespace Roslynator.CSharp.CodeFixes
                                 ISymbol containingSymbol = semanticModel.GetEnclosingSymbol(returnStatement.SpanStart, context.CancellationToken);
 
                                 if (containingSymbol?.Kind == SymbolKind.Method
-                                    && ((IMethodSymbol)containingSymbol).ReturnType?.IsIEnumerableOrConstructedFromIEnumerableOfT() == true)
+                                    && ((IMethodSymbol)containingSymbol).ReturnType.OriginalDefinition.IsIEnumerableOrIEnumerableOfT())
                                 {
                                     CodeAction codeAction = CodeAction.Create(
                                         "Use yield return instead of return",
