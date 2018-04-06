@@ -87,11 +87,11 @@ namespace Roslynator.CSharp.Analysis.ReturnTaskInsteadOfNull
 
             bool IsReturnTypeConstructedFromTaskOfT()
             {
-                var returnType = context.SemanticModel
+                return context.SemanticModel
                     .GetDeclaredSymbol(methodDeclaration, context.CancellationToken)?
-                    .ReturnType as INamedTypeSymbol;
-
-                return returnType?.ConstructedFrom.Equals(taskOfTSymbol) == true;
+                    .ReturnType
+                    .OriginalDefinition
+                    .Equals(taskOfTSymbol) == true;
             }
         }
 
@@ -140,11 +140,11 @@ namespace Roslynator.CSharp.Analysis.ReturnTaskInsteadOfNull
 
             bool IsReturnTypeConstructedFromTaskOfT()
             {
-                var returnType = context.SemanticModel
+                return context.SemanticModel
                     .GetDeclaredSymbol(localFunction, context.CancellationToken)?
-                    .ReturnType as INamedTypeSymbol;
-
-                return returnType?.ConstructedFrom.Equals(taskOfTSymbol) == true;
+                    .ReturnType
+                    .OriginalDefinition
+                    .Equals(taskOfTSymbol) == true;
             }
         }
 
@@ -190,11 +190,11 @@ namespace Roslynator.CSharp.Analysis.ReturnTaskInsteadOfNull
 
             bool IsReturnTypeConstructedFromTaskOfT()
             {
-                var returnType = context.SemanticModel
+                return context.SemanticModel
                     .GetDeclaredSymbol(propertyDeclaration, context.CancellationToken)?
-                    .Type as INamedTypeSymbol;
-
-                return returnType?.ConstructedFrom.Equals(taskOfTSymbol) == true;
+                    .Type
+                    .OriginalDefinition
+                    .Equals(taskOfTSymbol) == true;
             }
         }
 
@@ -240,11 +240,11 @@ namespace Roslynator.CSharp.Analysis.ReturnTaskInsteadOfNull
 
             bool IsReturnTypeConstructedFromTaskOfT()
             {
-                var returnType = context.SemanticModel
+                return context.SemanticModel
                     .GetDeclaredSymbol(indexerDeclaration, context.CancellationToken)?
-                    .Type as INamedTypeSymbol;
-
-                return returnType?.ConstructedFrom.Equals(taskOfTSymbol) == true;
+                    .Type
+                    .OriginalDefinition
+                    .Equals(taskOfTSymbol) == true;
             }
         }
 
@@ -285,11 +285,11 @@ namespace Roslynator.CSharp.Analysis.ReturnTaskInsteadOfNull
 
             bool IsReturnTypeConstructedFromTaskOfT()
             {
-                var returnType = context.SemanticModel
+                return context.SemanticModel
                     .GetMethodSymbol(lambda, context.CancellationToken)?
-                    .ReturnType as INamedTypeSymbol;
-
-                return returnType?.ConstructedFrom.Equals(taskOfTSymbol) == true;
+                    .ReturnType
+                    .OriginalDefinition
+                    .Equals(taskOfTSymbol) == true;
             }
         }
 
@@ -307,11 +307,11 @@ namespace Roslynator.CSharp.Analysis.ReturnTaskInsteadOfNull
 
             bool IsReturnTypeConstructedFromTaskOfT()
             {
-                var returnType = context.SemanticModel
+                return context.SemanticModel
                     .GetMethodSymbol(anonymousMethod, context.CancellationToken)?
-                    .ReturnType as INamedTypeSymbol;
-
-                return returnType?.ConstructedFrom.Equals(taskOfTSymbol) == true;
+                    .ReturnType
+                    .OriginalDefinition
+                    .Equals(taskOfTSymbol) == true;
             }
         }
 
