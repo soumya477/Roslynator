@@ -60,7 +60,7 @@ namespace Roslynator.Helpers
         private static ITypeSymbol ExtractFromNullableType(ITypeSymbol typeSymbol)
         {
             if (typeSymbol is INamedTypeSymbol namedTypeSymbol
-                && namedTypeSymbol.IsConstructedFrom(SpecialType.System_Nullable_T))
+                && namedTypeSymbol.IsNullableType())
             {
                 return namedTypeSymbol.TypeArguments[0];
             }

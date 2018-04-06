@@ -69,7 +69,7 @@ namespace Roslynator.CSharp.Refactorings
             {
                 CodeFixRegistrator.ChangeType(context, diagnostic, type, typeSymbol, semanticModel, CodeFixIdentifiers.ChangeTypeAccordingToInitializer);
 
-                if (typeSymbol.IsConstructedFromTaskOfT(semanticModel))
+                if (typeSymbol.EqualsOrInheritsFromTaskOfT(semanticModel))
                 {
                     ISymbol enclosingSymbol = semanticModel.GetEnclosingSymbol(variableDeclaration.SpanStart, context.CancellationToken);
 

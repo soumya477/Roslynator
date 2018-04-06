@@ -3379,7 +3379,7 @@ namespace Roslynator.CSharp
         /// </summary>
         /// <param name="trivia"></param>
         /// <returns></returns>
-        public static bool IsDocumentationCommentTrivia(this SyntaxTrivia trivia)
+        internal static bool IsDocumentationCommentTrivia(this SyntaxTrivia trivia)
         {
             return SyntaxFacts.IsDocumentationCommentTrivia(trivia.Kind());
         }

@@ -12,7 +12,6 @@ using Microsoft.CodeAnalysis.Text;
 using Roslynator.CSharp.Documentation;
 using Roslynator.CSharp.Syntax;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
-using static Roslynator.CSharp.SyntaxRemover;
 
 namespace Roslynator.CSharp
 {
@@ -32,7 +31,7 @@ namespace Roslynator.CSharp
             if (node == null)
                 throw new ArgumentNullException(nameof(node));
 
-            return document.RemoveNodeAsync(node, GetRemoveOptions(node), cancellationToken);
+            return document.RemoveNodeAsync(node, SyntaxRemover.GetRemoveOptions(node), cancellationToken);
         }
 
         /// <summary>
@@ -42,7 +41,7 @@ namespace Roslynator.CSharp
         /// <param name="member"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static Task<Document> RemoveMemberAsync(
+        internal static Task<Document> RemoveMemberAsync(
             this Document document,
             MemberDeclarationSyntax member,
             CancellationToken cancellationToken = default(CancellationToken))
@@ -61,37 +60,37 @@ namespace Roslynator.CSharp
                     {
                         var compilationUnit = (CompilationUnitSyntax)parent;
 
-                        return document.ReplaceNodeAsync(compilationUnit, RemoveMember(compilationUnit, member), cancellationToken);
+                        return document.ReplaceNodeAsync(compilationUnit, SyntaxRemover.RemoveMember(compilationUnit, member), cancellationToken);
                     }
                 case SyntaxKind.NamespaceDeclaration:
                     {
                         var namespaceDeclaration = (NamespaceDeclarationSyntax)parent;
 
-                        return document.ReplaceNodeAsync(namespaceDeclaration, RemoveMember(namespaceDeclaration, member), cancellationToken);
+                        return document.ReplaceNodeAsync(namespaceDeclaration, SyntaxRemover.RemoveMember(namespaceDeclaration, member), cancellationToken);
                     }
                 case SyntaxKind.ClassDeclaration:
                     {
                         var classDeclaration = (ClassDeclarationSyntax)parent;
 
-                        return document.ReplaceNodeAsync(classDeclaration, RemoveMember(classDeclaration, member), cancellationToken);
+                        return document.ReplaceNodeAsync(classDeclaration, SyntaxRemover.RemoveMember(classDeclaration, member), cancellationToken);
                     }
                 case SyntaxKind.StructDeclaration:
                     {
                         var structDeclaration = (StructDeclarationSyntax)parent;
 
-                        return document.ReplaceNodeAsync(structDeclaration, RemoveMember(structDeclaration, member), cancellationToken);
+                        return document.ReplaceNodeAsync(structDeclaration, SyntaxRemover.RemoveMember(structDeclaration, member), cancellationToken);
                     }
                 case SyntaxKind.InterfaceDeclaration:
                     {
                         var interfaceDeclaration = (InterfaceDeclarationSyntax)parent;
 
-                        return document.ReplaceNodeAsync(interfaceDeclaration, RemoveMember(interfaceDeclaration, member), cancellationToken);
+                        return document.ReplaceNodeAsync(interfaceDeclaration, SyntaxRemover.RemoveMember(interfaceDeclaration, member), cancellationToken);
                     }
                 default:
                     {
                         Debug.Assert(parent == null, parent.Kind().ToString());
 
-                        return document.RemoveNodeAsync(member, DefaultRemoveOptions, cancellationToken);
+                        return document.RemoveNodeAsync(member, SyntaxRemover.DefaultRemoveOptions, cancellationToken);
                     }
             }
         }
@@ -127,7 +126,7 @@ namespace Roslynator.CSharp
 
             SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
 
-            SyntaxNode newRoot = RemoveComments(root, kinds)
+            SyntaxNode newRoot = SyntaxRemover.RemoveComments(root, kinds)
                 .WithFormatterAnnotation();
 
             return document.WithSyntaxRoot(newRoot);
@@ -152,7 +151,7 @@ namespace Roslynator.CSharp
 
             SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
 
-            SyntaxNode newRoot = RemoveComments(root, span, kinds)
+            SyntaxNode newRoot = SyntaxRemover.RemoveComments(root, span, kinds)
                 .WithFormatterAnnotation();
 
             return document.WithSyntaxRoot(newRoot);
@@ -175,7 +174,7 @@ namespace Roslynator.CSharp
 
             SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
 
-            SyntaxNode newRoot = RemoveTrivia(root, span);
+            SyntaxNode newRoot = SyntaxRemover.RemoveTrivia(root, span);
 
             return document.WithSyntaxRoot(newRoot);
         }

@@ -3,6 +3,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using static Roslynator.CSharp.CSharpFactory;
@@ -11,6 +12,25 @@ namespace Roslynator.CSharp.Refactorings
 {
     internal static class CallConfigureAwaitRefactoring
     {
+        public static bool CanRefactor(
+            AwaitExpressionSyntax awaitExpression,
+            SemanticModel semanticModel,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            ExpressionSyntax expression = awaitExpression.Expression;
+
+            if (expression?.Kind() != SyntaxKind.InvocationExpression)
+                return false;
+
+            if (!(semanticModel.GetSymbol(expression, cancellationToken) is IMethodSymbol methodSymbol))
+                return false;
+
+            INamedTypeSymbol taskSymbol = semanticModel.GetTypeByMetadataName(MetadataNames.System_Threading_Tasks_Task);
+
+            return methodSymbol.ReturnType.EqualsOrInheritsFrom(taskSymbol)
+                && semanticModel.GetTypeByMetadataName(MetadataNames.System_Runtime_CompilerServices_ConfiguredTaskAwaitable_T) != null;
+        }
+
         public static Task<Document> RefactorAsync(
             Document document,
             AwaitExpressionSyntax awaitExpression,

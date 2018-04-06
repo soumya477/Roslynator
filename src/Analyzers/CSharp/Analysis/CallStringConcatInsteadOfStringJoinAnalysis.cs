@@ -52,8 +52,8 @@ namespace Roslynator.CSharp.Analysis
             if (parameters[0].Type.SpecialType != SpecialType.System_String)
                 return;
 
-            if (!parameters[1].IsParamsOf(SpecialType.System_String, SpecialType.System_Object)
-                && !parameters[1].Type.IsConstructedFromIEnumerableOfT())
+            if (!parameters[1].IsParameterArrayOf(SpecialType.System_String, SpecialType.System_Object)
+                && !parameters[1].Type.OriginalDefinition.IsIEnumerableOfT())
             {
                 return;
             }

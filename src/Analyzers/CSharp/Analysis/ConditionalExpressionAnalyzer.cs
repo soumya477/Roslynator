@@ -62,7 +62,7 @@ namespace Roslynator.CSharp.Analysis
             {
                 if (semanticModel
                     .GetTypeSymbol(nullCheck.Expression, cancellationToken)?
-                    .IsReferenceOrNullableType() == true)
+                    .IsReferenceTypeOrNullableType() == true)
                 {
                     context.ReportDiagnostic(
                         DiagnosticDescriptors.UseCoalesceExpressionInsteadOfConditionalExpression,
@@ -89,7 +89,7 @@ namespace Roslynator.CSharp.Analysis
                 {
                     Analyze(context, conditionalExpressionInfo, whenNull, whenNotNull, semanticModel, cancellationToken);
                 }
-                else if (typeSymbol.IsConstructedFrom(SpecialType.System_Nullable_T))
+                else if (typeSymbol.IsNullableType())
                 {
                     if (expression.IsParentKind(SyntaxKind.SimpleMemberAccessExpression))
                     {

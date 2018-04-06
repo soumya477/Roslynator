@@ -63,7 +63,7 @@ namespace Roslynator.CSharp.Analysis
             switch (typeSymbol?.TypeKind)
             {
                 case TypeKind.Struct:
-                    return !typeSymbol.IsConstructedFrom(SpecialType.System_Nullable_T);
+                    return !typeSymbol.IsNullableType();
                 case TypeKind.TypeParameter:
                     return ((ITypeParameterSymbol)typeSymbol).HasValueTypeConstraint;
                 default:

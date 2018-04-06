@@ -198,7 +198,7 @@ namespace Roslynator.CSharp
                     && expression.Kind() != SyntaxKind.NumericLiteralExpression
                     && semanticModel
                         .GetTypeSymbol(expression, cancellationToken)?
-                        .IsConstructedFrom(SpecialType.System_Nullable_T) == true;
+                        .IsNullableType() == true;
             }
         }
 

@@ -272,11 +272,11 @@ namespace Roslynator.CSharp.Refactorings
                         {
                             return returnType;
                         }
-                        else if (returnType.IsIEnumerable())
+                        else if (returnType.SpecialType == SpecialType.System_Collections_IEnumerable)
                         {
                             return analysis.SemanticModel.Compilation.ObjectType;
                         }
-                        else if (returnType.IsConstructedFromIEnumerableOfT())
+                        else if (returnType.OriginalDefinition.IsIEnumerableOfT())
                         {
                             return ((INamedTypeSymbol)returnType).TypeArguments[0];
                         }

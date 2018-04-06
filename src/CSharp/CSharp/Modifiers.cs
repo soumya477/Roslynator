@@ -14,15 +14,6 @@ namespace Roslynator.CSharp
     public static class Modifiers
     {
         /// <summary>
-        /// Creates an empty list of modifiers.
-        /// </summary>
-        /// <returns></returns>
-        public static SyntaxTokenList None()
-        {
-            return TokenList();
-        }
-
-        /// <summary>
         /// Creates a list of modifiers that contains "public" modifier.
         /// </summary>
         /// <returns></returns>
