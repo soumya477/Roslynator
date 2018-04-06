@@ -1488,32 +1488,29 @@ namespace Roslynator
             }
         }
 
-        //TODO:  IsGenericIEnumerable
         /// <summary>
-        /// Returns true if the type is constructed from <see cref="IEnumerable{T}"/>.
+        /// Returns true if the type is <see cref="IEnumerable{T}"/>.
         /// </summary>
         /// <param name="typeSymbol"></param>
         /// <returns></returns>
-        public static bool IsGenericIEnumerable(this ITypeSymbol typeSymbol)
+        public static bool IsIEnumerableOfT(this ITypeSymbol typeSymbol)
         {
             Test(typeSymbol, SpecialType.System_Collections_Generic_IEnumerable_T);
 
-            return typeSymbol?.OriginalDefinition.SpecialType == SpecialType.System_Collections_Generic_IEnumerable_T;
+            return typeSymbol?.SpecialType == SpecialType.System_Collections_Generic_IEnumerable_T;
         }
 
-        //TODO: IsIEnumerableOrGenericIEnumerable
         /// <summary>
-        /// Returns true if the type is <see cref="IEnumerable"/> or constructed from <see cref="IEnumerable{T}"/>.
+        /// Returns true if the type is <see cref="IEnumerable"/> or <see cref="IEnumerable{T}"/>.
         /// </summary>
         /// <param name="typeSymbol"></param>
         /// <returns></returns>
-        public static bool IsIEnumerableOrGenericIEnumerable(this ITypeSymbol typeSymbol)
+        public static bool IsIEnumerableOrIEnumerableOfT(this ITypeSymbol typeSymbol)
         {
             Debug.Assert(typeSymbol?.SpecialType == SpecialType.System_Collections_IEnumerable
-                || IsGenericIEnumerable(typeSymbol), typeSymbol.ToString());
+                || IsIEnumerableOfT(typeSymbol), typeSymbol.ToString());
 
             return typeSymbol?
-                .OriginalDefinition
                 .SpecialType
                 .Is(SpecialType.System_Collections_IEnumerable, SpecialType.System_Collections_Generic_IEnumerable_T) == true;
         }

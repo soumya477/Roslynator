@@ -131,7 +131,7 @@ namespace Roslynator.CSharp.Analysis.ReturnTaskInsteadOfNull
 
         private static bool IsReturnTypeConstructedFromTaskOfT(LocalFunctionStatementSyntax localFunction, INamedTypeSymbol taskOfTSymbol, SemanticModel semanticModel, CancellationToken cancellationToken)
         {
-            var methodSymbol = (IMethodSymbol)semanticModel.GetDeclaredSymbol(localFunction, cancellationToken);
+            IMethodSymbol methodSymbol = semanticModel.GetDeclaredSymbol(localFunction, cancellationToken);
 
             return methodSymbol?.IsErrorType() == false
                 && methodSymbol.ReturnType.OriginalDefinition.Equals(taskOfTSymbol);

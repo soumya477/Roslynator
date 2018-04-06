@@ -53,7 +53,7 @@ namespace Roslynator.CSharp.Analysis
                 return;
 
             if (!parameters[1].IsParameterArrayOf(SpecialType.System_String, SpecialType.System_Object)
-                && !parameters[1].Type.IsGenericIEnumerable())
+                && !parameters[1].Type.OriginalDefinition.IsIEnumerableOfT())
             {
                 return;
             }

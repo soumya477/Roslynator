@@ -228,7 +228,7 @@ namespace Roslynator.CSharp.Analysis.UnusedParameter
             if (!parameterInfo.Success)
                 return;
 
-            var methodSymbol = (IMethodSymbol)context.SemanticModel.GetDeclaredSymbol(localFunctionStatement, context.CancellationToken);
+            IMethodSymbol methodSymbol = context.SemanticModel.GetDeclaredSymbol(localFunctionStatement, context.CancellationToken);
 
             if (methodSymbol == null)
                 return;

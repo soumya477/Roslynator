@@ -98,7 +98,7 @@ namespace Roslynator.CSharp.Refactorings
                 && !isAsyncMethod
                 && newTypeSymbol is INamedTypeSymbol newNamedType
                 && newNamedType.ConstructedFrom.Equals(semanticModel.GetTypeByMetadataName(MetadataNames.System_Linq_IOrderedEnumerable_T))
-                && !typeSymbol.IsGenericIEnumerable())
+                && !typeSymbol.OriginalDefinition.IsIEnumerableOfT())
             {
                 INamedTypeSymbol constructedEnumerableSymbol = semanticModel
                     .Compilation
