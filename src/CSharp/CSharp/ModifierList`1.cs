@@ -9,6 +9,9 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace Roslynator.CSharp
 {
+    /// <summary>
+    /// Represents a list of modifiers.
+    /// </summary>
     public abstract class ModifierList<TNode> where TNode : SyntaxNode
     {
         internal ModifierList()
@@ -21,6 +24,9 @@ namespace Roslynator.CSharp
 
         internal abstract TNode WithModifiers(TNode node, SyntaxTokenList modifiers);
 
+        /// <summary>
+        /// Gets an instance of the <see cref="ModifierList{TNode}"/> for a syntax specified by the generic argument.
+        /// </summary>
         public static ModifierList<TNode> Instance { get; } = (ModifierList<TNode>)GetInstance();
 
         private static object GetInstance()
@@ -88,6 +94,13 @@ namespace Roslynator.CSharp
             throw new InvalidOperationException();
         }
 
+        /// <summary>
+        /// Creates a new node with a modifier of the specified kind inserted.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="kind"></param>
+        /// <param name="comparer"></param>
+        /// <returns></returns>
         public TNode Insert(TNode node, SyntaxKind kind, IComparer<SyntaxKind> comparer = null)
         {
             if (node == null)
@@ -100,6 +113,13 @@ namespace Roslynator.CSharp
             return InsertModifier(node, modifiers, Token(kind), index);
         }
 
+        /// <summary>
+        /// Creates a new node with the specified modifier inserted.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="modifier"></param>
+        /// <param name="comparer"></param>
+        /// <returns></returns>
         public TNode Insert(TNode node, SyntaxToken modifier, IComparer<SyntaxToken> comparer = null)
         {
             if (node == null)
@@ -177,6 +197,12 @@ namespace Roslynator.CSharp
             return WithModifiers(node, modifiers);
         }
 
+        /// <summary>
+        /// Creates a new node with a modifier of the specified kind removed.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="kind"></param>
+        /// <returns></returns>
         public TNode Remove(TNode node, SyntaxKind kind)
         {
             if (node == null)
@@ -196,6 +222,12 @@ namespace Roslynator.CSharp
             }
         }
 
+        /// <summary>
+        /// Creates a new node with the specified modifier removed.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="modifier"></param>
+        /// <returns></returns>
         public TNode Remove(TNode node, SyntaxToken modifier)
         {
             if (node == null)
@@ -215,6 +247,12 @@ namespace Roslynator.CSharp
             }
         }
 
+        /// <summary>
+        /// Creates a new node with a modifier at the specified index removed.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public TNode RemoveAt(TNode node, int index)
         {
             if (node == null)
@@ -290,6 +328,11 @@ namespace Roslynator.CSharp
             return AddIfNotEmptyOrWhitespace(trivia, triviaToAdd2);
         }
 
+        /// <summary>
+        /// Creates a new node with all modifiers removed.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
         public TNode RemoveAll(TNode node)
         {
             SyntaxTokenList modifiers = GetModifiers(node);
@@ -335,6 +378,12 @@ namespace Roslynator.CSharp
             return WithModifiers(node, default(SyntaxTokenList));
         }
 
+        /// <summary>
+        /// Creates a new node with modifiers that matches the predicate removed.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
         public TNode RemoveAll(TNode node, Func<SyntaxToken, bool> predicate)
         {
             SyntaxTokenList modifiers = GetModifiers(node);

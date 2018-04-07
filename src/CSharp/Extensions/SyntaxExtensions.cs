@@ -149,6 +149,14 @@ namespace Roslynator
             return (list.Count > 1) ? list.LastButOne() : default(TNode);
         }
 
+        /// <summary>
+        /// Creates a new separated list with both leading and trailing trivia of the specified node.
+        /// If the list contains more than one item, first item is updated with leading trivia and last item is updated with trailing trivia.
+        /// </summary>
+        /// <typeparam name="TNode"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="node"></param>
+        /// <returns></returns>
         public static SeparatedSyntaxList<TNode> WithTriviaFrom<TNode>(this SeparatedSyntaxList<TNode> list, SyntaxNode node) where TNode : SyntaxNode
         {
             if (node == null)
@@ -349,6 +357,14 @@ namespace Roslynator
             return (list.Count > 1) ? list.LastButOne() : default(TNode);
         }
 
+        /// <summary>
+        /// Creates a new list with both leading and trailing trivia of the specified node.
+        /// If the list contains more than one item, first item is updated with leading trivia and last item is updated with trailing trivia.
+        /// </summary>
+        /// <typeparam name="TNode"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="node"></param>
+        /// <returns></returns>
         public static SyntaxList<TNode> WithTriviaFrom<TNode>(this SyntaxList<TNode> list, SyntaxNode node) where TNode : SyntaxNode
         {
             if (node == null)

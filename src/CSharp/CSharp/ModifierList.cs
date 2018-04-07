@@ -410,7 +410,7 @@ namespace Roslynator.CSharp
         }
 
         /// <summary>
-        /// Creates a new node with accessibility modifiers removed.
+        /// Creates a new node with modifiers that matches the predicate removed.
         /// </summary>
         /// <typeparam name="TNode"></typeparam>
         /// <param name="node"></param>
