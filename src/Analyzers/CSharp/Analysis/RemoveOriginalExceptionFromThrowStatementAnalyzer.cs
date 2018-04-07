@@ -50,7 +50,7 @@ namespace Roslynator.CSharp.Analysis
             if (symbol?.IsErrorType() != false)
                 return;
 
-            //XTODO: SyntaxWalker
+            //XPERF: SyntaxWalker
             foreach (SyntaxNode node in block.DescendantNodes(descendIntoChildren: f => f.Kind() != SyntaxKind.CatchClause))
             {
                 if (node.Kind() != SyntaxKind.ThrowStatement)

@@ -352,7 +352,7 @@ namespace Roslynator.CSharp.CodeFixes
                                     if (Settings.IsCodeFixEnabled(CodeFixIdentifiers.IntroduceLocalVariable)
                                         && !expressionStatement.IsEmbedded())
                                     {
-                                        bool addAwait = typeSymbol.EqualsOrInheritsFromTaskOfT(semanticModel)
+                                        bool addAwait = typeSymbol.OriginalDefinition.EqualsOrInheritsFromTaskOfT(semanticModel)
                                             && semanticModel.GetEnclosingSymbol(expressionStatement.SpanStart, context.CancellationToken).IsAsyncMethod();
 
                                         CodeAction codeAction = CodeAction.Create(

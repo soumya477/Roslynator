@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using Microsoft.CodeAnalysis;
 
 namespace Roslynator
@@ -434,23 +433,7 @@ namespace Roslynator
 
         public static bool IsImmutableArrayOfT(ITypeSymbol typeSymbol, SemanticModel semanticModel)
         {
-            //XTEST:
-            Debug.Assert((typeSymbol?.OriginalDefinition.Equals(semanticModel.GetTypeByMetadataName(MetadataNames.System_Collections_Immutable_ImmutableArray_T)) == true) == IsConstructedFromImmutableArrayOfT2(), typeSymbol.ToString());
-
             return typeSymbol?.OriginalDefinition.Equals(semanticModel.GetTypeByMetadataName(MetadataNames.System_Collections_Immutable_ImmutableArray_T)) == true;
-
-            bool IsConstructedFromImmutableArrayOfT2()
-            {
-                if (typeSymbol.Kind == SymbolKind.NamedType)
-                {
-                    INamedTypeSymbol symbol = semanticModel.GetTypeByMetadataName(MetadataNames.System_Collections_Immutable_ImmutableArray_T);
-
-                    return symbol != null
-                        && ((INamedTypeSymbol)typeSymbol).ConstructedFrom.Equals(symbol);
-                }
-
-                return false;
-            }
         }
 
         public static bool SupportsSwitchExpression(ITypeSymbol typeSymbol)

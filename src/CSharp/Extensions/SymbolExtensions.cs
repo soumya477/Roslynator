@@ -1465,27 +1465,7 @@ namespace Roslynator
 
         internal static bool EqualsOrInheritsFromTaskOfT(this ITypeSymbol typeSymbol, SemanticModel semanticModel)
         {
-            Debug.Assert((typeSymbol?.OriginalDefinition.EqualsOrInheritsFrom(semanticModel.GetTypeByMetadataName(MetadataNames.System_Threading_Tasks_Task_T)) == true) == IsConstructedFromTaskOfT2(), typeSymbol.ToString());
-
-            return typeSymbol?.OriginalDefinition.EqualsOrInheritsFrom(semanticModel.GetTypeByMetadataName(MetadataNames.System_Threading_Tasks_Task_T)) == true;
-
-            bool IsConstructedFromTaskOfT2()
-            {
-                if (typeSymbol == null)
-                    throw new ArgumentNullException(nameof(typeSymbol));
-
-                if (semanticModel == null)
-                    throw new ArgumentNullException(nameof(semanticModel));
-
-                if (typeSymbol.Kind == SymbolKind.NamedType)
-                {
-                    INamedTypeSymbol taskOfT = semanticModel.GetTypeByMetadataName(MetadataNames.System_Threading_Tasks_Task_T);
-
-                    return ((INamedTypeSymbol)typeSymbol).ConstructedFrom.EqualsOrInheritsFrom(taskOfT);
-                }
-
-                return false;
-            }
+            return typeSymbol?.EqualsOrInheritsFrom(semanticModel.GetTypeByMetadataName(MetadataNames.System_Threading_Tasks_Task_T)) == true;
         }
 
         /// <summary>
@@ -1495,8 +1475,6 @@ namespace Roslynator
         /// <returns></returns>
         public static bool IsIEnumerableOfT(this ITypeSymbol typeSymbol)
         {
-            Test(typeSymbol, SpecialType.System_Collections_Generic_IEnumerable_T);
-
             return typeSymbol?.SpecialType == SpecialType.System_Collections_Generic_IEnumerable_T;
         }
 
@@ -1507,9 +1485,6 @@ namespace Roslynator
         /// <returns></returns>
         public static bool IsIEnumerableOrIEnumerableOfT(this ITypeSymbol typeSymbol)
         {
-            Debug.Assert(typeSymbol?.SpecialType == SpecialType.System_Collections_IEnumerable
-                || IsIEnumerableOfT(typeSymbol), typeSymbol.ToString());
-
             return typeSymbol?
                 .SpecialType
                 .Is(SpecialType.System_Collections_IEnumerable, SpecialType.System_Collections_Generic_IEnumerable_T) == true;
@@ -1533,8 +1508,6 @@ namespace Roslynator
         /// <returns></returns>
         public static bool IsNullableType(this ITypeSymbol typeSymbol)
         {
-            Test(typeSymbol, SpecialType.System_Nullable_T);
-
             return typeSymbol?.OriginalDefinition.SpecialType == SpecialType.System_Nullable_T;
         }
 
@@ -1543,20 +1516,5 @@ namespace Roslynator
             return (allInterfaces) ? typeSymbol.AllInterfaces : typeSymbol.Interfaces;
         }
         #endregion ITypeSymbol
-
-        //XTEST:
-        [Conditional("DEBUG")]
-        private static void Test(ITypeSymbol typeSymbol, SpecialType specialType)
-        {
-            Debug.Assert((typeSymbol?.OriginalDefinition.SpecialType == specialType)
-                == ((typeSymbol as INamedTypeSymbol)?.ConstructedFrom.SpecialType == specialType), typeSymbol.ToString());
-        }
-
-        [Conditional("DEBUG")]
-        private static void Test(ITypeSymbol typeSymbol, ISymbol symbol)
-        {
-            Debug.Assert((typeSymbol?.OriginalDefinition.Equals(symbol) == true)
-                == ((typeSymbol as INamedTypeSymbol)?.ConstructedFrom.Equals(symbol)), typeSymbol.ToString());
-        }
     }
 }

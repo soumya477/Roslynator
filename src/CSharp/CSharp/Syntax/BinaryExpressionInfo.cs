@@ -2,8 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -71,12 +69,6 @@ namespace Roslynator.CSharp.Syntax
 
             BinaryExpressionSyntax binaryExpression = BinaryExpression;
             SyntaxKind kind = Kind;
-
-            //XTEST:
-            Debug.Assert(Enumerate().Reverse().SequenceEqual(BinaryExpressionChainInfo.Create(binaryExpression)));
-            binaryExpression = BinaryExpression;
-            Debug.Assert(EnumerateLeftToRight().SequenceEqual(BinaryExpressionChainInfo.Create(binaryExpression)));
-            binaryExpression = BinaryExpression;
 
             return (leftToRight) ? EnumerateLeftToRight() : Enumerate();
 
