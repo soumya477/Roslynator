@@ -31,7 +31,7 @@
 * CSharpFactory
 * CSharpFacts
 * EnumExtensions
-* Modifier
+* ModifierList
 * Modifiers
 * SymbolExtensions
 * SyntaxAccessibility
@@ -41,6 +41,7 @@
 ### Classes
 
 * MemberDeclarationListSelection
+* ModifierList\`1
 * StatementListSelection
 
 ### Structs
@@ -56,7 +57,6 @@
 
 ### Structs
 
-* AccessibilityInfo
 * AsExpressionInfo
 * AssignmentExpressionInfo
 * BinaryExpressionInfo

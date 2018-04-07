@@ -51,6 +51,11 @@ namespace Roslynator.CodeGeneration.Xml
                 )
             );
 
+            return WriteDocument(doc, _regexForDefaultConfigFile);
+        }
+
+        private static string WriteDocument(XDocument doc, Regex regex)
+        {
             var xmlWriterSettings = new XmlWriterSettings()
             {
                 OmitXmlDeclaration = false,
@@ -66,14 +71,58 @@ namespace Roslynator.CodeGeneration.Xml
 
                 string s = sw.ToString();
 
-                return _regex.Replace(s, "${grp} ${comment}");
+                return regex.Replace(s, "${grp} ${comment}");
             }
         }
 
-        private static readonly Regex _regex = new Regex(@"
+        private static readonly Regex _regexForDefaultConfigFile = new Regex(@"
             (?<grp><(Refactoring|CodeFix)\ Id=""(RR|RCF)[0-9]{4}""\ IsEnabled=""(true|false)""\ />)
             \s+
             (?<comment><!--\ [a-zA-Z0-9 (),]+\ -->)
             ", RegexOptions.IgnorePatternWhitespace);
+
+        private static readonly Regex _regexForDefaultRuleSet = new Regex(@"
+            (?<grp><Rule\ Id=""RCS[0-9]{4}(FadeOut)?""\ Action=""\w+""\ />)
+            \s+
+            (?<comment><!--\ .+?\ -->)
+            ", RegexOptions.IgnorePatternWhitespace);
+
+        public static string CreateDefaultRuleSet(IEnumerable<AnalyzerDescriptor> analyzers)
+        {
+            var doc = new XDocument(
+                new XElement("RuleSet",
+                    new XAttribute("Name", "Default RuleSet"),
+                    new XAttribute("ToolsVersion", "15.0"),
+                    new XElement("Rules",
+                        new XAttribute("AnalyzerId", "Roslynator.CSharp.Analyzers"),
+                        new XAttribute("RuleNamespace", "Roslynator.CSharp.Analyzers"),
+                        CreateRuleElements()
+                    )
+                )
+            );
+
+            return WriteDocument(doc, _regexForDefaultRuleSet);
+
+            IEnumerable<XNode> CreateRuleElements()
+            {
+                foreach (AnalyzerDescriptor analyzer in analyzers.OrderBy(f => f.Id))
+                {
+                    yield return CreateRuleElement(analyzer);
+                    yield return new XComment($" {analyzer.Title} ");
+
+                    if (analyzer.SupportsFadeOutAnalyzer)
+                    {
+                        yield return CreateRuleElement(analyzer, isFadeOut: true);
+                    }
+                }
+            }
+
+            XElement CreateRuleElement(AnalyzerDescriptor analyzer, bool isFadeOut = false)
+            {
+                return new XElement("Rule",
+                    new XAttribute("Id", analyzer.Id + ((isFadeOut) ? "FadeOut" : "")),
+                    new XAttribute("Action", (analyzer.IsEnabledByDefault) ? analyzer.DefaultSeverity : "None"));
+            }
+        }
     }
 }

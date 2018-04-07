@@ -77,6 +77,10 @@ namespace Roslynator.CodeGeneration
             WriteAllText(
                 "DefaultConfigFile.xml",
                 XmlGenerator.CreateDefaultConfigFile(Refactorings, CodeFixes));
+
+            WriteAllText(
+                "DefaultRuleSet.xml",
+                XmlGenerator.CreateDefaultRuleSet(Analyzers));
         }
 
         public void WriteAllText(string relativePath, string content, bool onlyIfChanges = true, bool fileMustExists = true)

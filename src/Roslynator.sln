@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\ChangeLog.md = ..\ChangeLog.md
 		CodeFixes\CodeFixes.xml = CodeFixes\CodeFixes.xml
 		DefaultConfigFile.xml = DefaultConfigFile.xml
+		DefaultRuleSet.xml = DefaultRuleSet.xml
 		CodeFixes\Diagnostics.xml = CodeFixes\Diagnostics.xml
 		global.ruleset = global.ruleset
 		..\docs\HowToConfigureAnalyzers.md = ..\docs\HowToConfigureAnalyzers.md
@@ -24,7 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\docs\RoslynatorForVisualStudioCode.md = ..\docs\RoslynatorForVisualStudioCode.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddCodeFileHeader", "Tools\AddCodeFileHeader\AddCodeFileHeader.csproj", "{28B7D00B-A1EA-491D-873D-235406A77C3C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AddCodeFileHeader", "Tools\AddCodeFileHeader\AddCodeFileHeader.csproj", "{28B7D00B-A1EA-491D-873D-235406A77C3C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharp", "CSharp\CSharp.csproj", "{34A3E42E-2254-4EE7-A152-EEDB18E3D7E3}"
 EndProject
@@ -32,9 +33,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Refactorings", "Refactoring
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Analyzers", "Analyzers\Analyzers.csproj", "{2F2B32B2-31D8-4D52-A05F-0D909BD07EBE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cleaner", "Tools\Cleaner\Cleaner.csproj", "{44582CE6-29B1-4982-B485-C0285AA0A591}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cleaner", "Tools\Cleaner\Cleaner.csproj", "{44582CE6-29B1-4982-B485-C0285AA0A591}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGenerator", "Tools\CodeGenerator\CodeGenerator.csproj", "{BCCA00EB-08E2-4B22-BECF-10864A6BB456}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGenerator", "Tools\CodeGenerator\CodeGenerator.csproj", "{BCCA00EB-08E2-4B22-BECF-10864A6BB456}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualStudio.Common", "VisualStudio.Common\VisualStudio.Common.csproj", "{4AD2A192-847E-4942-8A72-D99C5602D5A7}"
 EndProject
@@ -50,11 +51,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeFixes", "CodeFixes\CodeFixes.csproj", "{9C9EF15B-2CB0-485E-BB48-90F670F6A3D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utilities", "Tools\Utilities\Utilities.csproj", "{62ABFF60-67FC-4D33-91BD-ED1CD7DB5007}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utilities", "Tools\Utilities\Utilities.csproj", "{62ABFF60-67FC-4D33-91BD-ED1CD7DB5007}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetadataGenerator", "Tools\MetadataGenerator\MetadataGenerator.csproj", "{DD303EB5-1C57-4588-980C-C55A401DB125}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetadataGenerator", "Tools\MetadataGenerator\MetadataGenerator.csproj", "{DD303EB5-1C57-4588-980C-C55A401DB125}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGeneration", "Tools\CodeGeneration\CodeGeneration.csproj", "{06884E7F-9DE1-4A42-9D45-42C19714F0B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGeneration", "Tools\CodeGeneration\CodeGeneration.csproj", "{06884E7F-9DE1-4A42-9D45-42C19714F0B2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharp.Workspaces", "CSharp.Workspaces\CSharp.Workspaces.csproj", "{56DA29A3-C179-471C-9941-42426EEB84D0}"
 EndProject
